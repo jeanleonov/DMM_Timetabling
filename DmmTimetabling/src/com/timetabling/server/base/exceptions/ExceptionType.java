@@ -1,6 +1,6 @@
-package com.rosinka.tt.server.base.exceptions;
+package com.timetabling.server.base.exceptions;
 
-import com.rosinka.tt.shared.ConstantsShared;
+import com.timetabling.shared.ConstantsShared;
 
 
 

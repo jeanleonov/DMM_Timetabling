@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.common;
+package com.timetabling.server.base.common;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.rosinka.tt.shared.UUID;
+import com.timetabling.shared.UUID;
 
 public class PerformanceLogger
 {

@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.data.dao;
+package com.timetabling.server.base.data.dao;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

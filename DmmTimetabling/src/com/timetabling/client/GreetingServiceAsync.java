@@ -1,4 +1,4 @@
-package com.rosinka.tt.client;
+package com.timetabling.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

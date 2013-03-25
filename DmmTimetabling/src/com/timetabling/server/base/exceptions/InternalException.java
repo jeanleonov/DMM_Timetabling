@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.exceptions;
+package com.timetabling.server.base.exceptions;
 
 /**
  * Internal system exception. Used within system only

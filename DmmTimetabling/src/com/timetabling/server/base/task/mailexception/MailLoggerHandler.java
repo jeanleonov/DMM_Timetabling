@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.task.mailexception;
+package com.timetabling.server.base.task.mailexception;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.data.dao;
+package com.timetabling.server.base.data.dao;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -8,11 +8,11 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.DAOBase;
-import com.rosinka.tt.server.base.data.dao.DAOT.DatastoreOperation;
-import com.rosinka.tt.server.base.data.entities.DatastoreEntity;
-import com.rosinka.tt.server.base.exceptions.InternalException;
-import com.rosinka.tt.server.base.task.mailexception.MailLoggerHandler;
-import com.rosinka.tt.server.managers.DaoManagerFactory;
+import com.timetabling.server.base.data.dao.DAOT.DatastoreOperation;
+import com.timetabling.server.base.data.entities.DatastoreEntity;
+import com.timetabling.server.base.exceptions.InternalException;
+import com.timetabling.server.base.task.mailexception.MailLoggerHandler;
+import com.timetabling.server.data.managers.DaoManagerFactory;
 
 /**
  * Implementation of {IGenericDAO} interface

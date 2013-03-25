@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.common;
+package com.timetabling.server.base.common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
-import com.rosinka.tt.server.base.data.entities.DatastoreEntity;
-import com.rosinka.tt.server.base.exceptions.InternalException;
+import com.timetabling.server.base.data.entities.DatastoreEntity;
+import com.timetabling.server.base.exceptions.InternalException;
 
 public class KeyHelper
 {

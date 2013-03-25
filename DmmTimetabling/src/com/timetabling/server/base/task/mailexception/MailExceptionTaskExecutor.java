@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.task.mailexception;
+package com.timetabling.server.base.task.mailexception;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,8 +8,8 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.apphosting.api.ApiProxy.OverQuotaException;
-import com.rosinka.tt.shared.ConstantsServer;
-import com.rosinka.tt.shared.UUID;
+import com.timetabling.shared.ConstantsServer;
+import com.timetabling.shared.UUID;
 
 public class MailExceptionTaskExecutor
 {

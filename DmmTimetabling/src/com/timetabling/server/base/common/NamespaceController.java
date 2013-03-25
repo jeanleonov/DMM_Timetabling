@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.common;
+package com.timetabling.server.base.common;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.data.dao;
+package com.timetabling.server.base.data.dao;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,9 +11,9 @@ import com.google.apphosting.api.DeadlineExceededException;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.rosinka.tt.server.base.common.PerformanceLogger;
-import com.rosinka.tt.server.base.exceptions.InternalException;
-import com.rosinka.tt.server.base.exceptions.InternalNotForUserException;
+import com.timetabling.server.base.common.PerformanceLogger;
+import com.timetabling.server.base.exceptions.InternalException;
+import com.timetabling.server.base.exceptions.InternalNotForUserException;
 
 /**
  * DAO that encapsulates a single transaction.

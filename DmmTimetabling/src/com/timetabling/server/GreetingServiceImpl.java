@@ -1,8 +1,9 @@
-package com.rosinka.tt.server;
+package com.timetabling.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.rosinka.tt.client.GreetingService;
-import com.rosinka.tt.shared.FieldVerifier;
+import com.timetabling.client.GreetingService;
+import com.timetabling.server.temp.ReadingFilesFromWEBINFTestin;
+import com.timetabling.shared.FieldVerifier;
 
 /**
  * The server side implementation of the RPC service.
@@ -12,6 +13,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		GreetingService {
 
 	public String greetServer(String input) throws IllegalArgumentException {
+		ReadingFilesFromWEBINFTestin.doSomthing();
 		// Verify that the input is valid. 
 		if (!FieldVerifier.isValidName(input)) {
 			// If the input is not valid, throw an IllegalArgumentException back to

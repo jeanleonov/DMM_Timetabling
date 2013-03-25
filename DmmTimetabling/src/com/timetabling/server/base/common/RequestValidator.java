@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.common;
+package com.timetabling.server.base.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +9,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.rosinka.tt.shared.ConstantsShared;
+import com.timetabling.shared.ConstantsShared;
 
 
 public class RequestValidator

@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.exceptions;
+package com.timetabling.server.exceptions;
 
 public class CurriculumIsNotEnoughExtenedException extends Exception {
 

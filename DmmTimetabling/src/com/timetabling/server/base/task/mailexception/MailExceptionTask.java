@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.task.mailexception;
+package com.timetabling.server.base.task.mailexception;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.mail.MailService;
 import com.google.appengine.api.mail.MailServiceFactory;
-import com.rosinka.tt.server.base.common.RequestValidator;
-import com.rosinka.tt.shared.ConstantsServer;
+import com.timetabling.server.base.common.RequestValidator;
+import com.timetabling.shared.ConstantsServer;
 
 public class MailExceptionTask extends HttpServlet
 {

@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.data.entities;
+package com.timetabling.server.base.data.entities;
 
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -6,7 +6,7 @@ import javax.persistence.Transient;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Unindexed;
-import com.rosinka.tt.server.base.common.KeyHelper;
+import com.timetabling.server.base.common.KeyHelper;
 
 @Entity
 public class DatastoreEntity

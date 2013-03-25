@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.data.entities;
+package com.timetabling.server.base.data.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

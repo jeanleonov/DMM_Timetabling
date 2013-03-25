@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.generating;
+package com.timetabling.server.generating;
 
 public class Generator {
 

@@ -1,4 +1,4 @@
-package com.rosinka.tt.shared;
+package com.timetabling.shared;
 
 public class ConstantsServer{
 	

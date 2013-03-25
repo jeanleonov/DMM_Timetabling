@@ -1,4 +1,4 @@
-package com.rosinka.tt.server.base.common;
+package com.timetabling.server.base.common;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

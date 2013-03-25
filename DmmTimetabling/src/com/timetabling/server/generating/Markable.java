@@ -1,6 +1,6 @@
-package com.rosinka.tt.server.generating;
+package com.timetabling.server.generating;
 
-import com.rosinka.tt.server.entities.tt.Version;
+import com.timetabling.server.data.entities.tt.Version;
 
 public interface Markable {
 
