@@ -7,6 +7,7 @@ import javax.persistence.Transient;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 import com.timetabling.server.data.entities.tt.Lesson;
+import com.timetabling.server.data.managers.CurriculumExtensionSaver;
 import com.timetabling.server.data.managers.Utils;
 
 /** Curriculum is associated with specified specialty.
@@ -28,16 +29,16 @@ public class CurriculumCell extends DatastoreLongEntity {
 	private long subjectId;
 	private int lessonTypeCode;
 	private long cathedraId;
-	
+	private String displayName;
+
 	/** Can be null if cell don't belong to any join.
 	 *  See 'CurriculumCellJoiner'.*/
-	private long joinId;
+	private Long joinId;					// TODO !!! Long.. if can be null
 	
 	/** For lectures it is usually 1, 
 	 *  for practice it is usually number of groups (..MF-31, MF-32 - 2 groups) */
 	@Unindexed private byte numberOfSubgroups;
-	
-	/** 2 if you have 1 full lesson,
+		/** 2 if you have 1 full lesson,
 	 *  1 if you have flashing lesson,
 	 *  4 if you have 2 full lessons, ...*/
 	@Unindexed private byte hoursInTwoWeeks;
@@ -94,11 +95,27 @@ public class CurriculumCell extends DatastoreLongEntity {
 		this.cathedraId = cathedraId;
 	}
 
-	public long getJoinId() {
+	/** Is for using reflect.
+	 * 	@See {@link CurriculumExtensionSaver} */
+	public void setCathedraId(Long cathedraId) {
+		this.cathedraId = cathedraId;
+	}
+	
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public Long getJoinId() {
 		return joinId;
 	}
 
-	public void setJoinId(long joinId) {
+	/** Is for using reflect.
+	 * 	@See {@link CurriculumExtensionSaver} */
+	public void setJoinId(Long joinId) {
 		this.joinId = joinId;
 	}
 
@@ -107,6 +124,12 @@ public class CurriculumCell extends DatastoreLongEntity {
 	}
 
 	public void setNumberOfSubgroups(byte numberOfSubgroups) {
+		this.numberOfSubgroups = numberOfSubgroups;
+	}
+
+	/** Is for using reflect.
+	 * 	@See {@link CurriculumExtensionSaver} */
+	public void setNumberOfSubgroups(Byte numberOfSubgroups) {
 		this.numberOfSubgroups = numberOfSubgroups;
 	}
 

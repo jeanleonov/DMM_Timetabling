@@ -3,6 +3,8 @@ package com.timetabling.server.data.managers;
 import java.util.logging.Logger;
 
 import com.timetabling.server.base.common.NamespaceController;
+import com.timetabling.server.base.data.dao.DAOT;
+import com.timetabling.server.base.data.dao.DAOT.DatastoreOperation;
 import com.timetabling.server.base.data.dao.ObjectifyDao;
 import com.timetabling.server.data.entities.curriculum.Specialty;
 import com.timetabling.server.data.entities.curriculum.Subject;
@@ -11,6 +13,8 @@ public class Utils {
 	
 	public final static boolean WINTER_SUMMER = true;
 	public final static boolean AUTUMN_WINTER = false;
+	
+	private static Logger logger = Logger.getLogger(Utils.class.getSimpleName());
 	
 	/**  - CurriculumCell, Lesson, TimeWithVersion, Version and CuriculumCellJoiner (XXX-entities)
 	 *  are placed in specified namespace (see gae datastore namespace). <br>
@@ -30,14 +34,23 @@ public class Utils {
 	/** This method try to find specialty with specified name. <br>
 	 *  If it found specialty -> return id of founded specialty, <br> 
 	 *  otherwise -> create and persist new specialty with specified name, and return id of created entity */
-	public static long getSpecialtyIdFor(String specialtyName) throws Exception {
-		ObjectifyDao<Specialty> dao = new ObjectifyDao<Specialty>();
+	public static long getSpecialtyIdFor(final String specialtyName) throws Exception {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		final ObjectifyDao<Specialty> dao = new ObjectifyDao<Specialty>(Specialty.class);
 		Specialty specialty = dao.getByProperty("name", specialtyName);
-		if (specialty == null) {
-			specialty = new Specialty();
-			specialty.setName(specialtyName);
-			return dao.put(specialty).getId();
-		}
+		if (specialty == null) 
+			return DAOT.runInTransaction(logger, new DatastoreOperation<Long>() {
+				@Override
+				public Long run(DAOT daot) throws Exception {
+					Specialty newSpecialty = new Specialty();
+					newSpecialty.setName(specialtyName);
+					return dao.put(newSpecialty).getId();
+				}
+				@Override
+				public String getOperationName() {
+					return "Saving of new specialty";
+				}
+			});
 		return specialty.getId();
 	}
 	
@@ -45,14 +58,22 @@ public class Utils {
 	/** This method try to find subject with specified name. <br>
 	 *  If it found subject -> return id of founded subject, <br> 
 	 *  otherwise -> create and persist new subject with specified name, and return id of created entity */
-	public static long getSubjectIdFor(String subjectName) throws Exception {
-		ObjectifyDao<Subject> dao = new ObjectifyDao<Subject>();
+	public static long getSubjectIdFor(final String subjectName) throws Exception {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		final ObjectifyDao<Subject> dao = new ObjectifyDao<Subject>(Subject.class);
 		Subject subject = dao.getByProperty("name", subjectName);
-		if (subject == null) {
-			subject = new Subject();
-			subject.setName(subjectName);
-			return dao.put(subject).getId();
-		}
+		if (subject == null)
+			return DAOT.runInTransaction(logger, new DatastoreOperation<Long>() {
+				@Override
+				public Long run(DAOT daot) throws Exception {
+					Subject newSubject = new Subject();
+					newSubject.setName(subjectName);
+					return dao.put(newSubject).getId();
+				}
+				@Override
+				public String getOperationName() {
+					return "Saving of new subject";
+			}});
 		return subject.getId();
 	}
 	

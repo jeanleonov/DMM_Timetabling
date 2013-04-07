@@ -8,8 +8,10 @@ import com.google.appengine.api.NamespaceManager;
 /**
  * Contains required logic to perform user verification
  */
-public class NamespaceController
-{
+public class NamespaceController {
+	
+	public static final String generalNamespace = "general";
+	
 	private static class AuthorizationControllerHolder
 	{
 		private final static NamespaceController INSTANCE = new NamespaceController();

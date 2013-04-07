@@ -7,15 +7,15 @@ public class Time {
 	
 	enum WeekType{
 		
-		LOWER (0) /**Lower week (нижн€€ недел€)*/,
+		/**Lower week (нижн€€ недел€)*/ LOWER (0),
 		
-		UPPER (1) /**Upper week (верхн€€ недел€)*/,
+		/**Upper week (верхн€€ недел€)*/UPPER (1),
 		
-		FULL (2)  /**Not flashing week (обычна€ немигающа€ пара)*/,
+		/**Not flashing week (обычна€ немигающа€ пара)*/ FULL (2),
 		
 		UNDEF (3), 
 		
-		ANY (4)   /** ANY recommended to use for Wish.*/;
+		/** ANY recommended to use for Wish.*/ ANY (4);
 		
 		int code;
 		private WeekType(int code) {

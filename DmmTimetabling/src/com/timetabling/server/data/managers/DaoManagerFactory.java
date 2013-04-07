@@ -4,7 +4,6 @@ import com.googlecode.objectify.ObjectifyService;
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
 import com.timetabling.server.data.entities.curriculum.Specialty;
 import com.timetabling.server.data.entities.curriculum.Subject;
-import com.timetabling.server.data.entities.curriculum.Type;
 import com.timetabling.server.data.entities.curriculum.extentions.Cathedra;
 import com.timetabling.server.data.entities.curriculum.extentions.CurriculumCellJoiner;
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher;
@@ -22,6 +21,7 @@ public class DaoManagerFactory{
 	
 	private static CurriculumSaver curriculumSaver = null;
 	private static LessonsManager lessonsManager = null;
+	private static CurriculumExtensionSaver curriculumExtensionSaver = null;
 
 	static{
 		ObjectifyService.register(Cathedra.class);
@@ -31,12 +31,12 @@ public class DaoManagerFactory{
 		ObjectifyService.register(CurriculumCell.class);
 		ObjectifyService.register(Specialty.class);
 		ObjectifyService.register(Subject.class);
-		ObjectifyService.register(Type.class);
 		ObjectifyService.register(Version.class);
 		ObjectifyService.register(Lesson.class);
 		ObjectifyService.register(LessonTimeWithVersion.class);
 		lessonsManager = new LessonsManager();
 		curriculumSaver = new CurriculumSaver();
+		curriculumExtensionSaver = new CurriculumExtensionSaver();
 	}
 
 	// Static-only usage pattern
@@ -52,6 +52,10 @@ public class DaoManagerFactory{
 	
 	public static CurriculumSaver getCurriculumSaver() {
 		return curriculumSaver;
+	}
+	
+	public static CurriculumExtensionSaver getCurriculumExtensionSaver() {
+		return curriculumExtensionSaver;
 	}
 
 	
