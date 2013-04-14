@@ -11,8 +11,8 @@ import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 public class Teacher extends DatastoreLongEntity {
 	
 	public enum TeacherRank {
-		DOZENT (0), 
-		PROFESSOR (1), 
+		PROFESSOR (0), 
+		DOZENT (1), 
 		LECTURER (2), 
 		ASSISTANT (3);
 		int code;
@@ -23,12 +23,7 @@ public class Teacher extends DatastoreLongEntity {
 			return code;
 		}
 		static public TeacherRank getByCode(int code) {
-			switch (code) {
-			case 0: return DOZENT;
-			case 1: return PROFESSOR;
-			case 2: return LECTURER;
-			default: return ASSISTANT;
-			}
+			return values()[code];
 		}
 	}
 	

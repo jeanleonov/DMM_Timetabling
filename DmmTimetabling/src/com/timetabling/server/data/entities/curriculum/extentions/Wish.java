@@ -7,7 +7,7 @@ import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher.TeacherRank;
-import com.timetabling.server.data.entities.tt.Time;
+import com.timetabling.server.data.entities.timetabling.Time;
 
 /** Describes convenience (WELL, BAD or IMPOSSIBLE) of time (field time) 
  *  for associated teacher (field parent)*/
@@ -26,11 +26,7 @@ public class Wish extends DatastoreLongEntity {
 			return code;
 		}
 		static public Priority getByCode(int code) {
-			switch (code) {
-			case 0: return WELL;
-			case 1: return BAD;
-			default: return IMPOSSIBLE;
-			}
+			return values()[code];
 		}
 	}
 

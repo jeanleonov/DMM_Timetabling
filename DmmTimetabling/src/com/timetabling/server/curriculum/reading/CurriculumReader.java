@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.List;
 
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
-import com.timetabling.server.data.managers.CurriculumSaver;
-import com.timetabling.server.data.managers.DaoManagerFactory;
-import com.timetabling.server.data.managers.Utils;
+import com.timetabling.server.data.managers.DaoFactory;
+import com.timetabling.server.data.managers.curriculum.CurriculumSaver;
+import com.timetabling.server.data.managers.simple.Utils;
 
 public class CurriculumReader {
 	
@@ -18,8 +18,10 @@ public class CurriculumReader {
 	private boolean season;
 	private List<CurriculumCell> curriculumCells;
 
-	public CurriculumReader(File file) {
+	public CurriculumReader(File file, int year, boolean season) {
 		this.file = file;
+		this.year = year;
+		this.season = season;
 	}
 	
 	public void readAndPersistCurriculum() throws Exception {
@@ -27,13 +29,13 @@ public class CurriculumReader {
 		persistCurriculum();
 	}
 	
-	/** Should read {@link #file} and initiate {@link #year}, {@link #season} and {@link #curriculumCells} */
+	/** Should read {@link #file} and initiate {@link #curriculumCells} */
 	private void read() {
 		// TODO
 	}
 	
 	private void persistCurriculum() throws Exception {
-		DaoManagerFactory.getCurriculumSaver().saveCurriculumsForSemester(year, season, curriculumCells);
+		DaoFactory.getCurriculumSaver().saveCurriculumsForSemester(year, season, curriculumCells);
 	}
 	
 }

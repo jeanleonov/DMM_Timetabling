@@ -1,10 +1,11 @@
-package com.timetabling.server.data.entities.tt;
+package com.timetabling.server.data.entities.timetabling.lesson;
 
 import javax.persistence.Transient;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
+import com.timetabling.server.data.entities.timetabling.Time;
 
 /** Every 1 Lesson is associated with N LessonTimeWithVersion, 
  *  which is associated with Version.

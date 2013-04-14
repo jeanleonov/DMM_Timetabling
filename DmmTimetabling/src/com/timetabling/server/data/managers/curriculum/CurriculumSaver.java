@@ -1,4 +1,4 @@
-package com.timetabling.server.data.managers;
+package com.timetabling.server.data.managers.curriculum;
 
 import java.util.List;
 
@@ -6,12 +6,11 @@ import com.timetabling.server.base.data.dao.DAOT;
 import com.timetabling.server.base.data.dao.DAOT.DatastoreOperation;
 import com.timetabling.server.base.data.dao.GenericDAO;
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
+import com.timetabling.server.data.managers.simple.Utils;
 
 public class CurriculumSaver extends GenericDAO<CurriculumCell> {
 
-	/** Access modifier is DEFAULT here and it is not accident.
-	 *  Just {@link DaoManagerFactory} can create managers */
-	CurriculumSaver() {
+	public CurriculumSaver() {
 		super(CurriculumCell.class);
 	}
 	
@@ -28,12 +27,31 @@ public class CurriculumSaver extends GenericDAO<CurriculumCell> {
 		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
 			@Override
 			public Void run(DAOT daot) throws Exception {
-				ofy().put(curriculumsCells);
+				daot.getOfy().put(curriculumsCells);
 				return null;
 			}
 			@Override
 			public String getOperationName() {
 				return "Persisting of curriculums cells for " + Utils.getSeasonName(season) + " " + year + "season.";
+			}
+		});
+	}
+	
+	public void saveCurriculumCell(
+			final int year, 
+			final boolean season, 
+			final CurriculumCell curriculumCell) 
+					throws Exception {
+		Utils.setNamespaceForSemester(year, season);
+		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
+			@Override
+			public Void run(DAOT daot) throws Exception {
+				daot.getOfy().put(curriculumCell);
+				return null;
+			}
+			@Override
+			public String getOperationName() {
+				return "Persisting of curriculum cell for " + Utils.getSeasonName(season) + " " + year + "season.";
 			}
 		});
 	}

@@ -1,4 +1,4 @@
-package com.timetabling.server.data.entities.tt;
+package com.timetabling.server.data.entities.timetabling.lesson;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,6 +14,10 @@ import com.googlecode.objectify.annotation.Parent;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher;
+import com.timetabling.server.data.entities.timetabling.Time;
+import com.timetabling.server.data.entities.timetabling.Version;
+import com.timetabling.server.data.entities.timetabling.tt.GroupTT;
+import com.timetabling.server.data.entities.timetabling.tt.TeacherTT;
 
 @Entity
 @Cached

@@ -6,9 +6,9 @@ import javax.persistence.Transient;
 
 import com.googlecode.objectify.annotation.Unindexed;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
-import com.timetabling.server.data.entities.tt.Lesson;
-import com.timetabling.server.data.managers.CurriculumExtensionSaver;
-import com.timetabling.server.data.managers.Utils;
+import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
+import com.timetabling.server.data.managers.DaoFactory;
+import com.timetabling.server.data.managers.curriculum.CurriculumExtensionSaver;
 
 /** Curriculum is associated with specified specialty.
  *  It says how many hours of lectures and practices of subject should be listened in each semester.<br> <code>
@@ -29,11 +29,13 @@ public class CurriculumCell extends DatastoreLongEntity {
 	private long subjectId;
 	private int lessonTypeCode;
 	private long cathedraId;
-	private String displayName;
+	
+	/** 1-5 (year of studying) */
+	private byte course;
 
 	/** Can be null if cell don't belong to any join.
 	 *  See 'CurriculumCellJoiner'.*/
-	private Long joinId;					// TODO !!! Long.. if can be null
+	private Long joinId = null;
 	
 	/** For lectures it is usually 1, 
 	 *  for practice it is usually number of groups (..MF-31, MF-32 - 2 groups) */
@@ -42,6 +44,8 @@ public class CurriculumCell extends DatastoreLongEntity {
 	 *  1 if you have flashing lesson,
 	 *  4 if you have 2 full lessons, ...*/
 	@Unindexed private byte hoursInTwoWeeks;
+	
+	@Unindexed private String displayName;
 	
 	/** List of lessons which are originated by this 'Cell'.
 	 * ( lessons.size() == numberOfSubgroups * (hoursInTwoWeeks+1)/2 ) */
@@ -54,11 +58,12 @@ public class CurriculumCell extends DatastoreLongEntity {
 	 * 	But it is not best decision! <br>
 	 *  Because for each call of this constructor DB will be queried twice 
 	 *  (for getting specialtyID by specialtyName and for getting subjectID by subjectName) */
-	public CurriculumCell(String specialtyName, String subjectName, Type lessonType, byte hoursInTwoWeeks) throws Exception {
-		this.specialtyId = Utils.getSpecialtyIdFor(specialtyName);
-		this.subjectId = Utils.getSubjectIdFor(subjectName);
+	public CurriculumCell(String specialtyName, String subjectName, Type lessonType, byte hoursInTwoWeeks, byte course) throws Exception {
+		this.specialtyId = DaoFactory.getSpecialtyManager().getSpecialtyIdFor(specialtyName);
+		this.subjectId = DaoFactory.getSubjectManager().getSubjectIdFor(subjectName);
 		this.lessonTypeCode = lessonType.getCode();
 		this.hoursInTwoWeeks = hoursInTwoWeeks;
+		this.course = course;
 	}
 
 	public long getSpecialtyId() {
@@ -100,13 +105,13 @@ public class CurriculumCell extends DatastoreLongEntity {
 	public void setCathedraId(Long cathedraId) {
 		this.cathedraId = cathedraId;
 	}
-	
-	public String getDisplayName() {
-		return displayName;
+
+	public byte getCourse() {
+		return course;
 	}
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setCourse(byte course) {
+		this.course = course;
 	}
 
 	public Long getJoinId() {
@@ -139,6 +144,14 @@ public class CurriculumCell extends DatastoreLongEntity {
 
 	public void setHoursInTwoWeeks(byte hoursInTwoWeeks) {
 		this.hoursInTwoWeeks = hoursInTwoWeeks;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	public List<Lesson> getLessons() {

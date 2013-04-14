@@ -1,4 +1,4 @@
-package com.timetabling.server.data.entities.tt;
+package com.timetabling.server.data.entities.timetabling;
 
 
 /** Describes specific lesson time.

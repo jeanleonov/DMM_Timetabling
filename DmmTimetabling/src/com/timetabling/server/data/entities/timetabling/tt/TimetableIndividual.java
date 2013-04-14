@@ -1,7 +1,9 @@
-package com.timetabling.server.data.entities.tt;
+package com.timetabling.server.data.entities.timetabling.tt;
 
 import java.util.List;
 
+import com.timetabling.server.data.entities.timetabling.Time;
+import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
 import com.timetabling.server.exceptions.CurriculumIsNotEnoughExtenedException;
 
 public class TimetableIndividual {

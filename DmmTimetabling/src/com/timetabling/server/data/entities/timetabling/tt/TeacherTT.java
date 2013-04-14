@@ -1,8 +1,10 @@
-package com.timetabling.server.data.entities.tt;
+package com.timetabling.server.data.entities.timetabling.tt;
 
 import java.util.List;
 
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher;
+import com.timetabling.server.data.entities.timetabling.Version;
+import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
 import com.timetabling.server.generating.Markable;
 
 /** Timetable of specified {@link Teacher}. <br>

@@ -1,15 +1,15 @@
-package com.timetabling.server.data.managers;
+package com.timetabling.server.data.managers.timetabling;
 
 import java.util.List;
 
 import com.timetabling.server.base.data.dao.GenericDAO;
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher;
-import com.timetabling.server.data.entities.tt.Lesson;
+import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
 
 public class LessonsManager extends GenericDAO<Lesson> {
 
 	/** Access modifier is DEFAULT here and it is not accident */
-	LessonsManager() {
+	public LessonsManager() {
 		super(Lesson.class);
 	}
 
