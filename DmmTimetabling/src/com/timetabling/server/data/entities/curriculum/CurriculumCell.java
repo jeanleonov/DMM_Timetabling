@@ -9,6 +9,7 @@ import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
 import com.timetabling.server.data.managers.DaoFactory;
 import com.timetabling.server.data.managers.curriculum.CurriculumExtensionSaver;
+import com.timetabling.shared.enums.LessonType;
 
 /** Curriculum is associated with specified specialty.
  *  It says how many hours of lectures and practices of subject should be listened in each semester.<br> <code>
@@ -58,7 +59,7 @@ public class CurriculumCell extends DatastoreLongEntity {
 	 * 	But it is not best decision! <br>
 	 *  Because for each call of this constructor DB will be queried twice 
 	 *  (for getting specialtyID by specialtyName and for getting subjectID by subjectName) */
-	public CurriculumCell(String specialtyName, String subjectName, Type lessonType, byte hoursInTwoWeeks, byte course) throws Exception {
+	public CurriculumCell(String specialtyName, String subjectName, LessonType lessonType, byte hoursInTwoWeeks, byte course) throws Exception {
 		this.specialtyId = DaoFactory.getSpecialtyManager().getSpecialtyIdFor(specialtyName);
 		this.subjectId = DaoFactory.getSubjectManager().getSubjectIdFor(subjectName);
 		this.lessonTypeCode = lessonType.getCode();
@@ -82,12 +83,12 @@ public class CurriculumCell extends DatastoreLongEntity {
 		this.subjectId = subjectId;
 	}
 
-	/** @see com.timetabling.server.data.entities.curriculum.Type Type */
+	/** @see com.timetabling.shared.enums.LessonType Type */
 	public int getLessonTypeCode() {
 		return lessonTypeCode;
 	}
 
-	/** @see com.timetabling.server.data.entities.curriculum.Type Type */
+	/** @see com.timetabling.shared.enums.LessonType Type */
 	public void setLessonTypeCode(int lessonTypeCode) {
 		this.lessonTypeCode = lessonTypeCode;
 	}

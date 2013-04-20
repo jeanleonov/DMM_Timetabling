@@ -1,6 +1,6 @@
 package com.timetabling.server.generating;
 
-import com.timetabling.server.data.entities.tt.Version;
+import com.timetabling.server.data.entities.timetabling.Version;
 
 public interface Markable {
 

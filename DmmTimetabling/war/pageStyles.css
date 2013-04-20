@@ -1,0 +1,23 @@
+@CHARSET "UTF-8";
+
+.page {
+	background-image: url(graphy_@2X.png);
+    background-repeat: repeat;
+}
+
+.header {
+	
+}
+
+.content {
+    position : absolute;
+    top: 40px;
+    bottom : 0;
+    left : 0;
+    right : 0;
+	margin : 10px;
+	padding : 10px;
+	background-color : rgba(235,245,255,0.75);
+	border-radius : 10px;
+	box-shadow: 0 0 10px gray;
+}

@@ -16,8 +16,16 @@
   <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
-
+  
   <!-- Other module inherits                                      -->
+  
+  <inherits name="com.googlecode.objectify.Objectify" />
+  
+  <inherits name='com.google.web.bindery.requestfactory.RequestFactory' />
+
+	<!-- Bootstrap -->
+	<inherits name="com.github.gwtbootstrap.Bootstrap" />
+	<inherits name='com.github.gwtbootstrap.datepicker.Datepicker' />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.timetabling.client.DmmTimetabling'/>

@@ -43,12 +43,12 @@ public class Time {
 	/** Monday, Tuesday, ... */
 	private int day = UNDEF;
 	private int lessonNumber = UNDEF;
-	private WeekType weekType = WeekType.UNDEF;
+	private int weekTypeCode = WeekType.UNDEF.getCode();
 	
 	public Time(int timeKey) {
 		lessonNumber = timeKey / 10000;
 		day = (timeKey - lessonNumber*10000) / 100;
-		weekType = WeekType.getByCode(timeKey - lessonNumber*10000 - day*100);
+		weekTypeCode = timeKey - lessonNumber*10000 - day*100;
 	}
 
 	public int getWeekDay() {
@@ -67,16 +67,24 @@ public class Time {
 		this.lessonNumber = lessonNumber;
 	}
 
+	public int getWeekTypeCode() {
+		return weekTypeCode;
+	}
+
+	public void setWeekType(int weekTypeCode) {
+		this.weekTypeCode = weekTypeCode;
+	}
+
 	public WeekType getWeekType() {
-		return weekType;
+		return WeekType.getByCode(weekTypeCode);
 	}
 
 	public void setWeekType(WeekType weekType) {
-		this.weekType = weekType;
+		this.weekTypeCode = weekType.getCode();
 	}
 	
 	public int getKey() {
-		return weekType.getCode() + 100*day + 10000*lessonNumber;
+		return weekTypeCode + 100*day + 10000*lessonNumber;
 	}
 	
 	/**
@@ -85,12 +93,12 @@ public class Time {
 	 * @throws Exception if some field of _this or _t is undefined
 	 */
 	public boolean hasConflictWith(Time t) throws Exception{
-		if (  day==UNDEF ||   lessonNumber==UNDEF ||   weekType == WeekType.UNDEF ||
-			t.day==UNDEF || t.lessonNumber==UNDEF || t.weekType == WeekType.UNDEF)
+		if (  day==UNDEF ||   lessonNumber==UNDEF ||   weekTypeCode == WeekType.UNDEF.getCode() ||
+			t.day==UNDEF || t.lessonNumber==UNDEF || t.weekTypeCode == WeekType.UNDEF.getCode())
 			throw new Exception("The times are not fully defined");
 		if (day==ANY || t.day==ANY || day==t.day)
 			if (lessonNumber==ANY || t.lessonNumber==ANY || lessonNumber==t.lessonNumber)
-				if (weekType==WeekType.ANY || t.weekType==WeekType.ANY || weekType==t.weekType)
+				if (weekTypeCode==WeekType.ANY.getCode() || t.weekTypeCode==WeekType.ANY.getCode() || weekTypeCode==t.weekTypeCode)
 					return true;
 		return false;
 	}

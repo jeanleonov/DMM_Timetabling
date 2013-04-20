@@ -1,4 +1,4 @@
-package com.timetabling.server.data.entities.timetabling.rule;
+package com.timetabling.shared.enums;
 
 
 public enum RuleType {

@@ -9,6 +9,25 @@
     <welcome-file>DmmTimetabling.html</welcome-file>
   </welcome-file-list>
   
+	<!-- Servlets -->
+  <servlet>
+    <servlet-name>requestFactoryServlet</servlet-name>
+    <servlet-class>com.google.web.bindery.requestfactory.server.RequestFactoryServlet</servlet-class>
+    <init-param>
+      <param-name>symbolMapsDirectory</param-name>
+        <!-- You'll need to compile with -extras and move the symbolMaps directory 
+             to this location if you want stack trace deobfuscation to work -->
+      <param-value>WEB-INF/classes/symbolMaps/</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>requestFactoryServlet</servlet-name>
+    <url-pattern>/gwtRequest</url-pattern>
+  </servlet-mapping>
+  
+  
+  
   <servlet>
     <servlet-name>SystemServiceServlet</servlet-name>
     <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
@@ -21,17 +40,6 @@
   <servlet-mapping>
     <servlet-name>SystemServiceServlet</servlet-name>
     <url-pattern>/_ah/spi/*</url-pattern>
-  </servlet-mapping>
-  
-  <!-- RPC -->
-  <servlet>
-    <servlet-name>RPCServlet</servlet-name>
-    <servlet-class>com.timetabling.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>RPCServlet</servlet-name>
-    <url-pattern>/DmmTimetabling/greet</url-pattern>
   </servlet-mapping>
   
 </web-app>

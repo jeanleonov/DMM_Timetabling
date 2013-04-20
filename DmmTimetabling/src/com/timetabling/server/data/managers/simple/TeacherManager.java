@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Query;
 import com.timetabling.server.base.common.KeyHelper;
 import com.timetabling.server.base.common.NamespaceController;
 import com.timetabling.server.base.data.dao.DAOT;
@@ -12,7 +11,6 @@ import com.timetabling.server.base.data.dao.DAOT.DatastoreOperation;
 import com.timetabling.server.base.data.dao.GenericDAO;
 import com.timetabling.server.data.entities.curriculum.extentions.Cathedra;
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher;
-import com.timetabling.server.data.entities.curriculum.extentions.Teacher.TeacherRank;
 import com.timetabling.server.data.entities.curriculum.extentions.Wish;
 
 public class TeacherManager extends GenericDAO<Teacher> {
@@ -21,19 +19,30 @@ public class TeacherManager extends GenericDAO<Teacher> {
 		super(Teacher.class);
 	}
 	
-	public Key<Teacher> putTeacher(final Teacher teacher, final Key<Cathedra> cathedraKey) throws Exception {
+	public void putTeacher(final Teacher teacher, final long cathedraId) throws Exception {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
-		Query<Teacher> query = ofy().query(Teacher.class)
-									.ancestor(cathedraKey)
-									.filter("name", teacher.getName());
-		if (query.count() != 0) {
-			long oldTeacherId = query.getKey().getId();
-			teacher.setId(oldTeacherId);
-		}
-		return DAOT.runInTransaction(logger, new DatastoreOperation<Key<Teacher>>() {
+		Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
+		teacher.setParent(cathedraKey);
+		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
 			@Override
-			public Key<Teacher> run(DAOT daot) throws Exception {
-				return daot.getOfy().put(teacher);
+			public Void run(DAOT daot) throws Exception {
+				daot.getOfy().put(teacher);
+				return null;
+			}
+			@Override
+			public String getOperationName() {
+				return "Persisting of teacher.";
+			}
+		});
+	}
+	
+	public void putTeacher(final Teacher teacher) throws Exception {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
+			@Override
+			public Void run(DAOT daot) throws Exception {
+				daot.getOfy().put(teacher);
+				return null;
 			}
 			@Override
 			public String getOperationName() {
@@ -67,19 +76,20 @@ public class TeacherManager extends GenericDAO<Teacher> {
 		Utils.<Teacher>setFieldValueInEntity(NamespaceController.generalNamespace, Teacher.class, teacherId, teacherName, nameSetter);
 	}
 	
-	public void setTeacherRank(long teacherId, TeacherRank teacherRank) throws Exception {
-		Method rankSetter = Teacher.class.getMethod("setRank", TeacherRank.class);
-		Utils.<Teacher>setFieldValueInEntity(NamespaceController.generalNamespace, Teacher.class, teacherId, teacherRank, rankSetter);
+	public void setTeacherRank(long teacherId, int teacherRankCode) throws Exception {
+		Method rankCodeSetter = Teacher.class.getMethod("setRankCode", Integer.class);
+		Utils.<Teacher>setFieldValueInEntity(NamespaceController.generalNamespace, Teacher.class, teacherId, teacherRankCode, rankCodeSetter);
 	}
 	
-	public Key<Wish> addWish(final long teacherId, final Wish wish) throws Exception {
+	public void addWish(final long teacherId, final Wish wish) throws Exception {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
-		return DAOT.runInTransaction(logger, new DatastoreOperation<Key<Wish>>() {
+		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
 			@Override
-			public Key<Wish> run(DAOT daot) throws Exception {
+			public Void run(DAOT daot) throws Exception {
 				Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, teacherId);
 				wish.setParent(teacherKey);
-				return daot.getOfy().put(wish);
+				daot.getOfy().put(wish);
+				return null;
 			}
 			@Override
 			public String getOperationName() {

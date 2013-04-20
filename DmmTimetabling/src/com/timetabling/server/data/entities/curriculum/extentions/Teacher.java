@@ -7,25 +7,9 @@ import javax.persistence.Transient;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
+import com.timetabling.shared.enums.TeacherRank;
 
 public class Teacher extends DatastoreLongEntity {
-	
-	public enum TeacherRank {
-		PROFESSOR (0), 
-		DOZENT (1), 
-		LECTURER (2), 
-		ASSISTANT (3);
-		int code;
-		private TeacherRank(int code) {
-			this.code = code;
-		}
-		public int getCode() {
-			return code;
-		}
-		static public TeacherRank getByCode(int code) {
-			return values()[code];
-		}
-	}
 	
 	@Parent private Key<Cathedra> parent;
 	private String name;
@@ -50,6 +34,16 @@ public class Teacher extends DatastoreLongEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/** @return teacher's rank (DOZENT, PROFESSOR, LECTURER or ASSISTANT) */
+	public int getRankCode() {
+		return rankCode;
+	}
+
+	/** @param rank - teacher's rank (DOZENT, PROFESSOR, LECTURER or ASSISTANT) */
+	public void setRankCode(int rankCode) {
+		this.rankCode = rankCode;
 	}
 
 	/** @return teacher's rank (DOZENT, PROFESSOR, LECTURER or ASSISTANT) */

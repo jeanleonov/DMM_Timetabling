@@ -16,7 +16,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
-import com.timetabling.server.data.managers.DaoManagerFactory;
+import com.timetabling.server.data.managers.DaoFactory;
 
 /**
  * Generic DAO for use with Objectify
@@ -38,12 +38,12 @@ public class ObjectifyDao<T> extends DAOBase {
 
 	@SuppressWarnings("unchecked")
 	public ObjectifyDao() {
-		DaoManagerFactory.initiate();
+		DaoFactory.initiate();
 		clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
 	public ObjectifyDao(Class<T> clazz) {
-		DaoManagerFactory.initiate();
+		DaoFactory.initiate();
 		this.clazz = clazz;
 	}
 

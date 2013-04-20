@@ -1,8 +1,6 @@
-package com.timetabling.server.data.entities.curriculum;
+package com.timetabling.shared.enums;
 
-
-
-public enum Type {
+public enum LessonType {
 	
 	LECTION (0),
 	PRACTICE (1),
@@ -12,7 +10,7 @@ public enum Type {
 	
 	int code;
 	
-	private Type(int code) {
+	private LessonType(int code) {
 		this.code = code;
 	}
 	
@@ -20,8 +18,7 @@ public enum Type {
 		return code;
 	}
 	
-	static public Type getByCode(int code) {
+	static public LessonType getByCode(int code) {
 		return values()[code];
 	}
-	
 }

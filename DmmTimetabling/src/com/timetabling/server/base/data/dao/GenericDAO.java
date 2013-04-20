@@ -12,7 +12,7 @@ import com.timetabling.server.base.data.dao.DAOT.DatastoreOperation;
 import com.timetabling.server.base.data.entities.DatastoreEntity;
 import com.timetabling.server.base.exceptions.InternalException;
 import com.timetabling.server.base.task.mailexception.MailLoggerHandler;
-import com.timetabling.server.data.managers.DaoManagerFactory;
+import com.timetabling.server.data.managers.DaoFactory;
 
 /**
  * Implementation of {IGenericDAO} interface
@@ -33,7 +33,7 @@ public class GenericDAO<T extends DatastoreEntity> extends DAOBase implements IG
 		this.clazz = clazz;
 
 		// initiate DaoFactory in order to register all required entities
-		DaoManagerFactory.initiate();
+		DaoFactory.initiate();
 
 		logger = Logger.getLogger(clazz.getSimpleName());
 

@@ -6,29 +6,13 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
-import com.timetabling.server.data.entities.curriculum.extentions.Teacher.TeacherRank;
 import com.timetabling.server.data.entities.timetabling.Time;
+import com.timetabling.shared.enums.TeacherRank;
+import com.timetabling.shared.enums.WishPriority;
 
 /** Describes convenience (WELL, BAD or IMPOSSIBLE) of time (field time) 
  *  for associated teacher (field parent)*/
 public class Wish extends DatastoreLongEntity {
-	
-	public enum Priority{
-		WELL (0), 
-		BAD (1), 
-		IMPOSSIBLE (2);
-		
-		int code;
-		private Priority(int code) {
-			this.code = code;
-		}
-		public int getCode() {
-			return code;
-		}
-		static public Priority getByCode(int code) {
-			return values()[code];
-		}
-	}
 
 	@Parent private Key<Teacher> parent;
 	private int timeKey = -1;
@@ -48,6 +32,22 @@ public class Wish extends DatastoreLongEntity {
 		this.parent = parent;
 	}
 
+	public int getTimeKey() {
+		return timeKey;
+	}
+
+	public void setTimeKey(int timeKey) {
+		this.timeKey = timeKey;
+	}
+
+	public int getPriorityCode() {
+		return priorityCode;
+	}
+
+	public void setPriorityCode(int priorityCode) {
+		this.priorityCode = priorityCode;
+	}
+
 	public Time getTime() {
 		if (time == null) {
 			if (timeKey == -1)
@@ -62,11 +62,11 @@ public class Wish extends DatastoreLongEntity {
 		this.time = time;
 	}
 
-	public Priority getPriority() {
-		return priorityCode == -1? null : Priority.getByCode(priorityCode);
+	public WishPriority getPriority() {
+		return priorityCode == -1? null : WishPriority.getByCode(priorityCode);
 	}
 
-	public void setPriority(Priority priority) {
+	public void setPriority(WishPriority priority) {
 		this.priorityCode = priority.getCode();
 	}
 
