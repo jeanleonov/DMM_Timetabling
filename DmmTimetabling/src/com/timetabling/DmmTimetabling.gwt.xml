@@ -23,9 +23,9 @@
   
   <inherits name='com.google.web.bindery.requestfactory.RequestFactory' />
 
-	<!-- Bootstrap -->
-	<inherits name="com.github.gwtbootstrap.Bootstrap" />
-	<inherits name='com.github.gwtbootstrap.datepicker.Datepicker' />
+  <!-- Bootstrap -->
+  <inherits name="com.github.gwtbootstrap.Bootstrap" />
+  <inherits name='com.github.gwtbootstrap.datepicker.Datepicker' />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.timetabling.client.DmmTimetabling'/>
@@ -33,5 +33,8 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
+
+	<!-- responsive bootstrap design settings -->
+	<set-property name="bootstrap.responsiveDesign" value="true" />
 
 </module>

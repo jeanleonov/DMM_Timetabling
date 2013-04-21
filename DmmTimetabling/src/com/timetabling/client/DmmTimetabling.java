@@ -2,7 +2,7 @@ package com.timetabling.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.timetabling.client.test.pages.cathedra.CathedraPage;
+import com.timetabling.client.pages.cathedra.CathedraPage;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
