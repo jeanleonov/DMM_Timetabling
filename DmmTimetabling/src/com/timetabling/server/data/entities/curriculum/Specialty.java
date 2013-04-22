@@ -1,10 +1,8 @@
 package com.timetabling.server.data.entities.curriculum;
 
-import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 
-@Cached
 public class Specialty extends DatastoreLongEntity {
 
 	private String name;

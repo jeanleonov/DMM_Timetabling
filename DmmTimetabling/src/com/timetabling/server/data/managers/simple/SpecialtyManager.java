@@ -23,22 +23,22 @@ public class SpecialtyManager extends GenericDAO<Specialty> {
 	public long getSpecialtyIdFor(final String specialtyName) throws Exception {
 		Utils.setNamespaceGeneral();
 		final ObjectifyDao<Specialty> dao = new ObjectifyDao<Specialty>(Specialty.class);
-		Specialty specialty = dao.getByProperty("name", specialtyName);
-		if (specialty == null) 
-			return DAOT.runInTransaction(logger, new DatastoreOperation<Long>() {
-				@Override
-				public Long run(DAOT daot) throws Exception {
-					Specialty newSpecialty = new Specialty();
-					newSpecialty.setName(specialtyName);
-					newSpecialty.setShortName(getDefaultShortName(specialtyName));
-					return daot.getOfy().put(newSpecialty).getId();
-				}
-				@Override
-				public String getOperationName() {
-					return "Saving of new specialty";
-				}
-			});
-		return specialty.getId();
+		return DAOT.runInTransaction(logger, new DatastoreOperation<Long>() {
+			@Override
+			public Long run(DAOT daot) throws Exception {
+				Specialty specialty = dao.getByProperty("name", specialtyName);
+				if (specialty != null)
+					return specialty.getId();
+				Specialty newSpecialty = new Specialty();
+				newSpecialty.setName(specialtyName);
+				newSpecialty.setShortName(getDefaultShortName(specialtyName));
+				return daot.getOfy().put(newSpecialty).getId();
+			}
+			@Override
+			public String getOperationName() {
+				return "Saving of new specialty";
+			}
+		});
 	}
 	
 	public static String getDefaultShortName(String specialtyName) {

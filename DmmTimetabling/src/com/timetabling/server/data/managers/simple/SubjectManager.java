@@ -23,21 +23,21 @@ public class SubjectManager extends GenericDAO<Subject> {
 	public long getSubjectIdFor(final String subjectName) throws Exception {
 		Utils.setNamespaceGeneral();
 		final ObjectifyDao<Subject> dao = new ObjectifyDao<Subject>(Subject.class);
-		Subject subject = dao.getByProperty("name", subjectName);
-		if (subject == null)
-			return DAOT.runInTransaction(logger, new DatastoreOperation<Long>() {
-				@Override
-				public Long run(DAOT daot) throws Exception {
-					Subject newSubject = new Subject();
-					newSubject.setName(subjectName);
-					newSubject.setDisplayName(subjectName);
-					return daot.getOfy().put(newSubject).getId();
-				}
-				@Override
-				public String getOperationName() {
-					return "Saving of new subject";
-			}});
-		return subject.getId();
+		return DAOT.runInTransaction(logger, new DatastoreOperation<Long>() {
+			@Override
+			public Long run(DAOT daot) throws Exception {
+				Subject subject = dao.getByProperty("name", subjectName);
+				if (subject != null)
+					return subject.getId();
+				Subject newSubject = new Subject();
+				newSubject.setName(subjectName);
+				newSubject.setDisplayName(subjectName);
+				return daot.getOfy().put(newSubject).getId();
+			}
+			@Override
+			public String getOperationName() {
+				return "Saving of new subject";
+		}});
 	}
 	
 	public Subject getSpecialtyById(long id) throws Exception {

@@ -49,12 +49,6 @@ public class CurriculumReader {
 	 * Should read {@link #file} and initiate {@link #curriculumCells}
 	 * @throws Exception 
 	 */
-	
-	public static void main(String[] args) throws Exception {
-		new CurriculumReader(new File("test1.xls"), 2012,  true).read();
-
-	}
-
 	private void read() throws Exception {
 		try {
 			inputstream = new FileInputStream(file);
@@ -131,7 +125,10 @@ public class CurriculumReader {
 			}
 			System.out.println(curriculumCells); //test
 			
-		} finally {
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
 			inputstream.close();
 		}
 	}

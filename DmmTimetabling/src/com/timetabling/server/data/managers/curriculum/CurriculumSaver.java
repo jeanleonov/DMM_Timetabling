@@ -24,17 +24,18 @@ public class CurriculumSaver extends GenericDAO<CurriculumCell> {
 			final List<CurriculumCell> curriculumsCells) 
 					throws Exception {
 		Utils.setNamespaceForSemester(year, season);
-		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
-			@Override
-			public Void run(DAOT daot) throws Exception {
-				daot.getOfy().put(curriculumsCells);
-				return null;
-			}
-			@Override
-			public String getOperationName() {
-				return "Persisting of curriculums cells for " + Utils.getSeasonName(season) + " " + year + "season.";
-			}
-		});
+		for (final CurriculumCell cell : curriculumsCells)
+			DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
+				@Override
+				public Void run(DAOT daot) throws Exception {
+					daot.getOfy().put(cell);
+					return null;
+				}
+				@Override
+				public String getOperationName() {
+					return "Persisting of curriculums cells for " + Utils.getSeasonName(season) + " " + year + "season.";
+				}
+			});
 	}
 	
 	public void saveCurriculumCell(

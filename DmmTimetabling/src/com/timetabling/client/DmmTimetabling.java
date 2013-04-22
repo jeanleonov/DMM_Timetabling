@@ -2,6 +2,7 @@ package com.timetabling.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.timetabling.client.base.communication.Communicator;
 import com.timetabling.client.pages.cathedra.CathedraPage;
 
 /**
@@ -15,5 +16,6 @@ public class DmmTimetabling implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		RootPanel.get("content").add(new CathedraPage());
+		Communicator.get().requestFactory.createCurriculumReaderRequest().runReading().fire();
 	}
 }
