@@ -7,7 +7,6 @@ import javax.persistence.Transient;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
-import com.timetabling.server.data.managers.DaoFactory;
 import com.timetabling.server.data.managers.curriculum.CurriculumExtensionSaver;
 import com.timetabling.shared.enums.LessonType;
 
@@ -31,6 +30,9 @@ public class CurriculumCell extends DatastoreLongEntity {
 	private int lessonTypeCode;
 	private long cathedraId;
 	
+	@Transient private String specialtyName;
+	@Transient private String subjectName;
+	
 	/** 1-5 (year of studying) */
 	private byte course;
 
@@ -41,7 +43,8 @@ public class CurriculumCell extends DatastoreLongEntity {
 	/** For lectures it is usually 1, 
 	 *  for practice it is usually number of groups (..MF-31, MF-32 - 2 groups) */
 	@Unindexed private byte numberOfSubgroups;
-		/** 2 if you have 1 full lesson,
+	
+	/** 2 if you have 1 full lesson,
 	 *  1 if you have flashing lesson,
 	 *  4 if you have 2 full lessons, ...*/
 	@Unindexed private byte hoursInTwoWeeks;
@@ -60,8 +63,8 @@ public class CurriculumCell extends DatastoreLongEntity {
 	 *  Because for each call of this constructor DB will be queried twice 
 	 *  (for getting specialtyID by specialtyName and for getting subjectID by subjectName) */
 	public CurriculumCell(String specialtyName, String subjectName, LessonType lessonType, byte hoursInTwoWeeks, byte course) throws Exception {
-		this.specialtyId = DaoFactory.getSpecialtyManager().getSpecialtyIdFor(specialtyName);
-		this.subjectId = DaoFactory.getSubjectManager().getSubjectIdFor(subjectName);
+		this.specialtyName = specialtyName;
+		this.subjectName = subjectName;
 		this.lessonTypeCode = lessonType.getCode();
 		this.hoursInTwoWeeks = hoursInTwoWeeks;
 		this.course = course;
@@ -105,6 +108,22 @@ public class CurriculumCell extends DatastoreLongEntity {
 	 * 	@See {@link CurriculumExtensionSaver} */
 	public void setCathedraId(Long cathedraId) {
 		this.cathedraId = cathedraId;
+	}
+
+	public String getSpecialtyName() {
+		return specialtyName;
+	}
+
+	public void setSpecialtyName(String specialtyName) {
+		this.specialtyName = specialtyName;
+	}
+
+	public String getSubjectName() {
+		return subjectName;
+	}
+
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
 	}
 
 	public byte getCourse() {

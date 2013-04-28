@@ -16,6 +16,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
 import com.timetabling.server.data.managers.DaoFactory;
 import com.timetabling.server.data.managers.curriculum.CurriculumSaver;
+import com.timetabling.server.data.managers.simple.SpecialtyManager;
+import com.timetabling.server.data.managers.simple.SubjectManager;
 import com.timetabling.server.data.managers.simple.Utils;
 import com.timetabling.shared.enums.LessonType;
 
@@ -233,8 +235,17 @@ public class CurriculumReader {
 	}
 
 	private void persistCurriculum() throws Exception {
+		initForeignKeys(curriculumCells);
 		DaoFactory.getCurriculumSaver().saveCurriculumsForSemester(year,
 				season, curriculumCells);
 	}
 
+	private void initForeignKeys(List<CurriculumCell> cells) throws Exception {
+		SpecialtyManager specialtyManager = DaoFactory.getSpecialtyManager();
+		SubjectManager subjectManager = DaoFactory.getSubjectManager();
+		for (CurriculumCell cell : cells) {
+			cell.setSpecialtyId(specialtyManager.getSpecialtyIdFor(cell.getSpecialtyName()));
+			cell.setSubjectId(subjectManager.getSubjectIdFor(cell.getSubjectName()));
+		}
+	}
 }
