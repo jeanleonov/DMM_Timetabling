@@ -1,4 +1,4 @@
-package com.timetabling.client.pages.teacher;
+package com.timetabling.client.ui.pages.teacher;
 
 import java.util.List;
 
@@ -9,7 +9,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -17,8 +16,9 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.timetabling.client.base.communication.Communicator;
 import com.timetabling.client.communication.entities.CathedraProxy;
 import com.timetabling.client.communication.requests.CathedraRequest;
+import com.timetabling.client.ui.pages.BasePage;
 
-public class TeacherPage extends Composite {
+public class TeacherPage extends BasePage {
 
 	private static TeacherPageUiBinder uiBinder = GWT
 			.create(TeacherPageUiBinder.class);

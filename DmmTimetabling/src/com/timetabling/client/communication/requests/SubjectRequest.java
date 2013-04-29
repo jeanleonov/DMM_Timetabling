@@ -12,9 +12,11 @@ import com.timetabling.server.data.managers.simple.SubjectManager;
 @Service( value = SubjectManager.class, locator = DaoServiceLocator.class )
 public interface SubjectRequest extends RequestContext {
 
+	Request<Void> putSubject(SubjectProxy subject);
 	Request<Long> getSubjectIdFor(String subjectName);
-	Request<SubjectProxy> getSpecialtyById(long id);
-	Request<List<SubjectProxy>> getAllSpecialties();
-	Request<Void>  setSubjectName(long subjectId, String subjectName);
-	Request<Void>  setSpecialtyShortName(long subjectId, String subectDisplayName);
+	Request<SubjectProxy> getSubjectById(long id);
+	Request<List<SubjectProxy>> getAllSubjects();
+	Request<Void> setSubjectName(long subjectId, String subjectName);
+	Request<Void> setSubjectDisplayName(long subjectId, String subectDisplayName);
+	Request<Void> deleteSubject(long subjectId);
 }

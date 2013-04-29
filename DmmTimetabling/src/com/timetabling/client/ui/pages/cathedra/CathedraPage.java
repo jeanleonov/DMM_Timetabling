@@ -1,4 +1,4 @@
-package com.timetabling.client.pages.cathedra;
+package com.timetabling.client.ui.pages.cathedra;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.TextBox;
@@ -8,7 +8,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -16,9 +15,10 @@ import com.timetabling.client.base.communication.Communicator;
 import com.timetabling.client.base.datagrid.DataSelectionListener;
 import com.timetabling.client.communication.entities.CathedraProxy;
 import com.timetabling.client.communication.requests.CathedraRequest;
-import com.timetabling.client.pages.cathedra.table.CathedraGrid;
+import com.timetabling.client.ui.pages.BasePage;
+import com.timetabling.client.ui.pages.cathedra.table.CathedraGrid;
 
-public class CathedraPage extends Composite implements DataSelectionListener<CathedraProxy> {
+public class CathedraPage extends BasePage implements DataSelectionListener<CathedraProxy> {
 
 	private static CathedraPageUiBinder uiBinder = GWT
 			.create(CathedraPageUiBinder.class);
@@ -27,6 +27,9 @@ public class CathedraPage extends Composite implements DataSelectionListener<Cat
 	}
 
 	@UiField Button saveButton;
+	@UiField Button editButton;
+	@UiField Button removeButton;
+	@UiField Button cancelButton;
 	@UiField TextBox nameSetter;
 	@UiField TextBox emailSetter;
 	@UiField FlowPanel persistedCathedras;
@@ -42,7 +45,7 @@ public class CathedraPage extends Composite implements DataSelectionListener<Cat
 	}
 
 	@UiHandler("saveButton")
-	void onClick(ClickEvent e) {
+	void onSave(ClickEvent e) {
 		CathedraRequest requestContext = Communicator.get().requestFactory.createCathedraRequest();
 		CathedraProxy cathedra = requestContext.create(CathedraProxy.class);
 		cathedra.setName(nameSetter.getValue());
@@ -55,15 +58,67 @@ public class CathedraPage extends Composite implements DataSelectionListener<Cat
 			}
 		});
 	}
+
+	@UiHandler("editButton")
+	void onEdit(ClickEvent e) {
+		CathedraProxy cathedra = dataGrid.getSelected();
+		CathedraRequest request = Communicator.get().requestFactory.createCathedraRequest();
+		cathedra = request.edit(cathedra);
+		cathedra.setName(nameSetter.getValue());
+		cathedra.setEmail(emailSetter.getValue());
+		request.putCathedra(cathedra).fire(new Receiver<Void>() {
+			@Override
+			public void onSuccess(Void response) {
+				updateList();
+			}
+		});
+	}
+
+	@UiHandler("removeButton")
+	void onRemove(ClickEvent e) {
+		CathedraProxy cathedra = dataGrid.getSelected();
+		CathedraRequest request = Communicator.get().requestFactory.createCathedraRequest();
+		request.deleteCathedra(cathedra.getId()).fire(new Receiver<Void>() {
+			@Override
+			public void onSuccess(Void response) {
+				updateList();
+			}
+		});
+	}
+
+	@UiHandler("cancelButton")
+	void onCancel(ClickEvent e) {
+		CathedraProxy cathedra = dataGrid.getSelected();
+		dataGrid.getSelectionModel().setSelected(cathedra, false);
+		setCreatingMode();
+	}
+	
+	private void setCreatingMode() {
+		saveButton.setVisible(true);
+		editButton.setVisible(false);
+		removeButton.setVisible(false);
+		cancelButton.setVisible(false);
+		nameSetter.setText("");
+		emailSetter.setText("");
+	}
+	
+	private void setEditingMode(CathedraProxy entity) {
+		saveButton.setVisible(false);
+		editButton.setVisible(true);
+		removeButton.setVisible(true);
+		cancelButton.setVisible(true);
+		nameSetter.setText(entity.getName());
+		emailSetter.setText(entity.getEmail());
+	}
 	
 	private void updateList() {
 		dataGrid.getProvider().update();
+		setCreatingMode();
 	}
 
 	@Override
 	public void onRowSelected(CathedraProxy entity) {
-		nameSetter.setText(entity.getName());
-		emailSetter.setText(entity.getEmail());
+		setEditingMode(entity);
 	}
 	
 	

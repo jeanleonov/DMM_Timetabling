@@ -16,6 +16,27 @@ public class SpecialtyManager extends GenericDAO<Specialty> {
 	public SpecialtyManager() {
 		super(Specialty.class);
 	}
+	
+	public void putSpecialty(Specialty specialty) throws Exception {
+		// TODO see cathedra manager
+		Utils.setNamespaceGeneral();
+		put(specialty);
+	}
+	
+	public void deleteSpecialty(final long specialtyId) throws Exception {
+		Utils.setNamespaceGeneral();
+		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
+			@Override
+			public Void run(DAOT daot) throws Exception {
+				daot.getOfy().delete(Specialty.class, specialtyId);
+				return null;
+			}
+			@Override
+			public String getOperationName() {
+				return "Deleting of specialty.";
+			}
+		});
+	}
 
 	/** This method try to find specialty with specified name. <br>
 	 *  If it found specialty -> return id of founded specialty, <br> 
@@ -46,10 +67,12 @@ public class SpecialtyManager extends GenericDAO<Specialty> {
 	}
 	
 	public Specialty getSpecialtyById(long id) throws Exception {
+		Utils.setNamespaceGeneral();
 		return get(KeyHelper.getKey(Specialty.class, id));
 	}
 	
 	public List<Specialty> getAllSpecialties() {
+		Utils.setNamespaceGeneral();
 		return ofy().query(Specialty.class).list();
 	}
 	

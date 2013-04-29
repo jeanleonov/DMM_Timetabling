@@ -17,6 +17,27 @@ public class SubjectManager extends GenericDAO<Subject> {
 		super(Subject.class);
 	}
 	
+	public void putSubject(Subject subject) throws Exception {
+		// TODO see cathedra manager
+		Utils.setNamespaceGeneral();
+		put(subject);
+	}
+	
+	public void deleteSubject(final long subjectId) throws Exception {
+		Utils.setNamespaceGeneral();
+		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
+			@Override
+			public Void run(DAOT daot) throws Exception {
+				daot.getOfy().delete(Subject.class, subjectId);
+				return null;
+			}
+			@Override
+			public String getOperationName() {
+				return "Deleting of subject.";
+			}
+		});
+	}
+	
 	/** This method try to find subject with specified name. <br>
 	 *  If it found subject -> return id of founded subject, <br> 
 	 *  otherwise -> create and persist new subject with specified name, and return id of created entity */
@@ -40,11 +61,13 @@ public class SubjectManager extends GenericDAO<Subject> {
 		}});
 	}
 	
-	public Subject getSpecialtyById(long id) throws Exception {
+	public Subject getSubjectById(long id) throws Exception {
+		Utils.setNamespaceGeneral();
 		return get(KeyHelper.getKey(Subject.class, id));
 	}
 	
-	public List<Subject> getAllSpecialties() {
+	public List<Subject> getAllSubjects() {
+		Utils.setNamespaceGeneral();
 		return ofy().query(Subject.class).list();
 	}
 	
@@ -54,7 +77,7 @@ public class SubjectManager extends GenericDAO<Subject> {
 				NamespaceController.generalNamespace, Subject.class, subjectId, subjectName, nameSetter);
 	}
 	
-	public void setSpecialtyShortName(long subjectId, String subectDisplayName) throws Exception {
+	public void setSubjectDisplayName(long subjectId, String subectDisplayName) throws Exception {
 		Method nameSetter = Subject.class.getMethod("setDisplayName", String.class);
 		Utils.<Subject>setFieldValueInEntity(
 				NamespaceController.generalNamespace, Subject.class, subjectId, subectDisplayName, nameSetter);

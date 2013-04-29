@@ -1,0 +1,50 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui"
+			 xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
+	
+	<ui:style>
+	
+		.editingPagesList {
+		}
+		
+		.label {
+			font-size: x-large;
+			font-weight: bold;
+			color: rgb(78, 111, 141);
+			text-shadow: 0 0 10px #fff;
+			font-variant: small-caps;
+		}
+		
+		.editingItemPanel {
+			margin-left: 30px;
+			margin-top: 10px;
+		}
+		
+		.editingItem {
+			color: rgb(255, 255, 255);
+			text-shadow: 0 0 10px rgb(0, 26, 46);
+			font-size: large;
+			font-variant: small-caps;
+			cursor: pointer;
+		}
+		
+	</ui:style>
+
+	
+	<g:FlowPanel>
+		<g:Label addStyleNames="{style.label}">Editing:</g:Label>
+		<g:FlowPanel addStyleNames="{style.editingPagesList}">
+			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
+				<g:Anchor addStyleNames="{style.editingItem}" text="Specialties" ui:field="specialties"></g:Anchor>
+			</g:FlowPanel>
+			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
+				<g:Anchor addStyleNames="{style.editingItem}" text="Subjects" ui:field="subjects"></g:Anchor>
+			</g:FlowPanel>
+			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
+				<g:Anchor addStyleNames="{style.editingItem}" text="Cathedras" ui:field="cathedras"></g:Anchor>
+			</g:FlowPanel>
+		</g:FlowPanel>
+	</g:FlowPanel>
+
+</ui:UiBinder> 

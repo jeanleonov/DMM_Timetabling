@@ -1,4 +1,4 @@
-package com.timetabling.client.pages.cathedra.table;
+package com.timetabling.client.ui.pages.cathedra.table;
 
 import java.util.List;
 

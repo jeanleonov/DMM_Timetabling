@@ -1,0 +1,73 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui"
+			 xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
+	<ui:style>
+	
+		.panel {
+		}
+		
+		.form {
+		}
+	
+		.block {
+			float : left;
+			display : inline;
+			margin-right : 10px;
+		}
+	
+		.plusButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.editButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.removeButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.cancelButton {
+			margin-top: 17px;
+			margin-left: 20px;
+		}
+	
+		.output {
+			position: absolute;
+			top: 70px;
+			bottom: 15px;
+			left: 15px;
+			right: 15px;
+			overflow: auto;
+		}
+		
+	</ui:style>
+	
+	
+	<g:FlowPanel addStyleNames="{style.panel}" >
+	
+		<g:FlowPanel addStyleNames="{style.form}" >
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Specialty name:</g:Label>
+				<b:TextBox ui:field="nameSetter"></b:TextBox>
+			</g:FlowPanel>
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Short name:</g:Label>
+				<b:TextBox ui:field="shortNameSetter"></b:TextBox>
+			</g:FlowPanel>
+			<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить" type="SUCCESS" icon="PLUS" />
+			<b:Button addStyleNames="{style.editButton}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
+			<b:Button addStyleNames="{style.removeButton}" ui:field="removeButton" text="Удалить" type="DANGER" icon="TRASH" />
+			<b:Button addStyleNames="{style.cancelButton}" ui:field="cancelButton" text="Отмена" type="WARNING" icon="REMOVE" />
+		</g:FlowPanel>
+		
+		<g:FlowPanel addStyleNames="{style.output}" ui:field="persistedSpecialties" >
+		</g:FlowPanel>
+		
+	</g:FlowPanel>
+	
+</ui:UiBinder> 

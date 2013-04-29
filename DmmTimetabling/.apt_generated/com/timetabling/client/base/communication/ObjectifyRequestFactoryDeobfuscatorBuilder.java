@@ -76,17 +76,17 @@ withOperation(new OperationKey("Ssuy$eQ$hVQDalI2vZGWT8qLi_I="),
   .withMethodName("deleteWish")
   .withRequestContext("com.timetabling.client.communication.requests.TeacherRequest")
   .build());
-withOperation(new OperationKey("N$yfdqR6Uat5qPni_5HhqYB$x$c="),
-  new OperationData.Builder()
-  .withClientMethodDescriptor("(Lcom/timetabling/client/communication/entities/TeacherProxy;J)Lcom/google/web/bindery/requestfactory/shared/Request;")
-  .withDomainMethodDescriptor("(Lcom/timetabling/server/data/entities/curriculum/extentions/Teacher;J)V")
-  .withMethodName("putTeacher")
-  .withRequestContext("com.timetabling.client.communication.requests.TeacherRequest")
-  .build());
 withOperation(new OperationKey("n8jJAuyBv$OKJN3aJUy3D8QwUqg="),
   new OperationData.Builder()
   .withClientMethodDescriptor("(Lcom/timetabling/client/communication/entities/TeacherProxy;)Lcom/google/web/bindery/requestfactory/shared/Request;")
   .withDomainMethodDescriptor("(Lcom/timetabling/server/data/entities/curriculum/extentions/Teacher;)V")
+  .withMethodName("putTeacher")
+  .withRequestContext("com.timetabling.client.communication.requests.TeacherRequest")
+  .build());
+withOperation(new OperationKey("N$yfdqR6Uat5qPni_5HhqYB$x$c="),
+  new OperationData.Builder()
+  .withClientMethodDescriptor("(Lcom/timetabling/client/communication/entities/TeacherProxy;J)Lcom/google/web/bindery/requestfactory/shared/Request;")
+  .withDomainMethodDescriptor("(Lcom/timetabling/server/data/entities/curriculum/extentions/Teacher;J)V")
   .withMethodName("putTeacher")
   .withRequestContext("com.timetabling.client.communication.requests.TeacherRequest")
   .build());
@@ -188,18 +188,25 @@ withOperation(new OperationKey("XqQYP$gzqaL88A4aPlYYxujXf10="),
   .withMethodName("setSubjectName")
   .withRequestContext("com.timetabling.client.communication.requests.SubjectRequest")
   .build());
-withOperation(new OperationKey("amHYXMi5AidJYWTnfENzdwjwmZI="),
-  new OperationData.Builder()
-  .withClientMethodDescriptor("(J)Lcom/google/web/bindery/requestfactory/shared/Request;")
-  .withDomainMethodDescriptor("(J)Lcom/timetabling/server/data/entities/curriculum/Subject;")
-  .withMethodName("getSpecialtyById")
-  .withRequestContext("com.timetabling.client.communication.requests.SubjectRequest")
-  .build());
-withOperation(new OperationKey("auO4CP$7s4izU8tRtaPxhialsqw="),
+withOperation(new OperationKey("XTSaeuogohYC1lxOAMz0NhcAx_s="),
   new OperationData.Builder()
   .withClientMethodDescriptor("(JLjava/lang/String;)Lcom/google/web/bindery/requestfactory/shared/Request;")
   .withDomainMethodDescriptor("(JLjava/lang/String;)V")
-  .withMethodName("setSpecialtyShortName")
+  .withMethodName("setSubjectDisplayName")
+  .withRequestContext("com.timetabling.client.communication.requests.SubjectRequest")
+  .build());
+withOperation(new OperationKey("8kRkqrOwKpGRVgTJu6Ls1BVERfo="),
+  new OperationData.Builder()
+  .withClientMethodDescriptor("(J)Lcom/google/web/bindery/requestfactory/shared/Request;")
+  .withDomainMethodDescriptor("(J)V")
+  .withMethodName("deleteSubject")
+  .withRequestContext("com.timetabling.client.communication.requests.SubjectRequest")
+  .build());
+withOperation(new OperationKey("Wg$o8msbOnSWA5$DEQHhbfsaYEU="),
+  new OperationData.Builder()
+  .withClientMethodDescriptor("()Lcom/google/web/bindery/requestfactory/shared/Request;")
+  .withDomainMethodDescriptor("()Ljava/util/List;")
+  .withMethodName("getAllSubjects")
   .withRequestContext("com.timetabling.client.communication.requests.SubjectRequest")
   .build());
 withOperation(new OperationKey("JBoKvtpSSWgJY19C8SVrAaXjnI0="),
@@ -209,11 +216,18 @@ withOperation(new OperationKey("JBoKvtpSSWgJY19C8SVrAaXjnI0="),
   .withMethodName("getSubjectIdFor")
   .withRequestContext("com.timetabling.client.communication.requests.SubjectRequest")
   .build());
-withOperation(new OperationKey("YyuSP$l03duw_g6qdFDejQR2pdE="),
+withOperation(new OperationKey("tJ3O9AFfS3aF56AqtGrH1$eXzNU="),
   new OperationData.Builder()
-  .withClientMethodDescriptor("()Lcom/google/web/bindery/requestfactory/shared/Request;")
-  .withDomainMethodDescriptor("()Ljava/util/List;")
-  .withMethodName("getAllSpecialties")
+  .withClientMethodDescriptor("(Lcom/timetabling/client/communication/entities/SubjectProxy;)Lcom/google/web/bindery/requestfactory/shared/Request;")
+  .withDomainMethodDescriptor("(Lcom/timetabling/server/data/entities/curriculum/Subject;)V")
+  .withMethodName("putSubject")
+  .withRequestContext("com.timetabling.client.communication.requests.SubjectRequest")
+  .build());
+withOperation(new OperationKey("QJQuSgUtaTqHmkjbuJVmAPum2mE="),
+  new OperationData.Builder()
+  .withClientMethodDescriptor("(J)Lcom/google/web/bindery/requestfactory/shared/Request;")
+  .withDomainMethodDescriptor("(J)Lcom/timetabling/server/data/entities/curriculum/Subject;")
+  .withMethodName("getSubjectById")
   .withRequestContext("com.timetabling.client.communication.requests.SubjectRequest")
   .build());
 withOperation(new OperationKey("dSLUHcMk5eSykf4SCVxh6xeSbXE="),
@@ -251,11 +265,25 @@ withOperation(new OperationKey("OTjq4oEeRhgI6slqutn7cVZJLuY="),
   .withMethodName("saveCurriculumsForSemester")
   .withRequestContext("com.timetabling.client.communication.requests.CurriculumSavingRequest")
   .build());
+withOperation(new OperationKey("OjhXXaKnpOCV7YUrcZ8aPUfkBnA="),
+  new OperationData.Builder()
+  .withClientMethodDescriptor("(J)Lcom/google/web/bindery/requestfactory/shared/Request;")
+  .withDomainMethodDescriptor("(J)V")
+  .withMethodName("deleteSpecialty")
+  .withRequestContext("com.timetabling.client.communication.requests.SpecialtyRequest")
+  .build());
 withOperation(new OperationKey("Z7oyFThccR4GNVEKvd75uQA2DyQ="),
   new OperationData.Builder()
   .withClientMethodDescriptor("(J)Lcom/google/web/bindery/requestfactory/shared/Request;")
   .withDomainMethodDescriptor("(J)Lcom/timetabling/server/data/entities/curriculum/Specialty;")
   .withMethodName("getSpecialtyById")
+  .withRequestContext("com.timetabling.client.communication.requests.SpecialtyRequest")
+  .build());
+withOperation(new OperationKey("WJdTVTvPXXnaOBhlcPUDnPUNVhU="),
+  new OperationData.Builder()
+  .withClientMethodDescriptor("(Lcom/timetabling/client/communication/entities/SpecialtyProxy;)Lcom/google/web/bindery/requestfactory/shared/Request;")
+  .withDomainMethodDescriptor("(Lcom/timetabling/server/data/entities/curriculum/Specialty;)V")
+  .withMethodName("putSpecialty")
   .withRequestContext("com.timetabling.client.communication.requests.SpecialtyRequest")
   .build());
 withOperation(new OperationKey("WABSHvqmVfgzBE2E0sr1moRk3eY="),

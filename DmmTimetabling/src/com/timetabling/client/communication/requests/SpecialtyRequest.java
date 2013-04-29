@@ -12,6 +12,8 @@ import com.timetabling.server.data.managers.simple.SpecialtyManager;
 @Service( value = SpecialtyManager.class, locator = DaoServiceLocator.class )
 public interface SpecialtyRequest extends RequestContext {
 	
+	Request<Void> putSpecialty(SpecialtyProxy specialty);
+	Request<Void> deleteSpecialty(long specialtyId);
 	Request<Long> getSpecialtyIdFor(String specialtyName);
 	Request<SpecialtyProxy> getSpecialtyById(long id);
 	Request<List<SpecialtyProxy>> getAllSpecialties();
