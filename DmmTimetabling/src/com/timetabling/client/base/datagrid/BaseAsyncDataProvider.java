@@ -58,8 +58,10 @@ public abstract class BaseAsyncDataProvider<E> extends AsyncDataProvider<E> {
 				if (preSucces != null)
 					preSucces.run();
 				cellTable.fireEvent(new LoadingStateChangeEvent(LoadingState.LOADED));
-				if (currentListReceiver == this)
-					updateRowData(0, response);
+				if (currentListReceiver == this) {
+					updateRowCount(response.size(), true);
+					updateRowData(cellTable, 0, response);
+				}
 				if (postSucces != null)
 					postSucces.run();
 			}

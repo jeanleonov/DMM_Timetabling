@@ -1,0 +1,44 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:chzn="urn:import:com.watopi.chosen.client.gwt">
+
+	<ui:style>
+		
+		.panel {
+			margin : 0 0.8%;
+			padding : 0.1%;
+			float : left;
+			width : 28.9%;
+		}
+		
+		.loading {
+			background-color: #000000;
+			background-image: url('img/loading.gif');
+			background-position: center;
+			background-repeat: no-repeat;
+			bottom: 0;
+			left: 0;
+			opacity: 0.3;
+			right: 0;
+			top: 0;
+			width: 100%;
+			z-index: 10000;
+		}
+		
+		.chosenPlace {
+			width : 100%;
+		}
+		
+		.labelPager {
+			width : 100%;
+		}
+	
+	</ui:style>
+
+	<g:FlowPanel addStyleNames="{style.panel}" ui:field="panel">
+		<g:HTMLPanel ui:field="loading" addStyleNames="{style.loading}" visible="false" />
+		<g:FlowPanel ui:field="chosenPlace" addStyleNames="{style.chosenPlace}"></g:FlowPanel>
+	</g:FlowPanel>
+
+</ui:UiBinder> 

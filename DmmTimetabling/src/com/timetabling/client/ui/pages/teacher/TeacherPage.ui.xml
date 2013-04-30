@@ -8,7 +8,6 @@
 		}
 		
 		.form {
-			display : table-row;
 		}
 	
 		.block {
@@ -17,31 +16,56 @@
 			margin-right : 10px;
 		}
 	
-		.button {
+		.plusButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.editButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.removeButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.cancelButton {
+			margin-top: 17px;
+			margin-left: 20px;
 		}
 	
 		.output {
-			display : table-row;
+			position: absolute;
+			top: 70px;
+			bottom: 15px;
+			left: 15px;
+			right: 15px;
+			overflow: auto;
 		}
 		
 	</ui:style>
 	
 	
-	<g:FlowPanel styleName="{style.panel}" >
+	<g:FlowPanel addStyleNames="{style.panel}" >
 	
-		<g:FlowPanel styleName="{style.form}" >
-			<g:FlowPanel styleName="{style.block}" >
-				<g:Label>Cathedra name:</g:Label>
+		<g:FlowPanel addStyleNames="{style.form}" >
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Teacher name:</g:Label>
 				<b:TextBox ui:field="nameSetter"></b:TextBox>
 			</g:FlowPanel>
-			<g:FlowPanel styleName="{style.block}" >
-				<g:Label>Cathedra email:</g:Label>
-				<b:TextBox ui:field="emailSetter"></b:TextBox>
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Rank:</g:Label>
+				<b:TextBox ui:field="rankSetter"></b:TextBox>
 			</g:FlowPanel>
-			<b:Button styleName="{style.button}" ui:field="saveButton" text="Save" type="SUCCESS" />
+			<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить" type="SUCCESS" icon="PLUS" />
+			<b:Button addStyleNames="{style.editButton}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
+			<b:Button addStyleNames="{style.removeButton}" ui:field="removeButton" text="Удалить" type="DANGER" icon="TRASH" />
+			<b:Button addStyleNames="{style.cancelButton}" ui:field="cancelButton" text="Отмена" type="WARNING" icon="REMOVE" />
 		</g:FlowPanel>
 		
-		<g:FlowPanel styleName="{style.output}" ui:field="persistedCathedras" >
+		<g:FlowPanel addStyleNames="{style.output}" ui:field="persistedTeachers" >
 		</g:FlowPanel>
 		
 	</g:FlowPanel>

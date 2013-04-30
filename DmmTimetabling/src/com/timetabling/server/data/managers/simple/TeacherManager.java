@@ -71,6 +71,11 @@ public class TeacherManager extends GenericDAO<Teacher> {
 		return ofy().query(Teacher.class).list();
 	}
 	
+	public List<Teacher> getAllTeachersFrom(Cathedra cathedra) {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		return ofy().query(Teacher.class).ancestor(cathedra).list();
+	}
+	
 	public void setTeacherName(long teacherId, String teacherName) throws Exception {
 		Method nameSetter = Teacher.class.getMethod("setName", String.class);
 		Utils.<Teacher>setFieldValueInEntity(NamespaceController.generalNamespace, Teacher.class, teacherId, teacherName, nameSetter);

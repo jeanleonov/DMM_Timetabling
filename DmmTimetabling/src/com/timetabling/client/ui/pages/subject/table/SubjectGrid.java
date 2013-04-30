@@ -42,8 +42,8 @@ public class SubjectGrid extends BaseDataGrid<SubjectProxy> {
 			super(new TextCell());
 		}
 		@Override
-		public String getValue(SubjectProxy specialty) {
-			return specialty.getName();
+		public String getValue(SubjectProxy subject) {
+			return subject.getName();
 		}
 	}
 
