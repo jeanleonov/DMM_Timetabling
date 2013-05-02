@@ -3,22 +3,22 @@ package com.timetabling.client.ui.pages.teacher.setters;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.timetabling.client.base.communication.Communicator;
 import com.timetabling.client.communication.entities.CathedraProxy;
-import com.timetabling.client.ui.widgets.chosen.ChosenDataProvider.Pair;
 import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList.SingleSelectListPanelDataProvider;
 
-public class CathedraListProvider  extends ListDataProvider<CathedraProxy> implements SingleSelectListPanelDataProvider<List<String>> {
+public class CathedraListProvider implements SingleSelectListPanelDataProvider<CathedraProxy> {
 	
 	private List<CathedraProxy> cathedras = null;
 	private List<String> cathedrasNames;
 	private Communicator communicator;
-	private CathedraProxy selected = null;
+	private Integer selectedIndex = 0;
+	private Runnable onSelect;
 	
-	private CathedraListProvider(Communicator communicator, Runnable onFinish) {
+	public CathedraListProvider(Communicator communicator, Runnable onSelect) {
 		this.communicator = communicator;
+		this.onSelect = onSelect;
 		cathedrasNames = new ArrayList<String>();
 	}
 	
@@ -51,31 +51,38 @@ public class CathedraListProvider  extends ListDataProvider<CathedraProxy> imple
 //=== ChosenFilterPanelDataProvider: ==========================
 
 	@Override
-	public void setSelectedIndex(final int selectedIndex) {
+	public void setSelectedIndex(final int newSelectedIndex) {
 		if (cathedras == null)
 			requestData(new Runnable() {
 				@Override
 				public void run() {
-					selected = cathedras.get(selectedIndex);
+					selectedIndex = newSelectedIndex;
+					onSelect.run();
 				}
 			});
-		else
-			selected = cathedras.get(selectedIndex);
-			
+		else {
+			selectedIndex = newSelectedIndex;
+			onSelect.run();
+		}			
 	}
 	@Override
 	public String getSelectedItem() {
-			selected = cathedras.get(selectedIndex);
+		return cathedras.get(selectedIndex).getName();
 	}
 	@Override
-	public void setSelectedItem(List<String> selectedItem) {
-		// TODO Auto-generated method stub
-		
+	public void setSelectedItem(CathedraProxy selectedItem) {
+		int i=0;
+		for (String cathedra : cathedrasNames) {
+			if (cathedra.equals(selectedItem.getName())) {
+				selectedIndex = i;
+				return;
+			}
+			i++;
+		}
 	}
 	@Override
 	public int getSelectedIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return selectedIndex;
 	}
 	
 	@Override
@@ -94,7 +101,7 @@ public class CathedraListProvider  extends ListDataProvider<CathedraProxy> imple
 	}
 
 	@Override
-	public List<String> getValue() {
-		return getSelectedItems();
+	public CathedraProxy getValue() {
+		return cathedras.get(selectedIndex);
 	}
 }

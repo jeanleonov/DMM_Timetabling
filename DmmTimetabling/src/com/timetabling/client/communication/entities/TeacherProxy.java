@@ -12,6 +12,6 @@ public interface TeacherProxy extends EntityProxy {
 	void setId(Long id);
 	String getName();
 	void setName(String name);
-	int getRankCode();
-	void setRankCode(int rankCode);
+	Integer getRankCode();
+	void setRankCode(Integer rankCode);
 }

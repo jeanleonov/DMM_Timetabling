@@ -1,5 +1,6 @@
 package com.timetabling.client.ui.pages.teacher;
 
+import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -7,7 +8,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -15,10 +15,12 @@ import com.timetabling.client.base.communication.Communicator;
 import com.timetabling.client.base.datagrid.DataSelectionListener;
 import com.timetabling.client.communication.entities.CathedraProxy;
 import com.timetabling.client.communication.entities.TeacherProxy;
-import com.timetabling.client.communication.requests.SubjectRequest;
 import com.timetabling.client.communication.requests.TeacherRequest;
 import com.timetabling.client.ui.pages.BasePage;
+import com.timetabling.client.ui.pages.teacher.setters.CathedraListProvider;
+import com.timetabling.client.ui.pages.teacher.setters.RankListProvider;
 import com.timetabling.client.ui.pages.teacher.table.TeacherGrid;
+import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList;
 
 public class TeacherPage extends BasePage implements DataSelectionListener<TeacherProxy> {
 
@@ -33,10 +35,14 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 	@UiField Button removeButton;
 	@UiField Button cancelButton;
 	@UiField TextBox nameSetter;
-	@UiField TextBox rankSetter;
+	@UiField FlowPanel cathedraSetterContainer;
+	@UiField FlowPanel rankSetterContainer;
+	@UiField FlowPanel form;
 	@UiField FlowPanel persistedTeachers;
 	private TeacherGrid dataGrid;
 	private CathedraProxy cathedra;
+	private SingleSelectList<CathedraProxy> cathedraSetter;
+	private SingleSelectList<Integer> rankSetter;
 
 	public TeacherPage() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -44,7 +50,21 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		dataGrid.setPreSucces(new PostLoadedAction());
 		persistedTeachers.add(dataGrid);
 		dataGrid.getElement().getStyle().setHeight(100, Unit.PCT);
+		rankSetter = new SingleSelectList<Integer>(new RankListProvider());
+		cathedraSetter = new SingleSelectList<CathedraProxy>(new CathedraListProvider(Communicator.get(), new OnCathedraSelect()));
+		rankSetterContainer.add(rankSetter);
+		cathedraSetterContainer.add(cathedraSetter);
+		form.setVisible(false);
+		persistedTeachers.setVisible(false);
 		updateList();
+	}
+	
+	void onCathedraSelect() {
+		form.setVisible(true);
+		persistedTeachers.setVisible(true);
+		cathedra = cathedraSetter.getDataProvider().getValue();
+		dataGrid.setCathedra(cathedra);
+		dataGrid.getProvider().update();
 	}
 
 	@UiHandler("saveButton")
@@ -52,7 +72,7 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();
 		TeacherProxy teacher = requestContext.create(TeacherProxy.class);
 		teacher.setName(nameSetter.getValue());
-		teacher.setRankCode(rankSetter.getValue());
+		teacher.setRankCode(rankSetter.getValue().intValue());
 		requestContext.putTeacher(teacher, cathedra.getId()).
 		fire(new Receiver<Void>() {
 			@Override
@@ -68,7 +88,7 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		TeacherRequest request = Communicator.get().requestFactory.createTeacherRequest();
 		teacher = request.edit(teacher);
 		teacher.setName(nameSetter.getValue());
-		teacher.setRankCode(rankSetter.getValue());
+		teacher.setRankCode(rankSetter.getValue().intValue());
 		request.putTeacher(teacher, cathedra.getId()).
 		fire(new Receiver<Void>() {
 			@Override
@@ -82,7 +102,7 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 	void onRemove(ClickEvent e) {
 		TeacherProxy teacher = dataGrid.getSelected();
 		TeacherRequest request = Communicator.get().requestFactory.createTeacherRequest();
-		request.deleteTeacher(teacher.getId()).
+		request.deleteTeacher(teacher.getId(), cathedra.getId()).
 		fire(new Receiver<Void>() {
 			@Override
 			public void onSuccess(Void response) {
@@ -104,7 +124,6 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		removeButton.setVisible(false);
 		cancelButton.setVisible(false);
 		nameSetter.setText("");
-		rankSetter.setText("");
 	}
 	
 	private void setEditingMode(TeacherProxy entity) {
@@ -113,7 +132,7 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		removeButton.setVisible(true);
 		cancelButton.setVisible(true);
 		nameSetter.setText(entity.getName());
-		rankSetter.setValue(entity.getRankCode());
+		rankSetter.setSelectedItem(entity.getRankCode());
 	}
 	
 	private void updateList() {
@@ -135,7 +154,13 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		@Override
 		public void run() {
 			nameSetter.setText("");
-			rankSetter.setValue(null);
+		}
+	}
+	
+	private class OnCathedraSelect implements Runnable {
+		@Override
+		public void run() {
+			onCathedraSelect();
 		}
 	}
 }

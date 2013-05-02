@@ -50,6 +50,12 @@ public class SingleSelectList <T> extends Composite {
 	@UiField FlowPanel chosenPlace;
 	private ChosenListBox chosen=null;
 
+	public SingleSelectList(SingleSelectListPanelDataProvider<T> dataProvider) {
+		initWidget(uiBinder.createAndBindUi(this));
+		this.dataProvider = dataProvider;
+		update();
+	}
+
 	public SingleSelectList(SingleSelectListPanelDataProvider<T> dataProvider, T initialValue) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.dataProvider = dataProvider;
@@ -77,6 +83,10 @@ public class SingleSelectList <T> extends Composite {
 		else
 			recreateChosen();
 	}
+	
+	public void setSelectedItem(T item) {
+		// TODO
+	}
 		
 	private void recreateChosen() {
 		if (chosen != null)
@@ -100,6 +110,7 @@ public class SingleSelectList <T> extends Composite {
 				displayItem = items.get(itemIndex-2);
 			chosen.insertItem(displayItem, itemIndex);
 		}
+		chosen.update();
 	}
 	
 	private void updateChosenMap(List<Pair<String, List<String>>> groupedItems) {

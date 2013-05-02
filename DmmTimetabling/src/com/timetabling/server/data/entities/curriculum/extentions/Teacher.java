@@ -13,7 +13,7 @@ public class Teacher extends DatastoreLongEntity {
 	
 	@Parent private Key<Cathedra> parent;
 	private String name;
-	private int rankCode = -1;
+	private Integer rankCode = -1;
 	
 	@Transient private List<Wish> wishes;
 
@@ -37,12 +37,12 @@ public class Teacher extends DatastoreLongEntity {
 	}
 
 	/** @return teacher's rank (DOZENT, PROFESSOR, LECTURER or ASSISTANT) */
-	public int getRankCode() {
+	public Integer getRankCode() {
 		return rankCode;
 	}
 
 	/** @param rank - teacher's rank (DOZENT, PROFESSOR, LECTURER or ASSISTANT) */
-	public void setRankCode(int rankCode) {
+	public void setRankCode(Integer rankCode) {
 		this.rankCode = rankCode;
 	}
 

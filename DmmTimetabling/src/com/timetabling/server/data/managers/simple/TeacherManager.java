@@ -51,12 +51,13 @@ public class TeacherManager extends GenericDAO<Teacher> {
 		});
 	}
 	
-	public void deleteTeacher(final long teacherId) throws Exception {
+	public void deleteTeacher(final long teacherId, final long cathedraId) throws Exception {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
 		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
 			@Override
 			public Void run(DAOT daot) throws Exception {
-				daot.getOfy().delete(Teacher.class, teacherId);
+				Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
+				daot.getOfy().delete(KeyHelper.getKey(Teacher.class, cathedraKey, teacherId));
 				return null;
 			}
 			@Override

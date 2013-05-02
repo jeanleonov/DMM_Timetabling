@@ -16,7 +16,7 @@ public interface TeacherRequest extends RequestContext {
 
 	Request<Void> putTeacher(TeacherProxy teacher, long cathedraIds);
 	Request<Void> putTeacher(TeacherProxy teacher);
-	Request<Void> deleteTeacher(long teacherId);
+	Request<Void> deleteTeacher(long teacherId, long cathedraId);
 	Request<List<TeacherProxy>> getAllTeachers();
 	Request<List<TeacherProxy>> getAllTeachersFrom(CathedraProxy cathedra);
 	Request<Void> setTeacherName(long teacherId, String teacherName);

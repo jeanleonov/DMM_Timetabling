@@ -24,8 +24,8 @@ import com.timetabling.client.communication.requests.testing.CurriculumReaderReq
 /**
  * Request factory for current application. Include request for entities.
  */
-@ExtraTypes( {	CathedraProxy.class, CurriculumCellProxy.class, RoomsInfoProxy.class,
-				SpecialtyProxy.class, SubjectProxy.class, TeacherProxy.class, WishProxy.class} )
+@ExtraTypes( {	CathedraProxy.class, SpecialtyProxy.class, RoomsInfoProxy.class,
+				SubjectProxy.class, TeacherProxy.class, CurriculumCellProxy.class, WishProxy.class} )
 public interface ObjectifyRequestFactory extends RequestFactory {
 	
 	CathedraRequest createCathedraRequest();
