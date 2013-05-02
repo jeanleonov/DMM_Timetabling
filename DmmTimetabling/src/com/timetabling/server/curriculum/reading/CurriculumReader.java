@@ -23,14 +23,51 @@ import com.timetabling.shared.enums.LessonType;
 
 public class CurriculumReader {
 
+	// ================================================
+	// ============= test =============================
+	// ================================================
+	public static void main(String[] args) throws Exception {
+		CurriculumReader test = new CurriculumReader(new File("test.xls"),
+				2012, false);
+		test.read();
+	}
+
+	// ================================================
+	// ============= Constants ========================
+	// ================================================
+
+	// (.*)Назва( +)дисципліни(.*)
+	private static final String SUBJECTS_TITLE_TEXT = "(.*)\u041D\u0430\u0437\u0432\u0430"
+			+ "( +)\u0434\u0438\u0441\u0446\u0438\u043F\u043B\u0456\u043D\u0438(.*)";
+
+	// Цикл дисциплін вільного вибору студентів
+	private static final String SPECIAL_COURSE_TITLE_TEXT = "\u0426\u0438\u043A\u043B"
+			+ " \u0434\u0438\u0441\u0446\u0438\u043F\u043B\u0456\u043D"
+			+ " \u0432\u0456\u043B\u044C\u043D\u043E\u0433\u043E \u0432\u0438\u0431\u043E\u0440"
+			+ "\u0443 \u0441\u0442\u0443\u0434\u0435\u043D\u0442\u0456\u0432";
+
+	private static final IOException exception = new IOException(
+			"File has the wrong structure");
+
+	// ================================================
+	// ============= Variables ========================
+	// ================================================
+
 	private File file;
 
+	private InputStream inputStream = null;
+	private Workbook workBook = null;
+	private Sheet workSheet = null;
+	private List<Cell> courses = null;
+	private List<CurriculumCell> curriculumCells;
 	/** @see CurriculumSaver#saveCurriculumsForSemester(int, boolean, List) */
 	private int year;
 	/** Use {@link Utils#AUTUMN_WINTER} and {@link Utils#WINTER_SUMMER} */
 	private boolean season;
-	private List<CurriculumCell> curriculumCells;
 
+	// ================================================
+	// ============= Constructor ======================
+	// ================================================
 	public CurriculumReader(File file, int year, boolean season) {
 		this.file = file;
 		this.year = year;
@@ -42,39 +79,33 @@ public class CurriculumReader {
 		persistCurriculum();
 	}
 
-	private InputStream inputstream = null;
-	private Workbook wb = null;
-	private Sheet sheet = null;
-	private List<Cell> curses = null;
-
 	/**
 	 * Should read {@link #file} and initiate {@link #curriculumCells}
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	private void read() throws Exception {
 		try {
-			inputstream = new FileInputStream(file);
-			wb = new HSSFWorkbook(inputstream);
-			sheet = wb.getSheetAt(0);
+			inputStream = new FileInputStream(file);
+			workBook = new HSSFWorkbook(inputStream);
+			workSheet = workBook.getSheetAt(0);
 
-			Row currentrow = null;
-			Cell currentcell = null;
+			Row currentRow = null;
+			Cell currentCell = null;
 
 			// ================================================
 			// ============= Valid Check ======================
 			// ================================================
-			IOException exception = new IOException(
-					"File has the wrong structure");
-			currentrow = sheet.getRow(0);
-			currentcell = currentrow.getCell(1);
-			if (currentcell == null)
+			currentRow = workSheet.getRow(0);
+			currentCell = currentRow.getCell(1);
+			if (currentCell == null)
 				throw exception;
-			if (currentcell.getCellType() != Cell.CELL_TYPE_STRING) {
+			if (currentCell.getCellType() != Cell.CELL_TYPE_STRING) {
 				throw exception;
 			}
 
-			String str = currentcell.getStringCellValue();
-			if (!str.matches("(.*)Назва( +)дисципліни(.*)")) {
+			String str = currentCell.getStringCellValue();
+			if (!str.matches(SUBJECTS_TITLE_TEXT)) {
 				throw exception;
 			}
 
@@ -82,98 +113,158 @@ public class CurriculumReader {
 			// ================================================
 			// ============= parse ============================
 			// ================================================
-			
-			curses = new ArrayList<Cell>();
-			currentcell = sheet.getRow(1).getCell(0);
-			while((currentcell = findNextCourse(currentcell)) != null) { //get courses
-				curses.add(currentcell);
+
+			courses = new ArrayList<Cell>();
+			currentCell = workSheet.getRow(1).getCell(0);
+
+			// get list of courses
+			while ((currentCell = findNextCourse(currentCell)) != null) {
+				courses.add(currentCell);
 			}
-			
-			currentrow = sheet.getRow(10);
-			int specialcoursesbeginrow = findRowBeginSpecialCurse(); //find first special-course row
-			for (int i = 0; i < curses.size(); i++) {
-				currentrow = sheet.getRow(10);
-				System.out.println("======================================== "+i);
-				while ((currentrow = getNextRowSubject(currentrow)) != null) {
-					int rowindex = curses.get(i).getRowIndex(); 
-					int columnindex = curses.get(i).getColumnIndex();
-					byte cursenum = getCourse(curses.get(i)
+
+			currentRow = workSheet.getRow(10);
+			// find first special-course row
+			int specialCoursesBeginRow = findRowBeginSpecialCurse();
+			// iterate through all the courses
+			for (int i = 0; i < courses.size(); i++) {
+
+				currentRow = workSheet.getRow(10);
+
+				while ((currentRow = getNextRowSubject(currentRow)) != null) {
+
+					int rowIndex = courses.get(i).getRowIndex();
+					int columnIndex = courses.get(i).getColumnIndex();
+					// get number of course
+					byte cursenum = getCourse(courses.get(i)
 							.getStringCellValue());
+					// get specialtyName
 					String specialtyName = file.getName();
-					String subjectName = getCellStringValue(currentrow
+					String subjectName = getCellStringValue(currentRow
 							.getCell(1));
-					rowindex = curses.get(i).getRowIndex();
-					if(true) {
-						columnindex += 2;
+					rowIndex = courses.get(i).getRowIndex();
+					if (season) {
+						columnIndex += 2;
 					}
-					Cell practices = currentrow.getCell(columnindex+1);
-					Cell lecture = currentrow.getCell(columnindex);
-					
-					String strpractices = getCellStringValue(practices);
-					String strlecture = getCellStringValue(lecture);
-					
-					int intpractices = (strpractices.isEmpty())?0:Integer.parseInt(strpractices.split("\\D")[0]);
-					int intlecture = (strlecture.isEmpty())?0:Integer.parseInt(strlecture.split("\\D")[0]);
-					
-					
-					if(lecture.getRowIndex() > specialcoursesbeginrow) {
-						curriculumCells.add(new CurriculumCell(specialtyName,subjectName,LessonType.SPECIAL_COURSE,(byte)(intlecture+intpractices),cursenum));
+
+					Cell practices = currentRow.getCell(columnIndex + 1);
+					Cell lecture = currentRow.getCell(columnIndex);
+
+					String stringPractices = getCellStringValue(practices);
+					String stringLecture = getCellStringValue(lecture);
+
+					int intPractices = (stringPractices.isEmpty()) ? 0
+							: Integer.parseInt(stringPractices.split("\\D")[0]);
+					int intLecture = (stringLecture.isEmpty()) ? 0 : Integer
+							.parseInt(stringLecture.split("\\D")[0]);
+
+					if (lecture.getRowIndex() > specialCoursesBeginRow) {
+						if (intLecture + intPractices != 0) {
+							// System.out
+							// .println("=======================================================================");
+							// System.out.print(specialtyName + " || ");
+							// System.out.print(subjectName + " || ");
+							// System.out.print("SPECIAL_COURSE" + " || ");
+							// System.out.print((byte) (intLecture +
+							// intPractices)
+							// + " || ");
+							// System.out.println(cursenum);
+							// System.out
+							// .println("=======================================================================");
+
+							curriculumCells.add(new CurriculumCell(
+									specialtyName, subjectName,
+									LessonType.SPECIAL_COURSE,
+									(byte) (intLecture + intPractices),
+									cursenum));
+						}
+
 					} else {
-						curriculumCells.add(new CurriculumCell(specialtyName,subjectName,LessonType.LECTION,(byte)(intlecture),cursenum));
-						curriculumCells.add(new CurriculumCell(specialtyName,subjectName,LessonType.PRACTICE,(byte)(intpractices),cursenum));
+						if (intLecture != 0) {
+							// System.out
+							// .println("=======================================================================");
+							// System.out.print(specialtyName + " || ");
+							// System.out.print(subjectName + " || ");
+							// System.out.print("LECTURE" + " || ");
+							// System.out.print((byte) (intLecture) + " || ");
+							// System.out.println(cursenum);
+							// System.out
+							// .println("=======================================================================");
+
+							curriculumCells.add(new CurriculumCell(
+									specialtyName, subjectName,
+									LessonType.LECTION, (byte) (intLecture),
+									cursenum));
+						}
+
+						if (intPractices != 0) {
+							// System.out
+							// .println("=======================================================================");
+							// System.out.print(specialtyName + " || ");
+							// System.out.print(subjectName + " || ");
+							// System.out.print("PRACTIES" + " || ");
+							// System.out.print((byte) (intPractices) + " || ");
+							// System.out.println(cursenum);
+							// System.out
+							// .println("=======================================================================");
+
+							curriculumCells.add(new CurriculumCell(
+									specialtyName, subjectName,
+									LessonType.PRACTICE, (byte) (intPractices),
+									cursenum));
+						}
+
 					}
-					
+
 				}
 			}
-			System.out.println(curriculumCells); //test
-			
+
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			inputstream.close();
+			throw e;
+		} finally {
+			inputStream.close();
 		}
 	}
-	
+
 	/** Find the first line after which there are special courses **/
 	private int findRowBeginSpecialCurse() {
-		Row row = sheet.getRow(10);
-		while(row != null) {
+		Row row = workSheet.getRow(10);
+		while (row != null) {
 			Cell cell = row.getCell(1);
 			if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-				if(cell.getStringCellValue().equals("Дисципліни вільного вибору студентів")) {
+				if (cell.getStringCellValue().equals(SPECIAL_COURSE_TITLE_TEXT)) {
 					return row.getRowNum();
 				}
 			}
-			row = sheet.getRow(row.getRowNum()+1);
+			row = workSheet.getRow(row.getRowNum() + 1);
 		}
 		return Integer.MAX_VALUE;
 	}
-	
+
 	private static byte getCourse(String coursestr) {
-		if(coursestr.matches("^III .*$")) {
+		if (coursestr.matches("^(.*)((III)|(\u0406\u0406\u0406))(.*)$")) {
 			return 3;
 		}
-		if(coursestr.matches("^IV .*$")) {
+		if (coursestr.matches("^(.*)((IV)|(\u0406V))(.*)$")) {
 			return 4;
 		}
-		
-		if(coursestr.matches("^V .*$")) {
+
+		if (coursestr.matches("^(.*)(V)(.*)$")) {
 			return 5;
 		}
-		
-		if(coursestr.matches("^II .*$")) {
+
+		if (coursestr.matches("^(.*)((II)|(\u0406\u0406))(.*)$")) {
 			return 2;
 		}
-		
-		if(coursestr.matches("^I .*$")) {
+
+		if (coursestr.matches("^(.*)((I)|(\u0406))(.*)$")) {
 			return 1;
 		}
 		return 0;
 	}
-	
-	private static String getCellStringValue (Cell cell) {
-		if(cell == null) return null;
+
+	private static String getCellStringValue(Cell cell) {
+		if (cell == null)
+			return null;
 		switch (cell.getCellType()) {
 		case Cell.CELL_TYPE_BLANK:
 			return "";
@@ -184,52 +275,50 @@ public class CurriculumReader {
 		case Cell.CELL_TYPE_FORMULA:
 			return cell.getCellFormula();
 		case Cell.CELL_TYPE_NUMERIC:
-			return String.valueOf((int)cell.getNumericCellValue());
+			return String.valueOf((int) cell.getNumericCellValue());
 		case Cell.CELL_TYPE_STRING:
 			return cell.getStringCellValue();
 		}
 		return null;
 	}
 
-	private Row getNextRowSubject(Row currentrow) {
-		currentrow = sheet.getRow(currentrow.getRowNum()+1);
-		while (currentrow!=null) {
-				
-			Cell cell = currentrow.getCell(0);
-			Cell name = currentrow.getCell(1);
-			
-			if(cell == null) {
+	private Row getNextRowSubject(Row currentRow) {
+		currentRow = workSheet.getRow(currentRow.getRowNum() + 1);
+		while (currentRow != null) {
+
+			Cell cell = currentRow.getCell(0);
+			Cell name = currentRow.getCell(1);
+
+			if (cell == null) {
 				return null;
 			}
-			
-			
-			if(name.getCellType() == Cell.CELL_TYPE_BLANK) { //end plan
+
+			if (name.getCellType() == Cell.CELL_TYPE_BLANK) { // end plan
 				return null;
 			}
-			
-			
+
 			if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-				return currentrow;
+				return currentRow;
 			} else {
-				currentrow = sheet.getRow(currentrow.getRowNum()+1);
-				
+				currentRow = workSheet.getRow(currentRow.getRowNum() + 1);
 			}
 		}
-		return currentrow;
+		return currentRow;
 
 	}
-	
+
 	private Cell findNextCourse(Cell from) {
-		Row courserow = sheet.getRow(1);
-		from = courserow.getCell(from.getColumnIndex()+1);
+		Row courseRow = workSheet.getRow(1);
+		from = courseRow.getCell(from.getColumnIndex() + 1);
 		while (from != null) {
 			if (from.getCellType() == Cell.CELL_TYPE_STRING) {
-				String cellvalue = from.getStringCellValue();
-				if (cellvalue.matches("^.*((I{1,3})|(IV)|(V)).*$")) {
+				String cellValue = from.getStringCellValue();
+				if (cellValue
+						.matches("^(.*)((\u0406{1,3})|(\u0406V)|(V)|(I{1,3})|(IV))(.*)$")) {
 					return from;
 				}
 			}
-			from = courserow.getCell(from.getColumnIndex()+1);
+			from = courseRow.getCell(from.getColumnIndex() + 1);
 		}
 		return null;
 	}
@@ -244,8 +333,10 @@ public class CurriculumReader {
 		SpecialtyManager specialtyManager = DaoFactory.getSpecialtyManager();
 		SubjectManager subjectManager = DaoFactory.getSubjectManager();
 		for (CurriculumCell cell : cells) {
-			cell.setSpecialtyId(specialtyManager.getSpecialtyIdFor(cell.getSpecialtyName()));
-			cell.setSubjectId(subjectManager.getSubjectIdFor(cell.getSubjectName()));
+			cell.setSpecialtyId(specialtyManager.getSpecialtyIdFor(cell
+					.getSpecialtyName()));
+			cell.setSubjectId(subjectManager.getSubjectIdFor(cell
+					.getSubjectName()));
 		}
 	}
 }
