@@ -1,25 +1,29 @@
-package com.timetabling.client.ui.pages.teacher.setters;
+package com.timetabling.client.communication.providers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.timetabling.client.base.communication.Communicator;
-import com.timetabling.client.communication.entities.CathedraProxy;
+import com.timetabling.client.communication.entities.SpecialtyProxy;
 import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList.SingleSelectListPanelDataProvider;
 
-public class CathedraListProvider implements SingleSelectListPanelDataProvider<CathedraProxy> {
+public class SpecialtyListProvider implements SingleSelectListPanelDataProvider<SpecialtyProxy> {
 	
-	private List<CathedraProxy> cathedras = null;
-	private List<String> cathedrasNames;
+	private List<SpecialtyProxy> specialties = null;
+	private List<String> specialtiesNames;
 	private Communicator communicator;
 	private Integer selectedIndex = 0;
 	private Runnable onSelect;
 	
-	public CathedraListProvider(Communicator communicator, Runnable onSelect) {
+	public SpecialtyListProvider(Communicator communicator) {
+		this(communicator, null);
+	}
+	
+	public SpecialtyListProvider(Communicator communicator, Runnable onSelect) {
 		this.communicator = communicator;
 		this.onSelect = onSelect;
-		cathedrasNames = new ArrayList<String>();
+		specialtiesNames = new ArrayList<String>();
 	}
 	
 	//=== ChosenDataProvider: =====================================
@@ -38,7 +42,7 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 	}
 	@Override
 	public List<String> getLastLoadedFilteredList() {
-		return cathedrasNames;
+		return specialtiesNames;
 	}
 	@Override
 	public List<Pair<String, List<String>>> getLastLoadedFilteredMap() {
@@ -52,28 +56,30 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 
 	@Override
 	public void setSelectedIndex(final int newSelectedIndex) {
-		if (cathedras == null)
+		if (specialties == null)
 			requestData(new Runnable() {
 				@Override
 				public void run() {
 					selectedIndex = newSelectedIndex;
-					onSelect.run();
+					if (onSelect != null)
+						onSelect.run();
 				}
 			});
 		else {
 			selectedIndex = newSelectedIndex;
-			onSelect.run();
+			if (onSelect != null)
+				onSelect.run();
 		}			
 	}
 	@Override
 	public String getSelectedItem() {
-		return cathedras.get(selectedIndex).getName();
+		return specialties.get(selectedIndex+1).getName();
 	}
 	@Override
-	public void setSelectedItem(CathedraProxy selectedItem) {
+	public void setSelectedItem(SpecialtyProxy selectedItem) {
 		int i=0;
-		for (String cathedra : cathedrasNames) {
-			if (cathedra.equals(selectedItem.getName())) {
+		for (String specialty : specialtiesNames) {
+			if (specialty.equals(selectedItem.getName())) {
 				selectedIndex = i;
 				return;
 			}
@@ -87,21 +93,22 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 	
 	@Override
 	public void requestData(final Runnable onSucces) {
-		communicator.requestFactory.createCathedraRequest().getAllCathedras().
-		fire(new Receiver<List<CathedraProxy>>() {
+		communicator.requestFactory.createSpecialtyRequest().getAllSpecialties().
+		fire(new Receiver<List<SpecialtyProxy>>() {
 			@Override
-			public void onSuccess(List<CathedraProxy> response) {
-				cathedras = response;
-				cathedrasNames.clear();
-				for (CathedraProxy cathedra : cathedras)
-					cathedrasNames.add(cathedra.getName());
+			public void onSuccess(List<SpecialtyProxy> response) {
+				specialties = response;
+				specialtiesNames.clear();
+				specialtiesNames.add(" - ");
+				for (SpecialtyProxy cathedra : specialties)
+					specialtiesNames.add(cathedra.getName());
 				onSucces.run();
 			}
 		});
 	}
 
 	@Override
-	public CathedraProxy getValue() {
-		return cathedras.get(selectedIndex);
+	public SpecialtyProxy getValue() {
+		return specialties.get(selectedIndex+1);
 	}
 }

@@ -30,6 +30,8 @@ public class CurriculumCell extends DatastoreLongEntity {
 	private int lessonTypeCode;
 	private long cathedraId;
 	
+	private boolean isInitiated = false;
+	
 	@Transient private String specialtyName;
 	@Transient private String subjectName;
 	
@@ -108,6 +110,14 @@ public class CurriculumCell extends DatastoreLongEntity {
 	 * 	@See {@link CurriculumExtensionSaver} */
 	public void setCathedraId(Long cathedraId) {
 		this.cathedraId = cathedraId;
+	}
+
+	public boolean isInitiated() {
+		return isInitiated;
+	}
+
+	public void setInitiated(boolean isInitiated) {
+		this.isInitiated = isInitiated;
 	}
 
 	public String getSpecialtyName() {

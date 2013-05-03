@@ -15,10 +15,10 @@ import com.timetabling.client.base.communication.Communicator;
 import com.timetabling.client.base.datagrid.DataSelectionListener;
 import com.timetabling.client.communication.entities.CathedraProxy;
 import com.timetabling.client.communication.entities.TeacherProxy;
+import com.timetabling.client.communication.providers.CathedraListProvider;
+import com.timetabling.client.communication.providers.RankListProvider;
 import com.timetabling.client.communication.requests.TeacherRequest;
 import com.timetabling.client.ui.pages.BasePage;
-import com.timetabling.client.ui.pages.teacher.setters.CathedraListProvider;
-import com.timetabling.client.ui.pages.teacher.setters.RankListProvider;
 import com.timetabling.client.ui.pages.teacher.table.TeacherGrid;
 import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList;
 

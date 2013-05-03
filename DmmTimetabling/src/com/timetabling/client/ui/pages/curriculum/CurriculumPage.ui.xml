@@ -24,15 +24,27 @@
 			margin: 4px 4px 0 0;
 		}
 		
-		.yearSetter {
+		.cathedraChoser {
 			float: right;
 		}
 		
-		.autumnWinterSetter {
+		.courseChoser {
 			float: right;
 		}
 		
-		.winterSummerSetter {
+		.specialtyChoser {
+			float: right;
+		}
+		
+		.cathedraSetter {
+			float: right;
+		}
+		
+		.subgroupsSetter {
+			float: right;
+		}
+		
+		.hoursSetter {
 			float: right;
 		}
 		
@@ -87,20 +99,28 @@
 	<g:FlowPanel addStyleNames="{style.panel}" >
 	
 		<g:FlowPanel addStyleNames="{style.head}" >
-			<b:RadioButton name="seasonSetter" text="Autumn-winter" ui:field="autumnWinterSetter" addStyleNames="{style.autumnWinterSetter}" />
-			<b:RadioButton name="seasonSetter" text="Winter-summer" ui:field="winterSummerSetter" addStyleNames="{style.winterSummerSetter}" />
-			<g:IntegerBox ui:field="yearSetter" addStyleNames="{style.yearSetter}" />
-			<g:Label addStyleNames="{style.title}">Curriculum for: </g:Label>
+			<g:FlowPanel ui:field="cathedraChoserContainer" addStyleNames="{style.cathedraChoser}"></g:FlowPanel>
+			<g:FlowPanel ui:field="courseChoserContainer" addStyleNames="{style.courseChoser}"></g:FlowPanel>
+			<g:FlowPanel ui:field="specialtyChoserContainer" addStyleNames="{style.specialtyChoser}"></g:FlowPanel>
+			<g:Label addStyleNames="{style.title}">Curriculum</g:Label>
 		</g:FlowPanel>
 		
-	<!-- 	<g:FlowPanel addStyleNames="{style.form}" ui:field="form">
+	 	<g:FlowPanel addStyleNames="{style.form}" ui:field="form">
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Teacher name:</g:Label>
+				<g:Label>Name: </g:Label>
 				<b:TextBox ui:field="nameSetter"></b:TextBox>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Rank:</g:Label>
-				<g:FlowPanel ui:field="rankSetterContainer"></g:FlowPanel>
+				<g:Label>Cathedra: </g:Label>
+				<g:FlowPanel ui:field="cathedraSetterContainer" addStyleNames="{style.cathedraSetter}"></g:FlowPanel>
+			</g:FlowPanel>
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Subgroups: </g:Label>
+				<g:FlowPanel ui:field="subgroupsSetterContainer" addStyleNames="{style.subgroupsSetter}"></g:FlowPanel>
+			</g:FlowPanel>
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Hours: </g:Label>
+				<g:FlowPanel ui:field="hoursSetterContainer" addStyleNames="{style.hoursSetter}"></g:FlowPanel>
 			</g:FlowPanel>
 			<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить" type="SUCCESS" icon="PLUS" />
 			<b:Button addStyleNames="{style.editButton}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
@@ -109,8 +129,8 @@
 			<b:Button addStyleNames="{style.updateButton}" ui:field="updateButton" type="LINK" icon="REFRESH" iconSize="LARGE"></b:Button>
 		</g:FlowPanel>
 		
-		<g:FlowPanel addStyleNames="{style.output}" ui:field="persistedTeachers" >
-		</g:FlowPanel> -->
+		<g:FlowPanel addStyleNames="{style.output}" ui:field="persistedCells" >
+		</g:FlowPanel>
 		
 	</g:FlowPanel>
 	

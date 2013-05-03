@@ -1,23 +1,24 @@
-package com.timetabling.client.ui.pages.teacher.setters;
+package com.timetabling.client.communication.providers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList.SingleSelectListPanelDataProvider;
-import com.timetabling.shared.enums.TeacherRank;
 
-public class RankListProvider implements SingleSelectListPanelDataProvider<Integer> {
+public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<Byte> {
 	
-	private List<Integer> teacherRankCodes = null;
-	private List<String> rankNames = null;
+	private List<Byte> courses = null;
+	private List<String> coursesNames = null;
 	private Integer selectedIndex = 0;
+	private final static int NUMBER_OF_COURSES = 6;
 	
-	public RankListProvider() {
-		teacherRankCodes = new ArrayList<Integer>(TeacherRank.values().length);
-		rankNames = new ArrayList<String>(TeacherRank.values().length);
-		for (TeacherRank rank : TeacherRank.values()) {
-			teacherRankCodes.add(rank.getCode());
-			rankNames.add(rank.getDisplayName());
+	public SubgroupsListProvider() {
+		courses = new ArrayList<Byte>(NUMBER_OF_COURSES);
+		coursesNames = new ArrayList<String>(NUMBER_OF_COURSES);
+		coursesNames.add(" - ");
+		for (byte i=4; i<=NUMBER_OF_COURSES; i++) {
+			courses.add(i);
+			coursesNames.add(i + " Course");
 		}
 	}
 	
@@ -37,7 +38,7 @@ public class RankListProvider implements SingleSelectListPanelDataProvider<Integ
 	}
 	@Override
 	public List<String> getLastLoadedFilteredList() {
-		return rankNames;
+		return coursesNames;
 	}
 	@Override
 	public List<Pair<String, List<String>>> getLastLoadedFilteredMap() {
@@ -56,14 +57,14 @@ public class RankListProvider implements SingleSelectListPanelDataProvider<Integ
 	
 	@Override
 	public String getSelectedItem() {
-		return rankNames.get(selectedIndex);
+		return coursesNames.get(selectedIndex);
 	}
 	
 	@Override
-	public void setSelectedItem(Integer rankName) {
+	public void setSelectedItem(Byte courseItem) {
 		int i=0;
-		for (String rank : rankNames) {
-			if (rank.equals(rankName)) {
+		for (String course : coursesNames) {
+			if (course.equals(courseItem)) {
 				selectedIndex = i;
 				return;
 			}
@@ -82,7 +83,7 @@ public class RankListProvider implements SingleSelectListPanelDataProvider<Integ
 	}
 
 	@Override
-	public Integer getValue() {
-		return teacherRankCodes.get(selectedIndex);
+	public Byte getValue() {
+		return courses.get(selectedIndex+1);
 	}
 }
