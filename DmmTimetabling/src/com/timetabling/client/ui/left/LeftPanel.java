@@ -46,4 +46,9 @@ public class LeftPanel extends Composite {
 	void onTeachers(ClickEvent click) {
 		PagesDispatcher.setPage(PageName.TEACHERS);
 	}
+	
+	@UiHandler ("curriculum")
+	void onCurriculum(ClickEvent click) {
+		PagesDispatcher.setPage(PageName.CURRICULUM_EDITING);
+	}
 }

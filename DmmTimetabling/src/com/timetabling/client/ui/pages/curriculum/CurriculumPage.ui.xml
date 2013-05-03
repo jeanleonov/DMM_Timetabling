@@ -1,9 +1,117 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui"
+			 xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	<ui:style>
+	
+		.panel {
+		}
+		
+		.head {
+			float: right;
+			display: inline;
+			background: rgba(255, 255, 255, 0.34);
+			padding: 2px 12px 3px 12px;
+			border-radius: 0 7px 0 7px;
+			margin: -9px -15px 0 0;
+			color: rgb(41, 73, 94);
+		}
+		
+		.title {
+			float: right;
+			font-variant: small-caps;
+			font-size: large;
+			margin: 4px 4px 0 0;
+		}
+		
+		.yearSetter {
+			float: right;
+		}
+		
+		.autumnWinterSetter {
+			float: right;
+		}
+		
+		.winterSummerSetter {
+			float: right;
+		}
+		
+		.form {
+			min-width: 570px;
+			width: 100%;
+			display: inline-block;
+		}
+	
+		.block {
+			float : left;
+			display : inline;
+			margin-right : 10px;
+		}
+	
+		.plusButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.editButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.removeButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
+		.cancelButton {
+			margin-top: 17px;
+			margin-left: 20px;
+		}
+	
+		.output {
+			position: absolute;
+			top: 86px;
+			bottom: 15px;
+			left: 15px;
+			right: 15px;
+			overflow: auto;
+		}
+		
+		.updateButton {
+			margin-top: 15px;
+		}
 		
 	</ui:style>
-	<g:HTMLPanel>
-	</g:HTMLPanel>
+	
+	
+	<g:FlowPanel addStyleNames="{style.panel}" >
+	
+		<g:FlowPanel addStyleNames="{style.head}" >
+			<b:RadioButton name="seasonSetter" text="Autumn-winter" ui:field="autumnWinterSetter" addStyleNames="{style.autumnWinterSetter}" />
+			<b:RadioButton name="seasonSetter" text="Winter-summer" ui:field="winterSummerSetter" addStyleNames="{style.winterSummerSetter}" />
+			<g:IntegerBox ui:field="yearSetter" addStyleNames="{style.yearSetter}" />
+			<g:Label addStyleNames="{style.title}">Curriculum for: </g:Label>
+		</g:FlowPanel>
+		
+	<!-- 	<g:FlowPanel addStyleNames="{style.form}" ui:field="form">
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Teacher name:</g:Label>
+				<b:TextBox ui:field="nameSetter"></b:TextBox>
+			</g:FlowPanel>
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Rank:</g:Label>
+				<g:FlowPanel ui:field="rankSetterContainer"></g:FlowPanel>
+			</g:FlowPanel>
+			<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить" type="SUCCESS" icon="PLUS" />
+			<b:Button addStyleNames="{style.editButton}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
+			<b:Button addStyleNames="{style.removeButton}" ui:field="removeButton" text="Удалить" type="DANGER" icon="TRASH" />
+			<b:Button addStyleNames="{style.cancelButton}" ui:field="cancelButton" text="Отмена" type="WARNING" icon="REMOVE" />
+			<b:Button addStyleNames="{style.updateButton}" ui:field="updateButton" type="LINK" icon="REFRESH" iconSize="LARGE"></b:Button>
+		</g:FlowPanel>
+		
+		<g:FlowPanel addStyleNames="{style.output}" ui:field="persistedTeachers" >
+		</g:FlowPanel> -->
+		
+	</g:FlowPanel>
+	
 </ui:UiBinder> 

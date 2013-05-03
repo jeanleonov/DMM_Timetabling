@@ -7,7 +7,27 @@
 		.panel {
 		}
 		
+		.head {
+			float: right;
+			display: inline;
+			background: rgba(255, 255, 255, 0.34);
+			padding: 2px 12px 3px 12px;
+			border-radius: 0 7px 0 7px;
+			margin: -9px -15px 0 0;
+			color: rgb(41, 73, 94);
+		}
+		
+		.title {
+			float: right;
+			font-variant: small-caps;
+			font-size: large;
+			margin: 4px 4px 0 0;
+		}
+		
 		.form {
+			min-width: 570px;
+			width: 100%;
+			display: inline-block;
 		}
 	
 		.block {
@@ -38,17 +58,25 @@
 	
 		.output {
 			position: absolute;
-			top: 70px;
+			top: 86px;
 			bottom: 15px;
 			left: 15px;
 			right: 15px;
 			overflow: auto;
 		}
 		
+		.updateButton {
+			margin-top: 15px;
+		}
+		
 	</ui:style>
 	
 	
 	<g:FlowPanel addStyleNames="{style.panel}" >
+	
+		<g:FlowPanel addStyleNames="{style.head}" >
+			<g:Label addStyleNames="{style.title}">Subjects</g:Label>
+		</g:FlowPanel>
 	
 		<g:FlowPanel addStyleNames="{style.form}" >
 			<g:FlowPanel addStyleNames="{style.block}" >
@@ -63,6 +91,7 @@
 			<b:Button addStyleNames="{style.editButton}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
 			<b:Button addStyleNames="{style.removeButton}" ui:field="removeButton" text="Удалить" type="DANGER" icon="TRASH" />
 			<b:Button addStyleNames="{style.cancelButton}" ui:field="cancelButton" text="Отмена" type="WARNING" icon="REMOVE" />
+			<b:Button addStyleNames="{style.updateButton}" ui:field="updateButton" type="LINK" icon="REFRESH" iconSize="LARGE"></b:Button>
 		</g:FlowPanel>
 		
 		<g:FlowPanel addStyleNames="{style.output}" ui:field="persistedSubjects" >

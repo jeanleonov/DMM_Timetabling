@@ -118,6 +118,11 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		setCreatingMode();
 	}
 	
+	@UiHandler("updateButton")
+	void onUpdate(ClickEvent e) {
+		dataGrid.getProvider().update();
+	}
+	
 	private void setCreatingMode() {
 		saveButton.setVisible(true);
 		editButton.setVisible(false);

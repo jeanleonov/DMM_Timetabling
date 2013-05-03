@@ -30,6 +30,7 @@ public class CathedraPage extends BasePage implements DataSelectionListener<Cath
 	@UiField Button editButton;
 	@UiField Button removeButton;
 	@UiField Button cancelButton;
+	@UiField Button	updateButton;
 	@UiField TextBox nameSetter;
 	@UiField TextBox emailSetter;
 	@UiField FlowPanel persistedCathedras;
@@ -91,6 +92,11 @@ public class CathedraPage extends BasePage implements DataSelectionListener<Cath
 		CathedraProxy cathedra = dataGrid.getSelected();
 		dataGrid.getSelectionModel().setSelected(cathedra, false);
 		setCreatingMode();
+	}
+	
+	@UiHandler("updateButton")
+	void onUpdate(ClickEvent e) {
+		dataGrid.getProvider().update();
 	}
 	
 	private void setCreatingMode() {
