@@ -22,7 +22,7 @@ public class CathedraGrid extends BaseDataGrid<CathedraProxy> {
 	@Override
 	protected void initiateColumns() {
 		Column<CathedraProxy, String> cathedraName = new NameColumn();
-		addColumn(cathedraName, "Cathedra name", "300px");
+		addColumn(cathedraName, "Имя кафедры", "300px");
 		Column<CathedraProxy, String> cathedraEmail = new EmailColumn();
 		addColumn(cathedraEmail, "email", "200px");
 		getElement().getStyle().setWidth(510, Unit.PX);

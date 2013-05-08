@@ -22,9 +22,9 @@ public class SubjectGrid extends BaseDataGrid<SubjectProxy> {
 	@Override
 	protected void initiateColumns() {
 		Column<SubjectProxy, String> subjectName = new NameColumn();
-		addColumn(subjectName, "Subject name", "300px");
+		addColumn(subjectName, "Имя предмета", "300px");
 		Column<SubjectProxy, String> displayName = new DisplayNameColumn();
-		addColumn(displayName, "Display name", "200px");
+		addColumn(displayName, "Отображаемое имя", "200px");
 		getElement().getStyle().setWidth(510, Unit.PX);
 	}
 

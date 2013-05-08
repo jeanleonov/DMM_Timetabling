@@ -10,7 +10,7 @@ public class RankListProvider implements SingleSelectListPanelDataProvider<Integ
 	
 	private List<Integer> teacherRankCodes = null;
 	private List<String> rankNames = null;
-	private Integer selectedIndex = 0;
+	private int selectedIndex = 0;
 	
 	public RankListProvider() {
 		teacherRankCodes = new ArrayList<Integer>(TeacherRank.values().length);
@@ -60,15 +60,16 @@ public class RankListProvider implements SingleSelectListPanelDataProvider<Integ
 	}
 	
 	@Override
-	public void setSelectedItem(Integer rankName) {
+	public void setSelectedItem(Integer rankCode) {
 		int i=0;
-		for (String rank : rankNames) {
-			if (rank.equals(rankName)) {
+		for (Integer rank : teacherRankCodes) {
+			if (rank.equals(rankCode)) {
 				selectedIndex = i;
 				return;
 			}
 			i++;
 		}
+		selectedIndex = 0;
 	}
 	
 	@Override

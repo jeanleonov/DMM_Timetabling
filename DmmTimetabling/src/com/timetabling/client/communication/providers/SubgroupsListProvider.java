@@ -7,19 +7,22 @@ import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList.SingleSe
 
 public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<Byte> {
 	
-	private List<Byte> courses = null;
-	private List<String> coursesNames = null;
-	private Integer selectedIndex = 0;
-	private final static int NUMBER_OF_COURSES = 6;
+	private List<Byte> subgroups = null;
+	private List<String> subgroupsNames = null;
+	private int selectedIndex = 0;
 	
 	public SubgroupsListProvider() {
-		courses = new ArrayList<Byte>(NUMBER_OF_COURSES);
-		coursesNames = new ArrayList<String>(NUMBER_OF_COURSES);
-		coursesNames.add(" - ");
-		for (byte i=4; i<=NUMBER_OF_COURSES; i++) {
-			courses.add(i);
-			coursesNames.add(i + " Course");
-		}
+		subgroups = new ArrayList<Byte>(4);
+		subgroupsNames = new ArrayList<String>(5);
+		subgroupsNames.add(" - ");
+		subgroups.add((byte)1);
+		subgroupsNames.add("1 подгруппа");
+		subgroups.add((byte)2);
+		subgroupsNames.add("2 подгруппы");
+		subgroups.add((byte)1);
+		subgroupsNames.add("3 подгруппы");
+		subgroups.add((byte)1);
+		subgroupsNames.add("4 подгруппы");
 	}
 	
 	//=== ChosenDataProvider: =====================================
@@ -38,7 +41,7 @@ public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<
 	}
 	@Override
 	public List<String> getLastLoadedFilteredList() {
-		return coursesNames;
+		return subgroupsNames;
 	}
 	@Override
 	public List<Pair<String, List<String>>> getLastLoadedFilteredMap() {
@@ -57,19 +60,20 @@ public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<
 	
 	@Override
 	public String getSelectedItem() {
-		return coursesNames.get(selectedIndex);
+		return subgroupsNames.get(selectedIndex);
 	}
 	
 	@Override
 	public void setSelectedItem(Byte courseItem) {
 		int i=0;
-		for (String course : coursesNames) {
+		for (String course : subgroupsNames) {
 			if (course.equals(courseItem)) {
 				selectedIndex = i;
 				return;
 			}
 			i++;
 		}
+		selectedIndex = 0;
 	}
 	
 	@Override
@@ -84,6 +88,8 @@ public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<
 
 	@Override
 	public Byte getValue() {
-		return courses.get(selectedIndex+1);
+		if (selectedIndex != 0)
+			return subgroups.get(selectedIndex-1);
+		return null;
 	}
 }

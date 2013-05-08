@@ -9,16 +9,18 @@ public class CourseListProvider implements SingleSelectListPanelDataProvider<Byt
 	
 	private List<Byte> courses = null;
 	private List<String> coursesNames = null;
-	private Integer selectedIndex = 0;
-	private final static int NUMBER_OF_COURSES = 6;
+	private int selectedIndex = 0;
+	private Runnable onSelect;
+	private final static int NUMBER_OF_COURSES = 5;
 	
-	public CourseListProvider() {
+	public CourseListProvider(Runnable onSelect) {
+		this.onSelect = onSelect;
 		courses = new ArrayList<Byte>(NUMBER_OF_COURSES);
 		coursesNames = new ArrayList<String>(NUMBER_OF_COURSES);
 		coursesNames.add(" - ");
-		for (byte i=4; i<=NUMBER_OF_COURSES; i++) {
+		for (byte i=1; i<=NUMBER_OF_COURSES; i++) {
 			courses.add(i);
-			coursesNames.add(i + " Course");
+			coursesNames.add(i + "-й курс");
 		}
 	}
 	
@@ -53,6 +55,7 @@ public class CourseListProvider implements SingleSelectListPanelDataProvider<Byt
 	@Override
 	public void setSelectedIndex(final int newSelectedIndex) {
 		selectedIndex = newSelectedIndex;
+		onSelect.run();
 	}
 	
 	@Override
@@ -64,12 +67,15 @@ public class CourseListProvider implements SingleSelectListPanelDataProvider<Byt
 	public void setSelectedItem(Byte courseItem) {
 		int i=0;
 		for (String course : coursesNames) {
-			if (course.equals(courseItem)) {
+			if (course.contains(courseItem.toString())) {
 				selectedIndex = i;
+				onSelect.run();
 				return;
 			}
 			i++;
 		}
+		selectedIndex = 0;
+		onSelect.run();
 	}
 	
 	@Override
@@ -84,6 +90,8 @@ public class CourseListProvider implements SingleSelectListPanelDataProvider<Byt
 
 	@Override
 	public Byte getValue() {
-		return courses.get(selectedIndex+1);
+		if (selectedIndex != 0)
+			return courses.get(selectedIndex-1);
+		return null;
 	}
 }

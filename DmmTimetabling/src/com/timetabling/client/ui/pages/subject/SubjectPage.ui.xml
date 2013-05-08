@@ -75,16 +75,16 @@
 	<g:FlowPanel addStyleNames="{style.panel}" >
 	
 		<g:FlowPanel addStyleNames="{style.head}" >
-			<g:Label addStyleNames="{style.title}">Subjects</g:Label>
+			<g:Label addStyleNames="{style.title}">Предметы</g:Label>
 		</g:FlowPanel>
 	
 		<g:FlowPanel addStyleNames="{style.form}" >
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Subject name:</g:Label>
+				<g:Label>Имя предмета:</g:Label>
 				<b:TextBox ui:field="nameSetter"></b:TextBox>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Display name:</g:Label>
+				<g:Label>Отображаемое имя:</g:Label>
 				<b:TextBox ui:field="displayNameSetter"></b:TextBox>
 			</g:FlowPanel>
 			<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить" type="SUCCESS" icon="PLUS" />

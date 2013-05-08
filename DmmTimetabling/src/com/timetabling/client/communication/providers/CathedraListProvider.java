@@ -13,8 +13,12 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 	private List<CathedraProxy> cathedras = null;
 	private List<String> cathedrasNames;
 	private Communicator communicator;
-	private Integer selectedIndex = 0;
+	private int selectedIndex = 0;
 	private Runnable onSelect;
+	
+	public CathedraListProvider(Communicator communicator) {
+		this(communicator, null);
+	}
 	
 	public CathedraListProvider(Communicator communicator, Runnable onSelect) {
 		this.communicator = communicator;
@@ -57,12 +61,14 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 				@Override
 				public void run() {
 					selectedIndex = newSelectedIndex;
-					onSelect.run();
+					if (onSelect != null)
+						onSelect.run();
 				}
 			});
 		else {
 			selectedIndex = newSelectedIndex;
-			onSelect.run();
+			if (onSelect != null)
+				onSelect.run();
 		}			
 	}
 	@Override
@@ -75,10 +81,15 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 		for (String cathedra : cathedrasNames) {
 			if (cathedra.equals(selectedItem.getName())) {
 				selectedIndex = i;
+				if (onSelect != null)
+					onSelect.run();
 				return;
 			}
 			i++;
 		}
+		selectedIndex = 0;
+		if (onSelect != null)
+			onSelect.run();
 	}
 	@Override
 	public int getSelectedIndex() {
@@ -86,7 +97,7 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 	}
 	
 	@Override
-	public void requestData(final Runnable onSucces) {
+	public void requestData(final Runnable onSuccess) {
 		communicator.requestFactory.createCathedraRequest().getAllCathedras().
 		fire(new Receiver<List<CathedraProxy>>() {
 			@Override
@@ -95,7 +106,7 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 				cathedrasNames.clear();
 				for (CathedraProxy cathedra : cathedras)
 					cathedrasNames.add(cathedra.getName());
-				onSucces.run();
+				onSuccess.run();
 			}
 		});
 	}

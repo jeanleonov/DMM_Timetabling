@@ -26,9 +26,9 @@ public class TeacherGrid extends BaseDataGrid<TeacherProxy> {
 	@Override
 	protected void initiateColumns() {
 		Column<TeacherProxy, String> teacherName = new NameColumn();
-		addColumn(teacherName, "Teacher name", "300px");
+		addColumn(teacherName, "Имя преподавателя", "300px");
 		Column<TeacherProxy, String> teacherRank = new RankColumn();
-		addColumn(teacherRank, "Rank", "200px");
+		addColumn(teacherRank, "Ранг", "200px");
 		getElement().getStyle().setWidth(510, Unit.PX);
 	}
 

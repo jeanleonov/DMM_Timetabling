@@ -80,16 +80,16 @@
 	
 		<g:FlowPanel addStyleNames="{style.head}" >
 			<g:FlowPanel ui:field="cathedraSetterContainer" addStyleNames="{style.cathedraSetter}"></g:FlowPanel>
-			<g:Label addStyleNames="{style.title}">Teachers from: </g:Label>
+			<g:Label addStyleNames="{style.title}">Преподаватели с кафедры: </g:Label>
 		</g:FlowPanel>
 		
 		<g:FlowPanel addStyleNames="{style.form}" ui:field="form">
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Teacher name:</g:Label>
+				<g:Label>Полное имя:</g:Label>
 				<b:TextBox ui:field="nameSetter"></b:TextBox>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Rank:</g:Label>
+				<g:Label>Ранг:</g:Label>
 				<g:FlowPanel ui:field="rankSetterContainer"></g:FlowPanel>
 			</g:FlowPanel>
 			<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить" type="SUCCESS" icon="PLUS" />

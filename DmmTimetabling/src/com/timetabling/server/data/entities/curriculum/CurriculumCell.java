@@ -7,7 +7,6 @@ import javax.persistence.Transient;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
-import com.timetabling.server.data.managers.curriculum.CurriculumExtensionSaver;
 import com.timetabling.shared.enums.LessonType;
 
 /** Curriculum is associated with specified specialty.
@@ -28,12 +27,13 @@ public class CurriculumCell extends DatastoreLongEntity {
 	private long specialtyId;
 	private long subjectId;
 	private int lessonTypeCode;
-	private long cathedraId;
+	private Long cathedraId = null;
 	
 	private boolean isInitiated = false;
 	
 	@Transient private String specialtyName;
 	@Transient private String subjectName;
+	@Transient private String cathedraName;
 	
 	/** 1-5 (year of studying) */
 	private byte course;
@@ -44,14 +44,14 @@ public class CurriculumCell extends DatastoreLongEntity {
 	
 	/** For lectures it is usually 1, 
 	 *  for practice it is usually number of groups (..MF-31, MF-32 - 2 groups) */
-	@Unindexed private byte numberOfSubgroups;
+	@Unindexed private Byte numberOfSubgroups = null;
 	
 	/** 2 if you have 1 full lesson,
 	 *  1 if you have flashing lesson,
 	 *  4 if you have 2 full lessons, ...*/
-	@Unindexed private byte hoursInTwoWeeks;
+	@Unindexed private Byte hoursInTwoWeeks = null;
 	
-	@Unindexed private String displayName;
+	@Unindexed private String displayName = null;
 	
 	/** List of lessons which are originated by this 'Cell'.
 	 * ( lessons.size() == numberOfSubgroups * (hoursInTwoWeeks+1)/2 ) */
@@ -70,6 +70,7 @@ public class CurriculumCell extends DatastoreLongEntity {
 		this.lessonTypeCode = lessonType.getCode();
 		this.hoursInTwoWeeks = hoursInTwoWeeks;
 		this.course = course;
+		this.displayName = subjectName;
 	}
 
 	public long getSpecialtyId() {
@@ -98,16 +99,10 @@ public class CurriculumCell extends DatastoreLongEntity {
 		this.lessonTypeCode = lessonTypeCode;
 	}
 
-	public long getCathedraId() {
+	public Long getCathedraId() {
 		return cathedraId;
 	}
 
-	public void setCathedraId(long cathedraId) {
-		this.cathedraId = cathedraId;
-	}
-
-	/** Is for using reflect.
-	 * 	@See {@link CurriculumExtensionSaver} */
 	public void setCathedraId(Long cathedraId) {
 		this.cathedraId = cathedraId;
 	}
@@ -136,6 +131,14 @@ public class CurriculumCell extends DatastoreLongEntity {
 		this.subjectName = subjectName;
 	}
 
+	public String getCathedraName() {
+		return cathedraName;
+	}
+
+	public void setCathedraName(String cathedraName) {
+		this.cathedraName = cathedraName;
+	}
+
 	public byte getCourse() {
 		return course;
 	}
@@ -147,32 +150,24 @@ public class CurriculumCell extends DatastoreLongEntity {
 	public Long getJoinId() {
 		return joinId;
 	}
-
-	/** Is for using reflect.
-	 * 	@See {@link CurriculumExtensionSaver} */
+	
 	public void setJoinId(Long joinId) {
 		this.joinId = joinId;
 	}
 
-	public byte getNumberOfSubgroups() {
+	public Byte getNumberOfSubgroups() {
 		return numberOfSubgroups;
 	}
 
-	public void setNumberOfSubgroups(byte numberOfSubgroups) {
-		this.numberOfSubgroups = numberOfSubgroups;
-	}
-
-	/** Is for using reflect.
-	 * 	@See {@link CurriculumExtensionSaver} */
 	public void setNumberOfSubgroups(Byte numberOfSubgroups) {
 		this.numberOfSubgroups = numberOfSubgroups;
 	}
 
-	public byte getHoursInTwoWeeks() {
+	public Byte getHoursInTwoWeeks() {
 		return hoursInTwoWeeks;
 	}
 
-	public void setHoursInTwoWeeks(byte hoursInTwoWeeks) {
+	public void setHoursInTwoWeeks(Byte hoursInTwoWeeks) {
 		this.hoursInTwoWeeks = hoursInTwoWeeks;
 	}
 

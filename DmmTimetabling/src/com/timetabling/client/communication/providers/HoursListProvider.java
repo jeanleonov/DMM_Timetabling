@@ -7,19 +7,23 @@ import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList.SingleSe
 
 public class HoursListProvider implements SingleSelectListPanelDataProvider<Byte> {
 	
-	private List<Byte> courses = null;
-	private List<String> coursesNames = null;
-	private Integer selectedIndex = 0;
-	private final static int NUMBER_OF_COURSES = 6;
+	private List<Byte> hours = null;
+	private List<String> hoursNames = null;
+	private int selectedIndex = 0;
+	public static final String FLUSHING = "Мигалка";
+	public static final String ONE = "1 пара";
+	public static final String TWO = "2 пары";
 	
 	public HoursListProvider() {
-		courses = new ArrayList<Byte>(NUMBER_OF_COURSES);
-		coursesNames = new ArrayList<String>(NUMBER_OF_COURSES);
-		coursesNames.add(" - ");
-		for (byte i=4; i<=NUMBER_OF_COURSES; i++) {
-			courses.add(i);
-			coursesNames.add(i + " Course");
-		}
+		hours = new ArrayList<Byte>(3);
+		hoursNames = new ArrayList<String>(4);
+		hoursNames.add(" - ");
+		hours.add((byte)1);
+		hoursNames.add(FLUSHING);
+		hours.add((byte)2);
+		hoursNames.add(ONE);
+		hours.add((byte)4);
+		hoursNames.add(TWO);
 	}
 	
 	//=== ChosenDataProvider: =====================================
@@ -38,7 +42,7 @@ public class HoursListProvider implements SingleSelectListPanelDataProvider<Byte
 	}
 	@Override
 	public List<String> getLastLoadedFilteredList() {
-		return coursesNames;
+		return hoursNames;
 	}
 	@Override
 	public List<Pair<String, List<String>>> getLastLoadedFilteredMap() {
@@ -57,19 +61,19 @@ public class HoursListProvider implements SingleSelectListPanelDataProvider<Byte
 	
 	@Override
 	public String getSelectedItem() {
-		return coursesNames.get(selectedIndex);
+		return hoursNames.get(selectedIndex);
 	}
 	
 	@Override
-	public void setSelectedItem(Byte courseItem) {
-		int i=0;
-		for (String course : coursesNames) {
-			if (course.equals(courseItem)) {
-				selectedIndex = i;
-				return;
-			}
-			i++;
-		}
+	public void setSelectedItem(Byte hourItem) {
+		if (hourItem.equals(FLUSHING))
+			selectedIndex = 1;
+		else if (hourItem.equals(ONE))
+			selectedIndex = 2;
+		else if (hourItem.equals(TWO))
+			selectedIndex = 3;
+		else
+			selectedIndex = 0;
 	}
 	
 	@Override
@@ -84,6 +88,8 @@ public class HoursListProvider implements SingleSelectListPanelDataProvider<Byte
 
 	@Override
 	public Byte getValue() {
-		return courses.get(selectedIndex+1);
+		if (selectedIndex != 0)
+			return hours.get(selectedIndex-1);
+		return null;
 	}
 }

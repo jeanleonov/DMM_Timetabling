@@ -33,22 +33,22 @@
 
 	
 	<g:FlowPanel>
-		<g:Label addStyleNames="{style.label}">Editing:</g:Label>
+		<g:Label addStyleNames="{style.label}">Редактирование:</g:Label>
 		<g:FlowPanel addStyleNames="{style.editingPagesList}">
 			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
-				<g:Anchor addStyleNames="{style.editingItem}" text="Specialties" ui:field="specialties"></g:Anchor>
+				<g:Anchor addStyleNames="{style.editingItem}" text="Специальности" ui:field="specialties"></g:Anchor>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
-				<g:Anchor addStyleNames="{style.editingItem}" text="Subjects" ui:field="subjects"></g:Anchor>
+				<g:Anchor addStyleNames="{style.editingItem}" text="Предметы" ui:field="subjects"></g:Anchor>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
-				<g:Anchor addStyleNames="{style.editingItem}" text="Cathedras" ui:field="cathedras"></g:Anchor>
+				<g:Anchor addStyleNames="{style.editingItem}" text="Кафедры" ui:field="cathedras"></g:Anchor>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
-				<g:Anchor addStyleNames="{style.editingItem}" text="Teachers" ui:field="teachers"></g:Anchor>
+				<g:Anchor addStyleNames="{style.editingItem}" text="Преподаватели" ui:field="teachers"></g:Anchor>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
-				<g:Anchor addStyleNames="{style.editingItem}" text="Curriculum" ui:field="curriculum"></g:Anchor>
+				<g:Anchor addStyleNames="{style.editingItem}" text="Учебный план" ui:field="curriculum"></g:Anchor>
 			</g:FlowPanel>
 		</g:FlowPanel>
 	</g:FlowPanel>

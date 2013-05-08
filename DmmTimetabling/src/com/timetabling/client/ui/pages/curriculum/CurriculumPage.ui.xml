@@ -48,10 +48,15 @@
 			float: right;
 		}
 		
+		.typeSetter {
+			float: right;
+		}
+		
 		.form {
 			min-width: 570px;
 			width: 100%;
 			display: inline-block;
+			margin-top: 5px;
 		}
 	
 		.block {
@@ -82,7 +87,7 @@
 	
 		.output {
 			position: absolute;
-			top: 86px;
+			top: 96px;
 			bottom: 15px;
 			left: 15px;
 			right: 15px;
@@ -102,27 +107,30 @@
 			<g:FlowPanel ui:field="cathedraChoserContainer" addStyleNames="{style.cathedraChoser}"></g:FlowPanel>
 			<g:FlowPanel ui:field="courseChoserContainer" addStyleNames="{style.courseChoser}"></g:FlowPanel>
 			<g:FlowPanel ui:field="specialtyChoserContainer" addStyleNames="{style.specialtyChoser}"></g:FlowPanel>
-			<g:Label addStyleNames="{style.title}">Curriculum</g:Label>
+			<g:Label addStyleNames="{style.title}">Учебный план</g:Label>
 		</g:FlowPanel>
 		
 	 	<g:FlowPanel addStyleNames="{style.form}" ui:field="form">
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Name: </g:Label>
+				<g:Label>Имя: </g:Label>
 				<b:TextBox ui:field="nameSetter"></b:TextBox>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Cathedra: </g:Label>
+				<g:Label>Кафедры: </g:Label>
 				<g:FlowPanel ui:field="cathedraSetterContainer" addStyleNames="{style.cathedraSetter}"></g:FlowPanel>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Subgroups: </g:Label>
+				<g:Label>Подгруппы: </g:Label>
 				<g:FlowPanel ui:field="subgroupsSetterContainer" addStyleNames="{style.subgroupsSetter}"></g:FlowPanel>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Hours: </g:Label>
+				<g:Label>Часы: </g:Label>
 				<g:FlowPanel ui:field="hoursSetterContainer" addStyleNames="{style.hoursSetter}"></g:FlowPanel>
 			</g:FlowPanel>
-			<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить" type="SUCCESS" icon="PLUS" />
+			<g:FlowPanel addStyleNames="{style.block}" >
+				<g:Label>Тип: </g:Label>
+				<g:FlowPanel ui:field="typeSetterContainer" addStyleNames="{style.typeSetter}"></g:FlowPanel>
+			</g:FlowPanel>
 			<b:Button addStyleNames="{style.editButton}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
 			<b:Button addStyleNames="{style.removeButton}" ui:field="removeButton" text="Удалить" type="DANGER" icon="TRASH" />
 			<b:Button addStyleNames="{style.cancelButton}" ui:field="cancelButton" text="Отмена" type="WARNING" icon="REMOVE" />

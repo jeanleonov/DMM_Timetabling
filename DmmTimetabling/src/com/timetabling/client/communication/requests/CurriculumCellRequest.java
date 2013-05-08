@@ -12,10 +12,15 @@ import com.timetabling.server.data.managers.simple.CurriculumCellManager;
 @Service( value = CurriculumCellManager.class, locator = DaoServiceLocator.class )
 public interface CurriculumCellRequest extends RequestContext {
 
+	Request<Void> putCurriculumCell(int year, boolean season, CurriculumCellProxy cell);
 	Request<List<CurriculumCellProxy>> getCurriculumCells(int year, boolean season);
 	Request<List<CurriculumCellProxy>> getCurriculumCellsForSpecialty(int year, boolean season, long specialtyId);
-	Request<List<CurriculumCellProxy>> getCurriculumCellsForSubject(int year, boolean season, long subjectId);
-	Request<List<CurriculumCellProxy>> getCurriculumCellsForJoin(int year, boolean season, long joinId);
+	Request<List<CurriculumCellProxy>> getCurriculumCellsForCource(int year, boolean season, byte course);
 	Request<List<CurriculumCellProxy>> getCurriculumCellsForCathedra(int year, boolean season, long cathedraId);
+	Request<List<CurriculumCellProxy>> getCurriculumCellsForSpecialtyCourse(int year, boolean season, long specialtyId, byte course);
+	Request<List<CurriculumCellProxy>> getCurriculumCellsForCathedraCourse(int year, boolean season, long cathedraId, byte course);
+	Request<List<CurriculumCellProxy>> getCurriculumCellsForCathedraSpecialty(int year, boolean season, long cathedraId, long specialtyId);
+	Request<List<CurriculumCellProxy>> getCurriculumCellsForCathedraSpecialtyCourse(int year, boolean season, long cathedraId, long specialtyId, byte course);
+	Request<Void> deleteCell(int year, boolean season, long cellId);
 	
 }

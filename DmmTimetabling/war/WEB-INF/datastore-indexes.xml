@@ -8,27 +8,25 @@
 	</datastore-index>
 	
 	<datastore-index kind="CurriculumCell" ancestor="false">
-    	<property name="specialtyId" direction="asc"/>
-    	<property name="course" direction="asc"/>
-    	<property name="subject" direction="asc"/>
-	</datastore-index>
-	
-	<datastore-index kind="CurriculumCell" ancestor="false">
     	<property name="cathedraId" direction="asc"/>
-    	<property name="specialtyId" direction="asc"/>
-	</datastore-index>
-	
-	<datastore-index kind="CurriculumCell" ancestor="false">
-    	<property name="cathedraId" direction="asc"/>
-    	<property name="specialtyId" direction="asc"/>
     	<property name="course" direction="asc"/>
 	</datastore-index>
 	
 	<datastore-index kind="CurriculumCell" ancestor="false">
     	<property name="cathedraId" direction="asc"/>
     	<property name="specialtyId" direction="asc"/>
+	</datastore-index>
+	
+	<datastore-index kind="CurriculumCell" ancestor="false">
+    	<property name="cathedraId" direction="asc"/>
+    	<property name="specialtyId" direction="asc"/>
     	<property name="course" direction="asc"/>
-    	<property name="subject" direction="asc"/>
+	</datastore-index>
+	
+	<datastore-index kind="CurriculumCell" ancestor="false">
+    	<property name="cathedraId" direction="asc"/>
+    	<property name="specialtyId" direction="asc"/>
+    	<property name="course" direction="asc"/>
 	</datastore-index>
 	
 	<datastore-index kind="Teacher" ancestor="true">

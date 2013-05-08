@@ -22,9 +22,9 @@ public class SpecialtyGrid extends BaseDataGrid<SpecialtyProxy> {
 	@Override
 	protected void initiateColumns() {
 		Column<SpecialtyProxy, String> specialtyName = new NameColumn();
-		addColumn(specialtyName, "Specialty name", "300px");
+		addColumn(specialtyName, "Имя специальности", "300px");
 		Column<SpecialtyProxy, String> shartName = new ShortNameColumn();
-		addColumn(shartName, "Short name", "200px");
+		addColumn(shartName, "Краткое имя", "200px");
 		getElement().getStyle().setWidth(510, Unit.PX);
 	}
 

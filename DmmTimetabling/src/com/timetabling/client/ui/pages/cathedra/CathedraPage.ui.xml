@@ -75,12 +75,12 @@
 	<g:FlowPanel addStyleNames="{style.panel}" >
 	
 		<g:FlowPanel addStyleNames="{style.head}" >
-			<g:Label addStyleNames="{style.title}">Cathedras</g:Label>
+			<g:Label addStyleNames="{style.title}">Кафедры</g:Label>
 		</g:FlowPanel>
 	
 		<g:FlowPanel addStyleNames="{style.form}" >
 			<g:FlowPanel addStyleNames="{style.block}" >
-				<g:Label>Cathedra name:</g:Label>
+				<g:Label>Имя кафедры:</g:Label>
 				<b:TextBox ui:field="nameSetter"></b:TextBox>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.block}" >

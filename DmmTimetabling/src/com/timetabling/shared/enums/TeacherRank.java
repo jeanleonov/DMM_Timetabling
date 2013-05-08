@@ -2,10 +2,10 @@ package com.timetabling.shared.enums;
 
 public enum TeacherRank {
 	
-	PROFESSOR (0, "Professor"), 
-	DOZENT (1, "Dozent"), 
-	LECTURER (2, "Lecturer"), 
-	ASSISTANT (3, "Assistant");
+	PROFESSOR (0, "Профессор"), 
+	DOZENT (1, "Доцент"), 
+	LECTURER (2, "Лектор"), 
+	ASSISTANT (3, "Асистент");
 	
 	private int code;
 	private String displayName;

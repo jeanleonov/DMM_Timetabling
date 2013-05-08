@@ -13,7 +13,7 @@ public class SpecialtyListProvider implements SingleSelectListPanelDataProvider<
 	private List<SpecialtyProxy> specialties = null;
 	private List<String> specialtiesNames;
 	private Communicator communicator;
-	private Integer selectedIndex = 0;
+	private int selectedIndex = 0;
 	private Runnable onSelect;
 	
 	public SpecialtyListProvider(Communicator communicator) {
@@ -81,10 +81,13 @@ public class SpecialtyListProvider implements SingleSelectListPanelDataProvider<
 		for (String specialty : specialtiesNames) {
 			if (specialty.equals(selectedItem.getName())) {
 				selectedIndex = i;
+				onSelect.run();
 				return;
 			}
 			i++;
 		}
+		selectedIndex = 0;
+		onSelect.run();
 	}
 	@Override
 	public int getSelectedIndex() {
@@ -109,6 +112,8 @@ public class SpecialtyListProvider implements SingleSelectListPanelDataProvider<
 
 	@Override
 	public SpecialtyProxy getValue() {
-		return specialties.get(selectedIndex+1);
+		if (selectedIndex != 0)
+			return specialties.get(selectedIndex-1);
+		return null;
 	}
 }
