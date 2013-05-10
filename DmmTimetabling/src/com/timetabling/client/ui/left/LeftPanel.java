@@ -7,9 +7,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.timetabling.client.ui.pages.PageName;
 import com.timetabling.client.ui.pages.PagesDispatcher;
+import com.timetabling.client.ui.pages.testing.Test;
 
 public class LeftPanel extends Composite {
 
@@ -22,9 +24,11 @@ public class LeftPanel extends Composite {
 	@UiField Anchor specialties;
 	@UiField Anchor subjects;
 	@UiField Anchor cathedras;
+	@UiField FlowPanel test;
 
 	public LeftPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
+		test.add(new Test());
 	}
 	
 	@UiHandler ("specialties")

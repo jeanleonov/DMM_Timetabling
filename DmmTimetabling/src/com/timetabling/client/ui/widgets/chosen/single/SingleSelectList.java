@@ -144,4 +144,9 @@ public class SingleSelectList <T> extends Composite {
 	public T getValue() {
 		return dataProvider.getValue();
 	}
+	
+	public void setEnabled(boolean enabled) {
+		if (chosen != null)
+			chosen.setEnabled(enabled);
+	}
 }

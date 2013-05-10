@@ -184,4 +184,9 @@ public class MultipleSelectList <T> extends Composite {
 			}
 		}
 	}
+	
+	public void setEnabled(boolean enabled) {
+		if (chosen != null)
+			chosen.setEnabled(enabled);
+	}
 }

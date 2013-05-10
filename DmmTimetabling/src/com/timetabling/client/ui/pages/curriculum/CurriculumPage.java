@@ -72,6 +72,7 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 		addElementsToPanels();
 		initDataGrid();
 		updateList();
+		setCreatingMode();
 	}
 	
 	private void createSettersAndChosers() {
@@ -102,24 +103,18 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 	}
 	
 	void onCathedraSelect() {
-		form.setVisible(true);
-		persistedCells.setVisible(true);
 		cathedra = cathedraChoser.getDataProvider().getValue();
 		dataGrid.setCathedra(cathedra);
 		dataGrid.getProvider().update();
 	}
 	
 	void onCourseSelect() {
-		form.setVisible(true);
-		persistedCells.setVisible(true);
 		course = courseChoser.getDataProvider().getValue();
 		dataGrid.setCourse(course);
 		dataGrid.getProvider().update();
 	}
 	
 	void onSpecialtySelect() {
-		form.setVisible(true);
-		persistedCells.setVisible(true);
 		specialty = specialtyChoser.getDataProvider().getValue();
 		dataGrid.setSpecialty(specialty);
 		dataGrid.getProvider().update();
@@ -134,7 +129,8 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 		cell.setNumberOfSubgroups(subgroupsSetter.getValue());
 		cell.setHoursInTwoWeeks(hoursSetter.getValue());
 		cell.setLessonTypeCode(typeSetter.getValue());
-		cell.setCathedraId(cathedraSetter.getValue().getId());
+		CathedraProxy cathedra = cathedraSetter.getValue();
+		cell.setCathedraId(cathedra==null? null : cathedra.getId());
 		request.putCurriculumCell(CurriculumCellGrid.YEAR, CurriculumCellGrid.SEASON, cell).
 		fire(new Receiver<Void>() {
 			@Override
@@ -170,17 +166,31 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 	}
 	
 	private void setCreatingMode() {
-		editButton.setVisible(false);
-		removeButton.setVisible(false);
-		cancelButton.setVisible(false);
-		nameSetter.setText("");
+		editButton.setEnabled(false);
+		removeButton.setEnabled(false);
+		cancelButton.setEnabled(false);
+		nameSetter.setEnabled(false);
+		cathedraSetter.setEnabled(false);
+		subgroupsSetter.setEnabled(false);
+		hoursSetter.setEnabled(false);
+		typeSetter.setEnabled(false);
+		
 	}
 	
 	private void setEditingMode(CurriculumCellProxy entity) {
-		editButton.setVisible(true);
-		removeButton.setVisible(true);
-		cancelButton.setVisible(true);
+		editButton.setEnabled(true);
+		removeButton.setEnabled(true);
+		cancelButton.setEnabled(true);
+		nameSetter.setEnabled(true);
+		cathedraSetter.setEnabled(true);
+		subgroupsSetter.setEnabled(true);
+		hoursSetter.setEnabled(true);
+		typeSetter.setEnabled(true);
 		nameSetter.setText(entity.getDisplayName());
+		((CathedraListProvider) cathedraSetter.getDataProvider()).setSelectedCathedraName(entity.getCathedraName());
+		subgroupsSetter.setSelectedItem(entity.getNumberOfSubgroups());
+		hoursSetter.setSelectedItem(entity.getHoursInTwoWeeks());
+		typeSetter.setSelectedItem(entity.getLessonTypeCode());
 	}
 	
 	private void updateList() {

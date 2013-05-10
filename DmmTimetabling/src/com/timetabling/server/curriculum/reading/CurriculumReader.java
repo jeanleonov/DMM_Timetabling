@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -22,6 +24,8 @@ import com.timetabling.server.data.managers.simple.Utils;
 import com.timetabling.shared.enums.LessonType;
 
 public class CurriculumReader {
+	
+	private static Logger logger = Logger.getLogger(CurriculumReader.class.getSimpleName());
 
 	// ================================================
 	// ============= test =============================
@@ -36,11 +40,11 @@ public class CurriculumReader {
 	// ============= Constants ========================
 	// ================================================
 
-	// (.*)Назва( +)дисципліни(.*)
+	// (.*)пїЅпїЅпїЅпїЅпїЅ( +)пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(.*)
 	private static final String SUBJECTS_TITLE_TEXT = "(.*)\u041D\u0430\u0437\u0432\u0430"
 			+ "( +)\u0434\u0438\u0441\u0446\u0438\u043F\u043B\u0456\u043D\u0438(.*)";
 
-	// Цикл дисциплін вільного вибору студентів
+	// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	private static final String SPECIAL_COURSE_TITLE_TEXT = "\u0426\u0438\u043A\u043B"
 			+ " \u0434\u0438\u0441\u0446\u0438\u043F\u043B\u0456\u043D"
 			+ " \u0432\u0456\u043B\u044C\u043D\u043E\u0433\u043E \u0432\u0438\u0431\u043E\u0440"
@@ -219,6 +223,8 @@ public class CurriculumReader {
 			}
 
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Curriculum reading error", e);
+			e.printStackTrace();
 			throw e;
 		} finally {
 			inputStream.close();

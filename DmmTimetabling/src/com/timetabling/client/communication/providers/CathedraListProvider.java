@@ -32,18 +32,22 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 	public boolean isDataGroupable() {
 		return false;
 	}
+	
 	@Override
 	public boolean isAsync() {
 		return true;
 	}	
+	
 	@Override
 	public boolean isMultipleSelect() {
 		return false;
 	}
+	
 	@Override
 	public List<String> getLastLoadedFilteredList() {
 		return cathedrasNames;
 	}
+	
 	@Override
 	public List<Pair<String, List<String>>> getLastLoadedFilteredMap() {
 		// this provider is not isDataGroupable()
@@ -71,10 +75,12 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 				onSelect.run();
 		}			
 	}
+	
 	@Override
 	public String getSelectedItem() {
 		return cathedras.get(selectedIndex).getName();
 	}
+	
 	@Override
 	public void setSelectedItem(CathedraProxy selectedItem) {
 		int i=0;
@@ -91,6 +97,23 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 		if (onSelect != null)
 			onSelect.run();
 	}
+	
+	public void setSelectedCathedraName(String cathedraName) {
+		int i=0;
+		for (String cathedra : cathedrasNames) {
+			if (cathedra.equals(cathedraName)) {
+				selectedIndex = i;
+				if (onSelect != null)
+					onSelect.run();
+				return;
+			}
+			i++;
+		}
+		selectedIndex = 0;
+		if (onSelect != null)
+			onSelect.run();
+	}
+	
 	@Override
 	public int getSelectedIndex() {
 		return selectedIndex;
@@ -104,6 +127,7 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 			public void onSuccess(List<CathedraProxy> response) {
 				cathedras = response;
 				cathedrasNames.clear();
+				cathedrasNames.add(" - ");
 				for (CathedraProxy cathedra : cathedras)
 					cathedrasNames.add(cathedra.getName());
 				onSuccess.run();
@@ -113,6 +137,8 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 
 	@Override
 	public CathedraProxy getValue() {
-		return cathedras.get(selectedIndex);
+		if (selectedIndex != 0)
+			return cathedras.get(selectedIndex-1);
+		return null;
 	}
 }

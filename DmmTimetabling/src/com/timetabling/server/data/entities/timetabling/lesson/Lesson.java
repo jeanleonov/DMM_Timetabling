@@ -25,7 +25,8 @@ public class Lesson extends DatastoreLongEntity {
 
 	@Parent private Key<CurriculumCell> parent;
 	private byte subGroupNumber;
-	private long teacherId;
+	private boolean isFlushing;
+	private Long teacherId = null;
 
 	@Transient private Map<Version, Time> versionTimeMap;
 	@Transient private List<GroupTT> groupTTs;
@@ -37,6 +38,12 @@ public class Lesson extends DatastoreLongEntity {
 	public Lesson() {
 	}
 	
+	public Lesson(Key<CurriculumCell> parent, byte subgroupNumber, boolean isFlushing) {
+		this.parent = parent;
+		this.subGroupNumber = subgroupNumber;
+		this.isFlushing = isFlushing;
+	}
+	
 	public byte getSubGroupNumber() {
 		return subGroupNumber;
 	}
@@ -45,11 +52,19 @@ public class Lesson extends DatastoreLongEntity {
 		this.subGroupNumber = subGroupNumber;
 	}
 	
-	public long getTeacherId() {
+	public boolean isFlushing() {
+		return isFlushing;
+	}
+
+	public void setFlushing(boolean isFlushing) {
+		this.isFlushing = isFlushing;
+	}
+
+	public Long getTeacherId() {
 		return teacherId;
 	}
 
-	public void setTeacherId(long teacherId) {
+	public void setTeacherId(Long teacherId) {
 		this.teacherId = teacherId;
 	}
 
@@ -73,6 +88,14 @@ public class Lesson extends DatastoreLongEntity {
 		return groupTTs;
 	}
 	
+	public Map<Version, Time> getVersionTimeMap() {
+		return versionTimeMap;
+	}
+
+	public void setVersionTimeMap(Map<Version, Time> versionTimeMap) {
+		this.versionTimeMap = versionTimeMap;
+	}
+
 	/**
 	 * Intended just for GroupTT in initialization process
 	 * @param groutTT

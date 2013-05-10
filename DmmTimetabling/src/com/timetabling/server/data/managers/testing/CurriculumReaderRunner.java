@@ -7,7 +7,7 @@ import com.timetabling.server.curriculum.reading.CurriculumReader;
 public class CurriculumReaderRunner {
 	
 	public void runReading() throws Exception {
-		new CurriculumReader(new File("Ó÷ïë_èíô_2-4.xls"), 2012,  true).readAndPersistCurriculum();
+		new CurriculumReader(new File("Ð£Ñ‡_Ð¿Ð»Ð°Ð½_Ð¿Ñ€Ð¸ÐºÐ»_2_4_NEW.xls"), 2013,  true).readAndPersistCurriculum();
 	}
 
 }

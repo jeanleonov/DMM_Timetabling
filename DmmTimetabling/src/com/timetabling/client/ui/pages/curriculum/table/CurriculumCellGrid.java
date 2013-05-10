@@ -14,7 +14,6 @@ import com.timetabling.client.base.datagrid.DataSelectionListener;
 import com.timetabling.client.communication.entities.CathedraProxy;
 import com.timetabling.client.communication.entities.CurriculumCellProxy;
 import com.timetabling.client.communication.entities.SpecialtyProxy;
-import com.timetabling.client.communication.providers.HoursListProvider;
 import com.timetabling.client.communication.requests.CurriculumCellRequest;
 import com.timetabling.shared.enums.LessonType;
 
@@ -37,16 +36,20 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		Column<CurriculumCellProxy, String> lessonType = new LessonTypeColumn();
 		addColumn(lessonType, "Тип пары", "175px");
 		Column<CurriculumCellProxy, String> subgroups = new SubgroupsColumn();
-		addColumn(subgroups, "Количество подгрупп", "175px");
+		addColumn(subgroups, "Подгруппы", "100px");
 		Column<CurriculumCellProxy, String> hours = new HoursColumn();
-		addColumn(hours, "Часы", "175px");
+		addColumn(hours, "Часы", "80px");
 		Column<CurriculumCellProxy, String> cathedra = new CathedraColumn();
 		addColumn(cathedra, "Кафедра", "175px");
 		Column<CurriculumCellProxy, String> specialty = new SpecialtyColumn();
 		addColumn(specialty, "Специальность", "175px");
 		Column<CurriculumCellProxy, String> subject = new SubjectColumn();
 		addColumn(subject, "Предмет", "175px");
-		getElement().getStyle().setWidth(1310, Unit.PX);
+		Column<CurriculumCellProxy, String> course = new CourseColumn();
+		addColumn(course, "Курс", "60px");
+		Column<CurriculumCellProxy, String> teachers = new TeachersColumn();
+		addColumn(teachers, "Преподаватели", "300px");
+		getElement().getStyle().setWidth(1500, Unit.PX);
 	}
 
 	@Override
@@ -120,7 +123,7 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		public String getValue(CurriculumCellProxy cell) {
 			if (cell.getNumberOfSubgroups() == null)
 				return "";
-			return cell.getNumberOfSubgroups().toString() + "подгруппа(ы)";
+			return cell.getNumberOfSubgroups().toString();
 		}
 	}
 	
@@ -133,13 +136,9 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		}
 		@Override
 		public String getValue(CurriculumCellProxy cell) {
-			if (cell.getHoursInTwoWeeks() == 1)
-				return HoursListProvider.FLUSHING;
-			if (cell.getHoursInTwoWeeks() == 2)
-				return HoursListProvider.ONE;
-			if (cell.getHoursInTwoWeeks() == 4)
-				return HoursListProvider.TWO;
-			return cell.getHoursInTwoWeeks().toString();
+			if (cell.getHoursInTwoWeeks() == null)
+				return "";
+			return cell.getHoursInTwoWeeks().toString() + "/2 пар";
 		}
 	}
 	
@@ -167,8 +166,6 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		}
 		@Override
 		public String getValue(CurriculumCellProxy cell) {
-			if (cell.getSpecialtyName() == null)
-				return "";
 			return cell.getSpecialtyName();
 		}
 	}
@@ -183,6 +180,33 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		@Override
 		public String getValue(CurriculumCellProxy cell) {
 			return cell.getSubjectName();
+		}
+	}
+
+	/**---------------------------------------------------------- 
+	 * Implementation of Column for Curriculum.course
+	 * */
+	public static class CourseColumn extends Column<CurriculumCellProxy, String> {
+		public CourseColumn() {
+			super(new TextCell());
+		}
+		@Override
+		public String getValue(CurriculumCellProxy cell) {
+			return ((Byte)cell.getCourse()).toString();
+		}
+	}
+
+	/**---------------------------------------------------------- 
+	 * Implementation of Column for Curriculum.course
+	 * */
+	public static class TeachersColumn extends Column<CurriculumCellProxy, String> {
+		public TeachersColumn() {
+			super(new TextCell());
+		}
+		@Override
+		public String getValue(CurriculumCellProxy cell) {
+			// TODO
+			return "";
 		}
 	}
 	
@@ -203,41 +227,49 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 				return request.getCurriculumCellsForCathedraSpecialtyCourse(YEAR, SEASON, cathedra.getId(), specialty.getId(), course)
 						.with("cathedraName")
 						.with("specialtyName")
-						.with("subjectName");
+						.with("subjectName")
+						.with("teachers");
 			if (cathedra == null && specialty != null && course != null)
 				return request.getCurriculumCellsForCathedraSpecialty(YEAR, SEASON, specialty.getId(), course)
 						.with("cathedraName")
 						.with("specialtyName")
-						.with("subjectName");
+						.with("subjectName")
+						.with("teachers");
 			if (cathedra != null && specialty == null && course != null)
 				return request.getCurriculumCellsForCathedraCourse(YEAR, SEASON, cathedra.getId(), course)
 						.with("cathedraName")
 						.with("specialtyName")
-						.with("subjectName");
+						.with("subjectName")
+						.with("teachers");
 			if (cathedra != null && specialty != null && course == null)
 				return request.getCurriculumCellsForCathedraSpecialty(YEAR, SEASON, cathedra.getId(), specialty.getId())
 						.with("cathedraName")
 						.with("specialtyName")
-						.with("subjectName");
+						.with("subjectName")
+						.with("teachers");
 			if (cathedra != null && specialty == null && course == null)
 				return request.getCurriculumCellsForCathedra(YEAR, SEASON, cathedra.getId())
 						.with("cathedraName")
 						.with("specialtyName")
-						.with("subjectName");
+						.with("subjectName")
+						.with("teachers");
 			if (cathedra == null && specialty != null && course == null)
 				return request.getCurriculumCellsForSpecialty(YEAR, SEASON, specialty.getId())
 						.with("cathedraName")
 						.with("specialtyName")
-						.with("subjectName");
+						.with("subjectName")
+						.with("teachers");
 			if (cathedra == null && specialty == null && course != null)
 				return request.getCurriculumCellsForCource(YEAR, SEASON, course)
 						.with("cathedraName")
 						.with("specialtyName")
-						.with("subjectName");
+						.with("subjectName")
+						.with("teachers");
 			return request.getCurriculumCells(YEAR, SEASON)
 					.with("cathedraName")
 					.with("specialtyName")
-					.with("subjectName");
+					.with("subjectName")
+					.with("teachers");
 		}
 	}
 	
