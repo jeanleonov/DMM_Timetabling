@@ -13,6 +13,7 @@ import com.timetabling.server.data.managers.simple.CurriculumCellManager;
 public interface CurriculumCellRequest extends RequestContext {
 
 	Request<Void> putCurriculumCell(int year, boolean season, CurriculumCellProxy cell);
+	Request<Void> setTeacherForLesson(int year, boolean season, long cellId, byte subgroup, long teacherId);
 	Request<List<CurriculumCellProxy>> getCurriculumCells(int year, boolean season);
 	Request<List<CurriculumCellProxy>> getCurriculumCellsForSpecialty(int year, boolean season, long specialtyId);
 	Request<List<CurriculumCellProxy>> getCurriculumCellsForCource(int year, boolean season, byte course);

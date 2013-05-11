@@ -50,6 +50,7 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 	@UiField FlowPanel typeSetterContainer;
 	
 	@UiField FlowPanel form;
+	@UiField FlowPanel teachersChosers;
 	@UiField FlowPanel persistedCells;
 	
 	private SingleSelectList<CathedraProxy> cathedraChoser;
@@ -58,6 +59,9 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 	private CathedraProxy cathedra = null;
 	private SpecialtyProxy specialty = null;
 	private Byte course = null;
+	
+	private CathedraProxy cathedraToSet = null;
+	private Byte subgroupToSet = null;
 	
 	private SingleSelectList<CathedraProxy> cathedraSetter;
 	private SingleSelectList<Byte> subgroupsSetter;
@@ -79,7 +83,7 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 		cathedraChoser = new SingleSelectList<CathedraProxy>(new CathedraListProvider(Communicator.get(), new OnCathedraSelect()));
 		courseChoser = new SingleSelectList<Byte>(new CourseListProvider(new OnCourseSelect()));
 		specialtyChoser = new SingleSelectList<SpecialtyProxy>(new SpecialtyListProvider(Communicator.get(), new OnSpecialtySelect()));
-		cathedraSetter = new SingleSelectList<CathedraProxy>(new CathedraListProvider(Communicator.get()));
+		cathedraSetter = new SingleSelectList<CathedraProxy>(new CathedraListProvider(Communicator.get(), new OnCathedraSet()));
 		subgroupsSetter = new SingleSelectList<Byte>(new SubgroupsListProvider());
 		hoursSetter = new SingleSelectList<Byte>(new HoursListProvider());
 		typeSetter = new SingleSelectList<Integer>(new LessonTypeListProvider());
@@ -118,6 +122,14 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 		specialty = specialtyChoser.getDataProvider().getValue();
 		dataGrid.setSpecialty(specialty);
 		dataGrid.getProvider().update();
+	}
+	
+	void onSubgroupsSet() {
+		// TODO
+	}
+	
+	void onCathedraSet() {
+		// TODO
 	}
 
 	@UiHandler("editButton")
@@ -239,6 +251,20 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 		@Override
 		public void run() {
 			onSpecialtySelect();
+		}
+	}
+	
+	private class OnCathedraSet implements Runnable {
+		@Override
+		public void run() {
+			onCathedraSet();
+		}
+	}
+	
+	private class OnSubgroupsSet implements Runnable {
+		@Override
+		public void run() {
+			onSubgroupsSet();
 		}
 	}
 }

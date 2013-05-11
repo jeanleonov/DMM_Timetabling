@@ -6,10 +6,7 @@
 	<ui:style>
 		
 		.panel {
-			margin : 0 0.8%;
-			padding : 0.1%;
-			float : left;
-			width : 28.9%;
+			
 		}
 		
 		.loading {

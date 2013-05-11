@@ -10,6 +10,7 @@ public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<
 	private List<Byte> subgroups = null;
 	private List<String> subgroupsNames = null;
 	private int selectedIndex = 0;
+	private Runnable onSelect = null;
 	
 	public SubgroupsListProvider() {
 		subgroups = new ArrayList<Byte>(4);
@@ -23,6 +24,11 @@ public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<
 		subgroupsNames.add("3 подгруппы");
 		subgroups.add((byte)1);
 		subgroupsNames.add("4 подгруппы");
+	}
+	
+	public SubgroupsListProvider(Runnable onSelect) {
+		this();
+		this.onSelect = onSelect; 
 	}
 	
 	//=== ChosenDataProvider: =====================================
@@ -56,6 +62,8 @@ public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<
 	@Override
 	public void setSelectedIndex(final int newSelectedIndex) {
 		selectedIndex = newSelectedIndex;
+		if (onSelect != null)
+			onSelect.run();
 	}
 	
 	@Override
@@ -69,11 +77,15 @@ public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<
 		for (String course : subgroupsNames) {
 			if (course.equals(courseItem)) {
 				selectedIndex = i;
+				if (onSelect != null)
+					onSelect.run();
 				return;
 			}
 			i++;
 		}
 		selectedIndex = 0;
+		if (onSelect != null)
+			onSelect.run();
 	}
 	
 	@Override

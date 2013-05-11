@@ -43,6 +43,10 @@ public class CurriculumCellManager extends GenericDAO<CurriculumCell> {
 		return KeyHelper.getKey(CurriculumCell.class, cell.getId());
 	}
 	
+	private Key<CurriculumCell> key(long cellId) {
+		return KeyHelper.getKey(CurriculumCell.class, cellId);
+	}
+	
 	private void cleanLessons(Key<CurriculumCell> parent) {
 		List<Key<Lesson>> lessonsKeys = ofy().query(Lesson.class).ancestor(parent).listKeys();
 		ofy().delete(lessonsKeys);
@@ -57,6 +61,16 @@ public class CurriculumCellManager extends GenericDAO<CurriculumCell> {
 				lessonsToPersist.add(new Lesson(parent, group, FLUSHING));
 		}
 		ofy().put(lessonsToPersist);
+	}
+	
+	public void setTeacherForLesson(int year, boolean season, long cellId, byte subgroup, long teacherId) {
+		Utils.setNamespaceForSemester(year, season);
+		Lesson lesson = ofy().query(Lesson.class)
+		.ancestor(key(cellId))
+		.filter("subGroupNumber", subgroup)
+		.get();
+		lesson.setTeacherId(teacherId);
+		ofy().put(lesson);
 	}
 	
 	public List<CurriculumCell> getCurriculumCells(int year, boolean season) {
