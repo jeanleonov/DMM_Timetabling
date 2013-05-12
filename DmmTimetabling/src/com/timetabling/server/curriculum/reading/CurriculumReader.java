@@ -312,21 +312,20 @@ public class CurriculumReader {
 		return null;
 	}
 
-	 private void persistCurriculum() throws Exception {
-	 initForeignKeys(curriculumCells);
-	 DaoFactory.getCurriculumSaver().saveCurriculumsForSemester(year,
-	 season, curriculumCells);
-	 }
-	
-	 private void initForeignKeys(List<CurriculumCell> cells) throws Exception
-	 {
-	 SpecialtyManager specialtyManager = DaoFactory.getSpecialtyManager();
-	 SubjectManager subjectManager = DaoFactory.getSubjectManager();
-	 for (CurriculumCell cell : cells) {
-	 cell.setSpecialtyId(specialtyManager.getSpecialtyIdFor(cell
-	 .getSpecialtyName()));
-	 cell.setSubjectId(subjectManager.getSubjectIdFor(cell
-	 .getSubjectName()));
-	 }
-	 }
+	private void persistCurriculum() throws Exception {
+		initForeignKeys(curriculumCells);
+		DaoFactory.getCurriculumSaver().saveCurriculumsForSemester(year,
+				season, curriculumCells);
+	}
+
+	private void initForeignKeys(List<CurriculumCell> cells) throws Exception {
+		SpecialtyManager specialtyManager = DaoFactory.getSpecialtyManager();
+		SubjectManager subjectManager = DaoFactory.getSubjectManager();
+		for (CurriculumCell cell : cells) {
+			cell.setSpecialtyId(specialtyManager.getSpecialtyIdFor(cell
+					.getSpecialtyName()));
+			cell.setSubjectId(subjectManager.getSubjectIdFor(cell
+					.getSubjectName()));
+		}
+	}
 }
