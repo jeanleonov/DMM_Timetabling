@@ -44,12 +44,12 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		Column<CurriculumCellProxy, String> specialty = new SpecialtyColumn();
 		addColumn(specialty, "Специальность", "175px");
 		Column<CurriculumCellProxy, String> subject = new SubjectColumn();
-		addColumn(subject, "Предмет", "175px");
+		addColumn(subject, "Предмет", "250px");
 		Column<CurriculumCellProxy, String> course = new CourseColumn();
 		addColumn(course, "Курс", "60px");
 		Column<CurriculumCellProxy, String> teachers = new TeachersColumn();
 		addColumn(teachers, "Преподаватели", "300px");
-		getElement().getStyle().setWidth(1500, Unit.PX);
+		getElement().getStyle().setWidth(1575, Unit.PX);
 	}
 
 	@Override
@@ -230,7 +230,7 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 						.with("subjectName")
 						.with("teachers");
 			if (cathedra == null && specialty != null && course != null)
-				return request.getCurriculumCellsForCathedraSpecialty(YEAR, SEASON, specialty.getId(), course)
+				return request.getCurriculumCellsForSpecialtyCourse(YEAR, SEASON, specialty.getId(), course.byteValue())
 						.with("cathedraName")
 						.with("specialtyName")
 						.with("subjectName")

@@ -62,13 +62,14 @@ public class LessonTypeListProvider implements SingleSelectListPanelDataProvider
 	@Override
 	public void setSelectedItem(Integer typeCode) {
 		int i=0;
-		for (Integer type : lessonTypeCodes) {
-			if (type.equals(typeCode)) {
-				selectedIndex = i;
-				return;
+		if (typeCode != null)
+			for (Integer type : lessonTypeCodes) {
+				if (type.equals(typeCode)) {
+					selectedIndex = i;
+					return;
+				}
+				i++;
 			}
-			i++;
-		}
 		selectedIndex = 0;
 	}
 	

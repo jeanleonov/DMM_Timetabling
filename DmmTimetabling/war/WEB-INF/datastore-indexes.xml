@@ -42,6 +42,10 @@
     	<property name="rankCode" direction="asc"/>
     	<property name="name" direction="asc"/>
 	</datastore-index>
+	
+	<datastore-index kind="Lesson" ancestor="true">
+    	<property name="subGroupNumber" direction="asc"/>
+	</datastore-index>
 
 </datastore-indexes>
 

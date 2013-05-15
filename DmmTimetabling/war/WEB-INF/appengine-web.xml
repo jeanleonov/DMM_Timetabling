@@ -16,8 +16,11 @@
     <include path="**.nocache.*" expiration="0s" />
 
     <include path="**.cache.*" expiration="365d" />
-  	<include path="/favicon.ico" />
-    <exclude path="**.gwt.rpc" />
+  	<include path="favicon.ico" />
+  	<include path="graphy_@2X.png" />
+  	<include path="graphy.png" />
+  	<include path="pageStyles.css" />
+  	<exclude path="**.gwt.rpc" />
   </static-files>
 
   <!-- Configure java.util.logging -->

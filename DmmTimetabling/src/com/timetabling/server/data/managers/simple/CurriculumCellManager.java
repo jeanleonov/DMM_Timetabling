@@ -54,7 +54,7 @@ public class CurriculumCellManager extends GenericDAO<CurriculumCell> {
 	
 	private void putLessonsFor(Key<CurriculumCell> parent, byte subgroups, byte hours) {
 		List<Lesson> lessonsToPersist = new ArrayList<Lesson>(subgroups*(hours/2+hours%2));
-		for (byte group=0; group<subgroups; group++) {
+		for (byte group=1; group<=subgroups; group++) {
 			for (int full=0; full<hours/2; full++)
 				lessonsToPersist.add(new Lesson(parent, group, FULL));
 			for (int flushing=0; flushing<hours%2; flushing++)

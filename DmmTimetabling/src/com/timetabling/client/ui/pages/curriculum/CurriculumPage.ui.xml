@@ -34,23 +34,7 @@
 			float: right;
 		}
 		
-		.specialtyChoser {
-			float: right;
-		}
-		
-		.cathedraSetter {
-			float: right;
-		}
-		
-		.subgroupsSetter {
-			float: right;
-		}
-		
-		.hoursSetter {
-			float: right;
-		}
-		
-		.typeSetter {
+		.setter {
 			float: right;
 		}
 		
@@ -62,9 +46,11 @@
 		}
 		
 		.up {
+			display : table-row;
 		}
 		
 		.down {
+			display : table-row;
 		}
 		
 		.teachers {
@@ -76,37 +62,22 @@
 			margin-right : 10px;
 		}
 	
-		.plusButton {
+		.button {
 			margin-top: 17px;
 			margin-left: 5px;
-		}
-	
-		.editButton {
-			margin-top: 17px;
-			margin-left: 5px;
-		}
-	
-		.removeButton {
-			margin-top: 17px;
-			margin-left: 5px;
-		}
-	
-		.cancelButton {
-			margin-top: 17px;
-			margin-left: 20px;
-		}
-	
-		.output {
-			position: absolute;
-			top: 96px;
-			bottom: 15px;
-			left: 15px;
-			right: 15px;
-			overflow: auto;
 		}
 		
 		.updateButton {
 			margin-top: 15px;
+		}
+	
+		.output {
+			position: absolute;
+			top: 155px;
+			bottom: 15px;
+			left: 15px;
+			right: 15px;
+			overflow: auto;
 		}
 		
 	</ui:style>
@@ -117,7 +88,7 @@
 		<g:FlowPanel addStyleNames="{style.head}" >
 			<g:FlowPanel ui:field="cathedraChoserContainer" addStyleNames="{style.cathedraChoser}"></g:FlowPanel>
 			<g:FlowPanel ui:field="courseChoserContainer" addStyleNames="{style.courseChoser}"></g:FlowPanel>
-			<g:FlowPanel ui:field="specialtyChoserContainer" addStyleNames="{style.specialtyChoser}"></g:FlowPanel>
+			<g:FlowPanel ui:field="specialtyChoserContainer" addStyleNames="{style.setter}"></g:FlowPanel>
 			<g:Label addStyleNames="{style.title}">Учебный план</g:Label>
 		</g:FlowPanel>
 		
@@ -129,26 +100,31 @@
 				</g:FlowPanel>
 				<g:FlowPanel addStyleNames="{style.block}" >
 					<g:Label>Кафедры: </g:Label>
-					<g:FlowPanel ui:field="cathedraSetterContainer" addStyleNames="{style.cathedraSetter}"></g:FlowPanel>
+					<g:FlowPanel ui:field="cathedraSetterContainer" addStyleNames="{style.setter}"></g:FlowPanel>
 				</g:FlowPanel>
 				<g:FlowPanel addStyleNames="{style.block}" >
 					<g:Label>Подгруппы: </g:Label>
-					<g:FlowPanel ui:field="subgroupsSetterContainer" addStyleNames="{style.subgroupsSetter}"></g:FlowPanel>
+					<g:FlowPanel ui:field="subgroupsSetterContainer" addStyleNames="{style.setter}"></g:FlowPanel>
 				</g:FlowPanel>
 				<g:FlowPanel addStyleNames="{style.block}" >
 					<g:Label>Часы: </g:Label>
-					<g:FlowPanel ui:field="hoursSetterContainer" addStyleNames="{style.hoursSetter}"></g:FlowPanel>
+					<g:FlowPanel ui:field="hoursSetterContainer" addStyleNames="{style.setter}"></g:FlowPanel>
 				</g:FlowPanel>
 				<g:FlowPanel addStyleNames="{style.block}" >
 					<g:Label>Тип: </g:Label>
-					<g:FlowPanel ui:field="typeSetterContainer" addStyleNames="{style.typeSetter}"></g:FlowPanel>
+					<g:FlowPanel ui:field="typeSetterContainer" addStyleNames="{style.setter}"></g:FlowPanel>
 				</g:FlowPanel>
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="{style.down}" >
-				<g:FlowPanel addStyleNames="{style.teachers}" ui:field="teachersChosers">	</g:FlowPanel>
-				<b:Button addStyleNames="{style.editButton}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
-				<b:Button addStyleNames="{style.removeButton}" ui:field="removeButton" text="Удалить" type="DANGER" icon="TRASH" />
-				<b:Button addStyleNames="{style.cancelButton}" ui:field="cancelButton" text="Отмена" type="WARNING" icon="REMOVE" />
+				<g:FlowPanel ui:field="teachersChosers">
+					<g:FlowPanel ui:field="teacher1SetterContainer" addStyleNames="{style.block}"></g:FlowPanel>
+					<g:FlowPanel ui:field="teacher2SetterContainer" addStyleNames="{style.block}"></g:FlowPanel>
+					<g:FlowPanel ui:field="teacher3SetterContainer" addStyleNames="{style.block}"></g:FlowPanel>
+					<g:FlowPanel ui:field="teacher4SetterContainer" addStyleNames="{style.block}"></g:FlowPanel>
+				</g:FlowPanel>
+				<b:Button addStyleNames="{style.button}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
+				<b:Button addStyleNames="{style.button}" ui:field="removeButton" text="Удалить" type="DANGER" icon="TRASH" />
+				<b:Button addStyleNames="{style.button}" ui:field="cancelButton" text="Отмена" type="WARNING" icon="REMOVE" />
 				<b:Button addStyleNames="{style.updateButton}" ui:field="updateButton" type="LINK" icon="REFRESH" iconSize="LARGE"></b:Button>
 			</g:FlowPanel>	
 		</g:FlowPanel>

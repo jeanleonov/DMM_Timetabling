@@ -78,14 +78,15 @@ public class SpecialtyListProvider implements SingleSelectListPanelDataProvider<
 	@Override
 	public void setSelectedItem(SpecialtyProxy selectedItem) {
 		int i=0;
-		for (String specialty : specialtiesNames) {
-			if (specialty.equals(selectedItem.getName())) {
-				selectedIndex = i;
-				onSelect.run();
-				return;
+		if (selectedItem != null)
+			for (String specialty : specialtiesNames) {
+				if (specialty.equals(selectedItem.getName())) {
+					selectedIndex = i;
+					onSelect.run();
+					return;
+				}
+				i++;
 			}
-			i++;
-		}
 		selectedIndex = 0;
 		onSelect.run();
 	}

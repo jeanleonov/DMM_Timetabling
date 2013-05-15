@@ -85,7 +85,7 @@ public class SingleSelectList <T> extends Composite {
 	}
 	
 	public void setSelectedItem(T item) {
-		// TODO
+		dataProvider.setSelectedItem(item);
 	}
 		
 	private void recreateChosen() {
@@ -146,7 +146,9 @@ public class SingleSelectList <T> extends Composite {
 	}
 	
 	public void setEnabled(boolean enabled) {
-		if (chosen != null)
+		if (chosen != null) {
+			update();
 			chosen.setEnabled(enabled);
+		}
 	}
 }

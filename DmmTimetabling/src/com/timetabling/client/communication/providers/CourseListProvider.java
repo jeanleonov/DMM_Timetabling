@@ -66,14 +66,15 @@ public class CourseListProvider implements SingleSelectListPanelDataProvider<Byt
 	@Override
 	public void setSelectedItem(Byte courseItem) {
 		int i=0;
-		for (String course : coursesNames) {
-			if (course.contains(courseItem.toString())) {
-				selectedIndex = i;
-				onSelect.run();
-				return;
+		if (courseItem != null)
+			for (String course : coursesNames) {
+				if (course.contains(courseItem.toString())) {
+					selectedIndex = i;
+					onSelect.run();
+					return;
+				}
+				i++;
 			}
-			i++;
-		}
 		selectedIndex = 0;
 		onSelect.run();
 	}

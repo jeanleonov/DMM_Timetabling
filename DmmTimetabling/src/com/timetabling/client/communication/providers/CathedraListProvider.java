@@ -78,21 +78,22 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 	
 	@Override
 	public String getSelectedItem() {
-		return cathedras.get(selectedIndex).getName();
+		return cathedrasNames.get(selectedIndex);
 	}
 	
 	@Override
 	public void setSelectedItem(CathedraProxy selectedItem) {
 		int i=0;
-		for (String cathedra : cathedrasNames) {
-			if (cathedra.equals(selectedItem.getName())) {
-				selectedIndex = i;
-				if (onSelect != null)
-					onSelect.run();
-				return;
+		if (selectedItem != null)
+			for (String cathedra : cathedrasNames) {
+				if (cathedra.equals(selectedItem.getName())) {
+					selectedIndex = i;
+					if (onSelect != null)
+						onSelect.run();
+					return;
+				}
+				i++;
 			}
-			i++;
-		}
 		selectedIndex = 0;
 		if (onSelect != null)
 			onSelect.run();
@@ -100,15 +101,16 @@ public class CathedraListProvider implements SingleSelectListPanelDataProvider<C
 	
 	public void setSelectedCathedraName(String cathedraName) {
 		int i=0;
-		for (String cathedra : cathedrasNames) {
-			if (cathedra.equals(cathedraName)) {
-				selectedIndex = i;
-				if (onSelect != null)
-					onSelect.run();
-				return;
+		if (cathedraName != null)
+			for (String cathedra : cathedrasNames) {
+				if (cathedra.equals(cathedraName)) {
+					selectedIndex = i;
+					if (onSelect != null)
+						onSelect.run();
+					return;
+				}
+				i++;
 			}
-			i++;
-		}
 		selectedIndex = 0;
 		if (onSelect != null)
 			onSelect.run();

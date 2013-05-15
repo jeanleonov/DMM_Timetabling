@@ -42,4 +42,14 @@
     <url-pattern>/_ah/spi/*</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>reader</servlet-name>
+    <servlet-class>com.timetabling.server.servlets.Reader</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>reader</servlet-name>
+    <url-pattern>/299021read</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
