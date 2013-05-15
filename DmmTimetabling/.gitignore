@@ -2,10 +2,11 @@
 .factorypath
 .project
 .apt_generated/*
+.gwt/*
 .settings/*
 gwt-unitCache/*
 war/DmmTimetabling/*
 war/WEB-INF/appengine-generated/*
 war/WEB-INF/classes/*
-war/WEB-INF/delpoy/*
+war/WEB-INF/deploy/*
 war/WEB-INF/lib/*
