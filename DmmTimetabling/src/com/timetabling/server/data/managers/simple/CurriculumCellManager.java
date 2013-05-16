@@ -30,11 +30,12 @@ public class CurriculumCellManager extends GenericDAO<CurriculumCell> {
 
 	public void putCurriculumCell(int year, boolean season, CurriculumCell cell) throws Exception {
 		Utils.setNamespaceForSemester(year, season);
-		if (cell.isInitiated()) 
+		if (cell.getIsLessonsCreated()) 
 			cleanLessons(key(cell));
 		if (cell.getNumberOfSubgroups() != null  &&  cell.getHoursInTwoWeeks() != null) {
 			putLessonsFor(key(cell), cell.getNumberOfSubgroups(), cell.getHoursInTwoWeeks());
-			cell.setInitiated(true);
+			cell.setIsLessonsCreated(true);
+			cell.setIsTeachersSet(false);
 		}
 		put(cell);
 	}

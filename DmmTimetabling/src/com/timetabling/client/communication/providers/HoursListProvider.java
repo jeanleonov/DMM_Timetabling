@@ -66,7 +66,7 @@ public class HoursListProvider implements SingleSelectListPanelDataProvider<Byte
 	@Override
 	public void setSelectedItem(Byte hourItem) {
 		if (hourItem != null)
-			selectedIndex = hourItem-1;
+			selectedIndex = hourItem;
 		else
 			selectedIndex = 0;
 		if (onSelect != null)

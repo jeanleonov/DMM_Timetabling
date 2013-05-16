@@ -49,6 +49,7 @@ public class SingleSelectList <T> extends Composite {
 	@UiField HTMLPanel loading;
 	@UiField FlowPanel chosenPlace;
 	private ChosenListBox chosen=null;
+	private boolean enabled=true;
 
 	public SingleSelectList(SingleSelectListPanelDataProvider<T> dataProvider) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -86,6 +87,12 @@ public class SingleSelectList <T> extends Composite {
 	
 	public void setSelectedItem(T item) {
 		dataProvider.setSelectedItem(item);
+		updateSelectedItem();
+	}
+	
+	public void updateSelectedItem() {
+		updateSelection(dataProvider.getSelectedIndex());
+		chosen.update();
 	}
 		
 	private void recreateChosen() {
@@ -94,6 +101,7 @@ public class SingleSelectList <T> extends Composite {
 		chosen = new ChosenListBox(false);
 		chosenPlace.add(chosen);
 		chosen.addChosenChangeHandler(getNewHandler());
+		chosen.setEnabled(enabled);
 		if (dataProvider.isDataGroupable())
 			updateChosenMap( dataProvider.getLastLoadedFilteredMap() );
 		else
@@ -146,9 +154,10 @@ public class SingleSelectList <T> extends Composite {
 	}
 	
 	public void setEnabled(boolean enabled) {
-		if (chosen != null) {
+		this.enabled = enabled;
+		if (chosen == null)
 			update();
-			chosen.setEnabled(enabled);
-		}
+		else
+			recreateChosen();
 	}
 }

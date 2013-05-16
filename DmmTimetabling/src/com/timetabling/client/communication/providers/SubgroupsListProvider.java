@@ -68,7 +68,7 @@ public class SubgroupsListProvider implements SingleSelectListPanelDataProvider<
 	@Override
 	public void setSelectedItem(Byte subgroupItem) {
 		if (subgroupItem != null)
-			selectedIndex = subgroupItem-1;
+			selectedIndex = subgroupItem;
 		else
 			selectedIndex = 0;
 		if (onSelect != null)

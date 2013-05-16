@@ -250,11 +250,6 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 	}
 	
 	private void setEditingMode(CurriculumCellProxy entity) {
-		nameSetter.setText(entity.getDisplayName());
-		((CathedraListProvider) cathedraSetter.getDataProvider()).setSelectedCathedraName(entity.getCathedraName());
-		subgroupsSetter.setSelectedItem(entity.getNumberOfSubgroups());
-		hoursSetter.setSelectedItem(entity.getHoursInTwoWeeks());
-		typeSetter.setSelectedItem(entity.getLessonTypeCode());
 		editButton.setEnabled(true);
 		removeButton.setEnabled(true);
 		cancelButton.setEnabled(true);
@@ -263,6 +258,12 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 		subgroupsSetter.setEnabled(true);
 		hoursSetter.setEnabled(true);
 		typeSetter.setEnabled(true);
+		nameSetter.setText(entity.getDisplayName());
+		((CathedraListProvider) cathedraSetter.getDataProvider()).setSelectedCathedraName(entity.getCathedraName());
+		cathedraSetter.updateSelectedItem();
+		subgroupsSetter.setSelectedItem(entity.getNumberOfSubgroups());
+		hoursSetter.setSelectedItem(entity.getHoursInTwoWeeks());
+		typeSetter.setSelectedItem(entity.getLessonTypeCode());
 	}
 	
 	private void updateList() {
@@ -285,6 +286,7 @@ public class CurriculumPage extends BasePage implements DataSelectionListener<Cu
 	private class PostLoadedAction implements Runnable {
 		@Override
 		public void run() {
+			setCreatingMode();
 		}
 	}
 	

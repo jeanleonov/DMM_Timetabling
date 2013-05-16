@@ -38,7 +38,7 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		Column<CurriculumCellProxy, String> subgroups = new SubgroupsColumn();
 		addColumn(subgroups, "Подгруппы", "100px");
 		Column<CurriculumCellProxy, String> hours = new HoursColumn();
-		addColumn(hours, "Часы", "80px");
+		addColumn(hours, "Часы", "90px");
 		Column<CurriculumCellProxy, String> cathedra = new CathedraColumn();
 		addColumn(cathedra, "Кафедра", "175px");
 		Column<CurriculumCellProxy, String> specialty = new SpecialtyColumn();
@@ -138,7 +138,7 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		public String getValue(CurriculumCellProxy cell) {
 			if (cell.getHoursInTwoWeeks() == null)
 				return "";
-			return cell.getHoursInTwoWeeks().toString() + "/2 пар";
+			return cell.getHoursInTwoWeeks().toString() + "/2 пары";
 		}
 	}
 	
