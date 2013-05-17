@@ -38,9 +38,9 @@ public class GroupTT implements Markable {
 		return lessons;
 	}
 	
-	public double getMarkForVersion(Version version) {
+	public float getMarkForVersion(Version version) {
 		// TODO
-		return 1d;
+		return 1f;
 	}
 	
 }

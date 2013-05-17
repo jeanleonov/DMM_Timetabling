@@ -28,6 +28,7 @@ public class Lesson extends DatastoreLongEntity {
 	private boolean isFlushing;
 	private Long teacherId = null;
 
+	@Transient private Time time;
 	@Transient private Map<Version, Time> versionTimeMap;
 	@Transient private List<GroupTT> groupTTs;
 	@Transient private TeacherTT teacherTT;
@@ -83,6 +84,13 @@ public class Lesson extends DatastoreLongEntity {
 			}
 		return collisions;
 	}
+
+	public boolean hasPotentialCollisions(Time targetTime) throws Exception{
+		for (Lesson lesson : lessonsWithMyTeacherOrGroup)
+			if (lesson != this && lesson.getTime().hasConflictWith(targetTime))
+				return true;
+		return false;
+	}
 	
 	public List<GroupTT> getGroupTTs() {
 		return groupTTs;
@@ -90,6 +98,14 @@ public class Lesson extends DatastoreLongEntity {
 	
 	public Map<Version, Time> getVersionTimeMap() {
 		return versionTimeMap;
+	}
+	
+	public Time getTime() {
+		return time;
+	}
+	
+	public void setTime(Time time) {
+		this.time = time;
 	}
 
 	public void setVersionTimeMap(Map<Version, Time> versionTimeMap) {

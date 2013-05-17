@@ -3,7 +3,7 @@ package com.timetabling.shared.enums;
 
 public enum RuleType {
 
-	TYPE1 (0),
+	WITHOUT_COLLISIONS (0),
 	TYPE2 (1);
 	
 	int code;

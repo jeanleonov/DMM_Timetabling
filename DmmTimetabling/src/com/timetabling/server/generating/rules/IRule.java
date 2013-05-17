@@ -7,6 +7,6 @@ public interface IRule {
 	
 	RuleType getRuleType();
 	
-	double checkTT(TimetableIndividual tt);
+	float checkTT(TimetableIndividual tt);
 	
 }
