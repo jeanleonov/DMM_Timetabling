@@ -5,11 +5,10 @@ import java.util.List;
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher;
 import com.timetabling.server.data.entities.timetabling.Version;
 import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
-import com.timetabling.server.generating.Markable;
 
 /** Timetable of specified {@link Teacher}. <br>
  *  Implements {@link Markable} for generating and evaluation of timetable.*/
-public class TeacherTT implements Markable {
+public class TeacherTT {
 	
 	private Teacher teacher;
 	

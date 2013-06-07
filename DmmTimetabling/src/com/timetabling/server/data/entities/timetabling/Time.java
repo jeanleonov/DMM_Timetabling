@@ -1,5 +1,7 @@
 package com.timetabling.server.data.entities.timetabling;
 
+import java.util.Random;
+
 
 /** Describes specific lesson time.
  *  For example: 1st lesson in Monday on lower week */
@@ -7,11 +9,11 @@ public class Time {
 	
 	enum WeekType{
 		
-		/**Lower week (нижняя неделя)*/ LOWER (0),
+		/**Lower week (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)*/ LOWER (0),
 		
-		/**Upper week (верхняя неделя)*/UPPER (1),
+		/**Upper week (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)*/UPPER (1),
 		
-		/**Not flashing week (обычная немигающая пара)*/ FULL (2),
+		/**Not flashing week (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ)*/ FULL (2),
 		
 		UNDEF (3), 
 		
@@ -39,6 +41,8 @@ public class Time {
 	/** ANY recommended to use for Wish  */
 	public final static int ANY = -1;
 	public final static int UNDEF = -2;
+	private final static int NUMBER_OF_DAYS = 5;
+	private final static int NUMBER_OF_LESSONS = 6;
 	
 	/** Monday, Tuesday, ... */
 	private int day = UNDEF;
@@ -90,17 +94,25 @@ public class Time {
 	/**
 	 * hasConflictWith or doesIntersectWith
 	 * @return true if times are intersecting. You should remember that ANY intersect with anything except UNDEF
-	 * @throws Exception if some field of _this or _t is undefined
 	 */
-	public boolean hasConflictWith(Time t) throws Exception{
+	public boolean hasConflictWith(Time t) {
 		if (  day==UNDEF ||   lessonNumber==UNDEF ||   weekTypeCode == WeekType.UNDEF.getCode() ||
 			t.day==UNDEF || t.lessonNumber==UNDEF || t.weekTypeCode == WeekType.UNDEF.getCode())
-			throw new Exception("The times are not fully defined");
+			assert false : "The times are not fully defined";
 		if (day==ANY || t.day==ANY || day==t.day)
 			if (lessonNumber==ANY || t.lessonNumber==ANY || lessonNumber==t.lessonNumber)
 				if (weekTypeCode==WeekType.ANY.getCode() || t.weekTypeCode==WeekType.ANY.getCode() || weekTypeCode==t.weekTypeCode)
 					return true;
 		return false;
+	}
+	
+	private static Random rand = new Random();
+	
+	public static Time getRandomTime(boolean isFlushing) {
+		return new Time(
+				     (isFlushing? (rand.nextBoolean()?0:1) : 2) +
+				     rand.nextInt(NUMBER_OF_DAYS)*100 +
+				     rand.nextInt(NUMBER_OF_LESSONS)*10000);
 	}
 
 }

@@ -70,4 +70,9 @@ public class TimetableIndividual {
 		// TODO
 		return 0;
 	}
+	
+	public void setVersion(Long version) {
+		for (Lesson lesson : getAllLessons())
+			lesson.setTimeFromVersion(version);
+	}
 }

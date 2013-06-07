@@ -15,7 +15,6 @@ import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher;
 import com.timetabling.server.data.entities.timetabling.Time;
-import com.timetabling.server.data.entities.timetabling.Version;
 import com.timetabling.server.data.entities.timetabling.tt.GroupTT;
 import com.timetabling.server.data.entities.timetabling.tt.TeacherTT;
 
@@ -29,7 +28,7 @@ public class Lesson extends DatastoreLongEntity {
 	private Long teacherId = null;
 
 	@Transient private Time time;
-	@Transient private Map<Version, Time> versionTimeMap;
+	@Transient private Map<Long, Time> versionTimeMap;
 	@Transient private List<GroupTT> groupTTs;
 	@Transient private TeacherTT teacherTT;
 	@Transient private List<Lesson> lessonsWithMyTeacherOrGroup;		// = groupTTs(i).lessons + taecherTT.lessons
@@ -74,10 +73,10 @@ public class Lesson extends DatastoreLongEntity {
 	 *@return found collisions or null, if collisions didn't find
 	 *@exception throws exception if time of some lesson is not fully defined
 	 **/
-	public List<Lesson> findPotentialCollisions(Time targetTime, Version version) throws Exception{
+	public List<Lesson> findPotentialCollisions(Time targetTime, Long version) {
 		List<Lesson> collisions=null;
 		for (Lesson lesson : lessonsWithMyTeacherOrGroup)
-			if (lesson != this && lesson.getTimeInVersion(version).hasConflictWith(targetTime)){
+			if (lesson != this && lesson.getTime().hasConflictWith(targetTime)){
 				if (collisions == null)
 					collisions = new LinkedList<Lesson>();
 				collisions.add(lesson);
@@ -85,7 +84,15 @@ public class Lesson extends DatastoreLongEntity {
 		return collisions;
 	}
 
-	public boolean hasPotentialCollisions(Time targetTime) throws Exception{
+	public int countPotentialCollisions(Time targetTime, Long version) {
+		int countOfCollisions = 0;
+		for (Lesson lesson : lessonsWithMyTeacherOrGroup)
+			if (lesson != this && lesson.getTime().hasConflictWith(targetTime))
+				countOfCollisions++;
+		return countOfCollisions;
+	}
+
+	public boolean hasPotentialCollisions(Time targetTime) {
 		for (Lesson lesson : lessonsWithMyTeacherOrGroup)
 			if (lesson != this && lesson.getTime().hasConflictWith(targetTime))
 				return true;
@@ -96,7 +103,7 @@ public class Lesson extends DatastoreLongEntity {
 		return groupTTs;
 	}
 	
-	public Map<Version, Time> getVersionTimeMap() {
+	public Map<Long, Time> getVersionTimeMap() {
 		return versionTimeMap;
 	}
 	
@@ -106,10 +113,6 @@ public class Lesson extends DatastoreLongEntity {
 	
 	public void setTime(Time time) {
 		this.time = time;
-	}
-
-	public void setVersionTimeMap(Map<Version, Time> versionTimeMap) {
-		this.versionTimeMap = versionTimeMap;
 	}
 
 	/**
@@ -130,12 +133,24 @@ public class Lesson extends DatastoreLongEntity {
 		this.parent = parent;
 	}
 
-	public Time getTimeInVersion(Version version) {
+	public Time getTimeInVersion(Long version) {
 		return versionTimeMap.get(version);
 	}
 
-	public void setTimeInVersion(Time time, Version version) {
+	public void setTimeInVersion(Time time, Long version) {
 		versionTimeMap.put(version, time);
+	}
+	
+	public void setThisTimeForVersion(Long version) {
+		versionTimeMap.put(version, time);
+	}
+	
+	public void setTimeFromVersion(Long version) {
+		time = getTimeInVersion(version);
+	}
+	
+	public void removeTimeInVersion(Long version) {
+		versionTimeMap.remove(version);
 	}
 
 	public TeacherTT getTeacherTT() {
