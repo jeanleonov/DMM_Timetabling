@@ -19,7 +19,7 @@ import com.timetabling.client.communication.requests.RulePriorityRequest;
 import com.timetabling.client.communication.requests.SpecialtyRequest;
 import com.timetabling.client.communication.requests.SubjectRequest;
 import com.timetabling.client.communication.requests.TeacherRequest;
-import com.timetabling.client.communication.requests.testing.CurriculumReaderRequest;
+import com.timetabling.client.communication.requests.testing.TestRequest;
 
 /**
  * Request factory for current application. Include request for entities.
@@ -39,6 +39,6 @@ public interface ObjectifyRequestFactory extends RequestFactory {
 	SubjectRequest createSubjectRequest();
 	TeacherRequest createTeacherRequest();
 	
-	CurriculumReaderRequest createCurriculumReaderRequest();
+	TestRequest createCurriculumReaderRequest();
 	
 }

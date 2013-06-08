@@ -8,16 +8,20 @@ public enum RuleType {
 	
 	int code;
 	float priority;
+	
 	private RuleType(int code, float priority) {
 		this.code = code;
 		this.priority = priority;
 	}
+	
 	public int getCode() {
 		return code;
 	}
+	
 	public float getPriority() {
 		return priority;
 	}
+
 	static public RuleType getByCode(int code) {
 		return values()[code];
 	}

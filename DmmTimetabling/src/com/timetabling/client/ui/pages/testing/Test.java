@@ -17,16 +17,21 @@ public class Test extends Composite {
 	interface TestUiBinder extends UiBinder<Widget, Test> {
 	}
 
-	@UiField
-	Button button;
+	@UiField Button read;
+	@UiField Button algorithm;
 
 	public Test() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	@UiHandler("button")
-	void onClick(ClickEvent e) {
+	@UiHandler("read")
+	void onRead(ClickEvent e) {
 		Communicator.get().requestFactory.createCurriculumReaderRequest().runReading().fire();
+	}
+
+	@UiHandler("algorithm")
+	void onAlgorithm(ClickEvent e) {
+		Communicator.get().requestFactory.createCurriculumReaderRequest().testAlgorithm().fire();
 	}
 
 }

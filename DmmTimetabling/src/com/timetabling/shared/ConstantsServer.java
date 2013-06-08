@@ -4,6 +4,8 @@ public class ConstantsServer{
 	
 	static public final String SAVE_CURRICULUM = "Save unextended curriculum";
 	
+	static public final int DAYS_IN_WEEK = 6;
+	
 	//email exception task
 	static public final String EXCEPTIONBODY = "exceptionBody";
 	

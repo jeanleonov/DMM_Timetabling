@@ -29,9 +29,9 @@ public class Lesson extends DatastoreLongEntity {
 
 	@Transient private Time time;
 	@Transient private Map<Long, Time> versionTimeMap;
-	@Transient private List<GroupTT> groupTTs;
+	@Transient private List<GroupTT> groupTTs = null;
 	@Transient private TeacherTT teacherTT;
-	@Transient private List<Lesson> lessonsWithMyTeacherOrGroup;		// = groupTTs(i).lessons + taecherTT.lessons
+	@Transient private List<Lesson> lessonsWithMyTeacherOrGroup = null;		// = groupTTs(i).lessons + taecherTT.lessons
 	@Transient private Teacher teacher;
 	@Transient private CurriculumCell curriculumCell;
 
@@ -98,6 +98,13 @@ public class Lesson extends DatastoreLongEntity {
 				return true;
 		return false;
 	}
+
+	public boolean hasCollisions() {
+		for (Lesson lesson : lessonsWithMyTeacherOrGroup)
+			if (lesson != this && lesson.getTime().hasConflictWith(time))
+				return true;
+		return false;
+	}
 	
 	public List<GroupTT> getGroupTTs() {
 		return groupTTs;
@@ -107,6 +114,10 @@ public class Lesson extends DatastoreLongEntity {
 		return versionTimeMap;
 	}
 	
+	public void setVersionTimeMap(Map<Long, Time> versionTimeMap) {
+		this.versionTimeMap = versionTimeMap;
+	}
+
 	public Time getTime() {
 		return time;
 	}

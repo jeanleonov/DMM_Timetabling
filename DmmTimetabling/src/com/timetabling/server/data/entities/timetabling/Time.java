@@ -7,7 +7,7 @@ import java.util.Random;
  *  For example: 1st lesson in Monday on lower week */
 public class Time {
 	
-	enum WeekType{
+	public enum WeekType{
 		
 		/**Lower week (������ ������)*/ LOWER (0),
 		
@@ -105,6 +105,7 @@ public class Time {
 					return true;
 		return false;
 	}
+	
 	
 	private static Random rand = new Random();
 	

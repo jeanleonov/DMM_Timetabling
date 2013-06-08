@@ -28,7 +28,7 @@ public class LeftPanel extends Composite {
 
 	public LeftPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
-	//	test.add(new Test());
+		test.add(new Test());
 	}
 	
 	@UiHandler ("specialties")

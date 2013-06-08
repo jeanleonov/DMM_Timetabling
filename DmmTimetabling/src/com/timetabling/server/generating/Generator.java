@@ -6,9 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.timetabling.server.data.entities.curriculum.CurriculumCell;
 import com.timetabling.server.data.entities.timetabling.Time;
 import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
 import com.timetabling.server.data.entities.timetabling.tt.TimetableIndividual;
+import com.timetabling.server.data.managers.DaoFactory;
+import com.timetabling.server.data.managers.timetabling.LessonsManager;
+import com.timetabling.server.generating.rules.CollisionAvoiding;
 import com.timetabling.server.generating.rules.IRule;
 
 public class Generator {
@@ -24,40 +28,40 @@ public class Generator {
 	private List<Long> notEstimatedVersions;
 	private List<IRule> rules;
 
-	public Generator(int year, boolean semester) {
-		loadGroupAndTeacherTTs(year, semester);
+	public Generator(int year, boolean season) {
 		curPopulation = new HashMap<Long, Float>();
-		curMaxMark = Double.MIN_VALUE;
+		curMaxMark = -Double.MAX_VALUE;
 		curBestIndivudual = null;
 		notEstimatedVersions = new LinkedList<Long>();
 		initiateRules();
+		loadGroupAndTeacherTTs(year, season);
 	}
 	
 	private void initiateRules() {
 		rules = new ArrayList<IRule>();
-		// TODO
-		rules.add(null);
-		rules.add(null);
-		rules.add(null);
+		rules.add(new CollisionAvoiding());
 	}
 	
 	public TimetableIndividual getTTWithMark(double mark) {
-		init();
 		while (curMaxMark < mark) {
 			multiplyAndEstimatePopulation();
 			cleanPopulation();
 		}
-		timetable.switchToVersion(curBestIndivudual);
+		timetable.setVersion(curBestIndivudual);
 		return timetable;
 	}
 	
-	private void init() {
+	private void init(List<Lesson> lessons) {
+		for (Lesson lesson : lessons)
+			lesson.setVersionTimeMap(new HashMap<Long, Time>());
 		for (int i=0; i<sizeOfPopulation; i++) {
 			Long version = getNewVersion();
-			for (Lesson lesson : timetable.getAllLessons()) {
-				setRandomTimeForLesson(lesson, collisionAvoidingTries);
+			for (Lesson lesson : lessons) {
+				setRandomTimeForLesson(lesson, 0);
 				lesson.setTimeInVersion(lesson.getTime(), version);
 			}
+			curPopulation.put(version, null);
+			notEstimatedVersions.add(version);
 		}
 	}
 	
@@ -71,12 +75,17 @@ public class Generator {
 		do {
 			time = Time.getRandomTime(lesson.isFlushing());
 			i++;
-		} while (i<=collisionAvoidingTries || lesson.hasPotentialCollisions(time));
+		} while (i<collisionAvoidingTries && lesson.hasPotentialCollisions(time));
 		lesson.setTime(time);
 	}
 	
-	private void loadGroupAndTeacherTTs(int year, boolean semester) {
-		// TODO
+	private void loadGroupAndTeacherTTs(int year, boolean season) {
+		LessonsManager manager = DaoFactory.getLessonsManager();
+		List<Lesson> lessons = manager.getLessonsFor(year, season);
+		init(lessons);
+		List<CurriculumCell> cells = DaoFactory.getCurriculumCellManager().getCurriculumCells(year, season);
+		timetable = manager.bindLessonsToTimetabels(lessons, cells);
+		manager.initConnectionsBetweenLessons(timetable);
 	}
 	
 	private void multiplyAndEstimatePopulation() {
@@ -105,14 +114,19 @@ public class Generator {
 			float mark = 0;
 			for (IRule rule : rules)
 				mark += rule.checkTT(timetable)*rule.getRuleType().getPriority();
-			curPopulation.put(version, mark/rules.size());
+			mark /= rules.size();
+			curPopulation.put(version, mark);
+			if (curMaxMark < mark)
+				curMaxMark = mark;
 		}
+		notEstimatedVersions.clear();
 	}
 	
 	private void cleanPopulation() {
-		double curMinMark = Double.MAX_VALUE;
+		double curMinMark;
 		Long curWorstVersion = null;
 		while (curPopulation.size() > sizeOfPopulation) {
+			curMinMark = Double.MAX_VALUE;
 			for (Long version : curPopulation.keySet()) {
 				double versionMark = curPopulation.get(version);
 				if (versionMark<curMinMark || curWorstVersion==null) {
@@ -123,6 +137,7 @@ public class Generator {
 			curPopulation.remove(curWorstVersion);
 			killVersion(curWorstVersion);
 		}
+		int a=0;
 	}
 	
 	private void killVersion(Long version) {

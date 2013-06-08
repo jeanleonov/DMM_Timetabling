@@ -15,7 +15,8 @@
 	
 	
 	<g:FlowPanel addStyleNames="{style.panel}">
-		<g:Button ui:field="button" text="Run reading!"/>
+		<g:Button ui:field="read" text="Run reading!"/>
+		<g:Button ui:field="algorithm" text="Run algorithm!"/>
 	</g:FlowPanel>
 	
 </ui:UiBinder> 
