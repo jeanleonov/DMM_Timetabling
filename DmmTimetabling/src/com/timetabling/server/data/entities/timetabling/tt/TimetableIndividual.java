@@ -83,4 +83,11 @@ public class TimetableIndividual {
 			lesson.setTimeFromVersion(version);
 		activeVersion = version;
 	}
+	
+	public void setVersionAndMoveLessonsInTTs(Long version) {
+		for (Lesson lesson : getAllLessons())
+			lesson.setTimeFromVersionAndMoveLessonsInTTs(version);
+		activeVersion = version;
+	}
+	
 }

@@ -160,6 +160,13 @@ public class Lesson extends DatastoreLongEntity {
 		time = getTimeInVersion(version);
 	}
 	
+	public void setTimeFromVersionAndMoveLessonsInTTs(Long version) {
+		time = getTimeInVersion(version);
+		teacherTT.updateLessonPosition(this, version);
+		for (GroupTT groupTT : groupTTs)
+			groupTT.updateLessonPosition(this, version);
+	}
+	
 	public void removeTimeInVersion(Long version) {
 		versionTimeMap.remove(version);
 	}

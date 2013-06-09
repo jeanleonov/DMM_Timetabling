@@ -22,8 +22,9 @@ public class LessonsComparator implements Comparator<Lesson> {
 		int lessonsNumberDifference = lesson1.getTime().getLessonNumber() - lesson2.getTime().getLessonNumber(); 
 		if (lessonsNumberDifference > 0)
 			return 1;
-		if (lessonsNumberDifference == 0)
-			return 0;
+//		Will ignore situation, when elements is equals 
+//		if (lessonsNumberDifference == 0)
+//			return 0;
 		return -1;
 	}
 

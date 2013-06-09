@@ -11,8 +11,8 @@ public class GroupTT extends TT {
 	private byte course;
 	private byte groupNumber;
 	
-	public GroupTT(List<Lesson> lessons) {
-		super(lessons);
+	public GroupTT(List<Lesson> lessons, Long version) {
+		super(lessons, version);
 		for (Lesson lesson : lessons) {
 			List<GroupTT> groupTTs = lesson.getGroupTTs();
 			if (groupTTs == null) {

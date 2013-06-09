@@ -13,6 +13,7 @@ import com.timetabling.server.data.entities.timetabling.tt.TimetableIndividual;
 import com.timetabling.server.data.managers.DaoFactory;
 import com.timetabling.server.data.managers.timetabling.LessonsManager;
 import com.timetabling.server.generating.rules.CollisionAvoiding;
+import com.timetabling.server.generating.rules.DaysLoading;
 import com.timetabling.server.generating.rules.IRule;
 
 public class Generator {
@@ -40,20 +41,25 @@ public class Generator {
 	private void initiateRules() {
 		rules = new ArrayList<IRule>();
 		rules.add(new CollisionAvoiding());
+		rules.add(new DaysLoading());
 	}
 	
 	public TimetableIndividual getTTWithMark(double mark) {
 		while (curMaxMark < mark) {
 			multiplyAndEstimatePopulation();
 			cleanPopulation();
+			for (Float markToPrint: curPopulation.values())
+				System.out.format("%.2f ", markToPrint);
+			System.out.println();
 		}
 		timetable.setVersion(curBestIndivudual);
 		return timetable;
 	}
 	
-	private void init(List<Lesson> lessons) {
+	private Long init(List<Lesson> lessons) {
 		for (Lesson lesson : lessons)
 			lesson.setVersionTimeMap(new HashMap<Long, Time>());
+		Long lastVersion = null;
 		for (int i=0; i<sizeOfPopulation; i++) {
 			Long version = getNewVersion();
 			for (Lesson lesson : lessons) {
@@ -62,7 +68,9 @@ public class Generator {
 			}
 			curPopulation.put(version, null);
 			notEstimatedVersions.add(version);
+			lastVersion = version;
 		}
+		return lastVersion;
 	}
 	
 	private Long getNewVersion() {
@@ -82,9 +90,9 @@ public class Generator {
 	private void loadGroupAndTeacherTTs(int year, boolean season) {
 		LessonsManager manager = DaoFactory.getLessonsManager();
 		List<Lesson> lessons = manager.getLessonsFor(year, season);
-		init(lessons);
+		Long lastVersion = init(lessons);
 		List<CurriculumCell> cells = DaoFactory.getCurriculumCellManager().getCurriculumCells(year, season);
-		timetable = manager.bindLessonsToTimetabels(lessons, cells);
+		timetable = manager.bindLessonsToTimetabels(lessons, cells, lastVersion);
 		manager.initConnectionsBetweenLessons(timetable);
 	}
 	
@@ -93,6 +101,7 @@ public class Generator {
 			timetable.setVersion(oldVersion);
 			for (int i=0; i<populationMultiplier; i++)
 				mutateIndividual(oldVersion);
+			System.out.println();
 		}
 		estimateNewVersions();
 	}
@@ -110,15 +119,18 @@ public class Generator {
 	
 	private void estimateNewVersions() {
 		for (Long version : notEstimatedVersions) {
-			timetable.setVersion(version);
+			timetable.setVersionAndMoveLessonsInTTs(version);
 			float mark = 0;
 			for (IRule rule : rules)
 				mark += rule.checkTT(timetable)*rule.getRuleType().getPriority();
 			mark /= rules.size();
 			curPopulation.put(version, mark);
-			if (curMaxMark < mark)
+			if (curMaxMark < mark) {
 				curMaxMark = mark;
+				curBestIndivudual = version;
+			}
 		}
+		timetable.setVersionAndMoveLessonsInTTs(curBestIndivudual);
 		notEstimatedVersions.clear();
 	}
 	
@@ -137,7 +149,6 @@ public class Generator {
 			curPopulation.remove(curWorstVersion);
 			killVersion(curWorstVersion);
 		}
-		int a=0;
 	}
 	
 	private void killVersion(Long version) {

@@ -49,11 +49,11 @@ public class LessonsManager extends GenericDAO<Lesson> {
 		return ofy().query(Lesson.class).list();
 	}
 	
-	public TimetableIndividual bindLessonsToTimetabels(List<Lesson> lessons, List<CurriculumCell> cells) {
+	public TimetableIndividual bindLessonsToTimetabels(List<Lesson> lessons, List<CurriculumCell> cells, Long version) {
 		setCurriculumCellsForLessons(lessons, cells);
 		Map<Long, Map<Byte, Map<Byte, List<Lesson>>>> groupsLessons = getGroupsLessons(lessons);
 		Map<Long, List<Lesson>> teachersLessons = getTeachersLessons(lessons);
-		TimetableIndividual tt = createTimetableWithTimes(groupsLessons, teachersLessons);
+		TimetableIndividual tt = createTimetableWithTimes(groupsLessons, teachersLessons, version);
 		tt.setAllLessons(lessons);
 		return tt;
 	}
@@ -119,7 +119,8 @@ public class LessonsManager extends GenericDAO<Lesson> {
 	
 	private TimetableIndividual createTimetableWithTimes(
 									Map<Long, Map<Byte, Map<Byte, List<Lesson>>>> specialtyTo,
-									Map<Long, List<Lesson>> teacherTo) {
+									Map<Long, List<Lesson>> teacherTo,
+									Long version) {
 		TimetableIndividual tt = new TimetableIndividual();
 		for (Long specialtyId : specialtyTo.keySet()) {
 			Map<Byte, Map<Byte, List<Lesson>>> courseTo = specialtyTo.get(specialtyId);
@@ -127,14 +128,14 @@ public class LessonsManager extends GenericDAO<Lesson> {
 				Map<Byte, List<Lesson>> groupTo = courseTo.get(course);
 				for (Byte group : groupTo.keySet()) {
 					List<Lesson> lessons = groupTo.get(group);
-					GroupTT groupTT = new GroupTT(lessons);
+					GroupTT groupTT = new GroupTT(lessons, version);
 					tt.addGroupTT(groupTT);
 				}
 			}
 		}
 		for (Long teacherId : teacherTo.keySet()) {
 			List<Lesson> lessons = teacherTo.get(teacherId);
-			TeacherTT teacherTT = new TeacherTT(lessons);
+			TeacherTT teacherTT = new TeacherTT(lessons, version);
 			tt.addTeacherTT(teacherTT);
 		}
 		return tt;
