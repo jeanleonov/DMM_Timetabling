@@ -8,7 +8,6 @@ import java.util.TreeSet;
 import com.timetabling.server.data.entities.timetabling.Time;
 import com.timetabling.server.data.entities.timetabling.Time.WeekType;
 import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
-import com.timetabling.shared.ConstantsServer;
 
 public class TT {
 
@@ -18,7 +17,7 @@ public class TT {
 	
 	@SuppressWarnings("unchecked")
 	public TT(List<Lesson> lessons, Long version) {
-		days = new SortedSet[ConstantsServer.DAYS_IN_WEEK*2];
+		days = new SortedSet[Time.NUMBER_OF_DAYS*2];
 		for (int i=0; i<days.length; i++)
 			days[i] = new TreeSet<Lesson>(LessonsComparator.get());
 		for (Lesson lesson : lessons)
@@ -43,7 +42,7 @@ public class TT {
 				}
 		}
 		if (oldTime.getWeekType() == WeekType.UPPER || oldTime.getWeekType() == WeekType.FULL) {
-			SortedSet<Lesson> upperWeekLessons = days[oldTime.getWeekDay()+ConstantsServer.DAYS_IN_WEEK];
+			SortedSet<Lesson> upperWeekLessons = days[oldTime.getWeekDay()+Time.NUMBER_OF_DAYS];
 			Iterator<Lesson> iterator = upperWeekLessons.iterator();
 			while (iterator.hasNext())
 				if (lesson == iterator.next()) {
@@ -55,12 +54,17 @@ public class TT {
 		activeVersion = newVersion;
 	}
 	
-	private void addLesson(Lesson lesson) {
+	public void cleanDays() {
+		for (SortedSet<Lesson> day : days)
+			day.clear();
+	}
+	
+	public void addLesson(Lesson lesson) {
 		Time time = lesson.getTime();
 		if (time.getWeekType() == WeekType.LOWER || time.getWeekType() == WeekType.FULL)
 			days[time.getWeekDay()].add(lesson);
 		if (time.getWeekType() == WeekType.UPPER || time.getWeekType() == WeekType.FULL)
-			days[time.getWeekDay()+ConstantsServer.DAYS_IN_WEEK].add(lesson);
+			days[time.getWeekDay()+Time.NUMBER_OF_DAYS].add(lesson);
 	}
 	
 	public SortedSet<Lesson>[] getDays() {

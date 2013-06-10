@@ -128,14 +128,14 @@ public class LessonsManager extends GenericDAO<Lesson> {
 				Map<Byte, List<Lesson>> groupTo = courseTo.get(course);
 				for (Byte group : groupTo.keySet()) {
 					List<Lesson> lessons = groupTo.get(group);
-					GroupTT groupTT = new GroupTT(lessons, version);
+					GroupTT groupTT = new GroupTT(lessons, version, specialtyId, course, group);
 					tt.addGroupTT(groupTT);
 				}
 			}
 		}
 		for (Long teacherId : teacherTo.keySet()) {
 			List<Lesson> lessons = teacherTo.get(teacherId);
-			TeacherTT teacherTT = new TeacherTT(lessons, version);
+			TeacherTT teacherTT = new TeacherTT(lessons, version, teacherId);
 			tt.addTeacherTT(teacherTT);
 		}
 		return tt;

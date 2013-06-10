@@ -29,6 +29,8 @@ public class Lesson extends DatastoreLongEntity {
 
 	@Transient private Time time;
 	@Transient private Map<Long, Time> versionTimeMap;
+	// TODO problems counting
+	@Transient private Map<Long, Integer> versionProblemsMap;
 	@Transient private List<GroupTT> groupTTs = null;
 	@Transient private TeacherTT teacherTT;
 	@Transient private List<Lesson> lessonsWithMyTeacherOrGroup = null;		// = groupTTs(i).lessons + taecherTT.lessons
@@ -67,12 +69,7 @@ public class Lesson extends DatastoreLongEntity {
 	public void setTeacherId(Long teacherId) {
 		this.teacherId = teacherId;
 	}
-
-	/**
-	 * Checks: is busy its teacher or its group at specified time
-	 *@return found collisions or null, if collisions didn't find
-	 *@exception throws exception if time of some lesson is not fully defined
-	 **/
+	
 	public List<Lesson> findPotentialCollisions(Time targetTime, Long version) {
 		List<Lesson> collisions=null;
 		for (Lesson lesson : lessonsWithMyTeacherOrGroup)
@@ -110,12 +107,10 @@ public class Lesson extends DatastoreLongEntity {
 		return groupTTs;
 	}
 	
-	public Map<Long, Time> getVersionTimeMap() {
-		return versionTimeMap;
-	}
-	
-	public void setVersionTimeMap(Map<Long, Time> versionTimeMap) {
-		this.versionTimeMap = versionTimeMap;
+	void addGoupTT(GroupTT groutTT) {
+		if (groupTTs == null)
+			groupTTs = new ArrayList<GroupTT>(curriculumCell.getNumberOfSubgroups());
+		groupTTs.add(groutTT);
 	}
 
 	public Time getTime() {
@@ -126,22 +121,20 @@ public class Lesson extends DatastoreLongEntity {
 		this.time = time;
 	}
 
-	/**
-	 * Intended just for GroupTT in initialization process
-	 * @param groutTT
-	 */
-	void addGoupTT(GroupTT groutTT) {
-		if (groupTTs == null)
-			groupTTs = new ArrayList<GroupTT>(curriculumCell.getNumberOfSubgroups());
-		groupTTs.add(groutTT);
-	}
-
 	public Key<CurriculumCell> getParent() {
 		return parent;
 	}
 
 	public void setParent(Key<CurriculumCell> parent) {
 		this.parent = parent;
+	}
+	
+	public Map<Long, Time> getVersionTimeMap() {
+		return versionTimeMap;
+	}
+	
+	public void setVersionTimeMap(Map<Long, Time> versionTimeMap) {
+		this.versionTimeMap = versionTimeMap;
 	}
 
 	public Time getTimeInVersion(Long version) {
@@ -162,13 +155,34 @@ public class Lesson extends DatastoreLongEntity {
 	
 	public void setTimeFromVersionAndMoveLessonsInTTs(Long version) {
 		time = getTimeInVersion(version);
-		teacherTT.updateLessonPosition(this, version);
+		teacherTT.addLesson(this);
 		for (GroupTT groupTT : groupTTs)
-			groupTT.updateLessonPosition(this, version);
+			groupTT.addLesson(this);
 	}
 	
-	public void removeTimeInVersion(Long version) {
+	public void removeVersion(Long version) {
 		versionTimeMap.remove(version);
+	//	TODO 
+	//	versionProblemsMap.remove(version);
+	}
+
+	public Map<Long, Integer> getVersionProblemsMap() {
+		return versionProblemsMap;
+	}
+
+	public void setVersionProblemsMap(Map<Long, Integer> versionProblemsMap) {
+		this.versionProblemsMap = versionProblemsMap;
+	}
+	
+	public void incrementProblem(Long version) {
+		Integer problems = versionProblemsMap.get(version);
+		if (problems == null)
+			versionProblemsMap.put(version, 0);
+		versionProblemsMap.put(version, problems+1);
+	}
+	
+	public void resetProblems(Long version) {
+		versionProblemsMap.put(version, 0);
 	}
 
 	public TeacherTT getTeacherTT() {
@@ -206,6 +220,11 @@ public class Lesson extends DatastoreLongEntity {
 
 	public void setGroupTTs(List<GroupTT> groupTTs) {
 		this.groupTTs = groupTTs;
+	}
+	
+	@Override
+	public String toString() {
+		return "Les_" + getId();
 	}
 	
 }

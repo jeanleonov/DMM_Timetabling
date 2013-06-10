@@ -11,7 +11,7 @@ public class GroupTT extends TT {
 	private byte course;
 	private byte groupNumber;
 	
-	public GroupTT(List<Lesson> lessons, Long version) {
+	public GroupTT(List<Lesson> lessons, Long version, Long specId, byte course, byte group) {
 		super(lessons, version);
 		for (Lesson lesson : lessons) {
 			List<GroupTT> groupTTs = lesson.getGroupTTs();
@@ -21,6 +21,9 @@ public class GroupTT extends TT {
 			}
 			groupTTs.add(this);
 		}
+		this.specialtyId = specId;
+		this.course = course;
+		this.groupNumber = group;
 	}
 
 	public Long getSpecialtyId() {

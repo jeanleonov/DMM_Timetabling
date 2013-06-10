@@ -85,6 +85,10 @@ public class TimetableIndividual {
 	}
 	
 	public void setVersionAndMoveLessonsInTTs(Long version) {
+		for (TeacherTT teacherTT : teacherTTs)
+			teacherTT.cleanDays();
+		for (GroupTT groupTT : groupTTs)
+			groupTT.cleanDays();
 		for (Lesson lesson : getAllLessons())
 			lesson.setTimeFromVersionAndMoveLessonsInTTs(version);
 		activeVersion = version;

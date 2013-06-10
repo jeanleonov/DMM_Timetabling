@@ -41,7 +41,7 @@ public class Time {
 	/** ANY recommended to use for Wish  */
 	public final static int ANY = -1;
 	public final static int UNDEF = -2;
-	private final static int NUMBER_OF_DAYS = 5;
+	public final static int NUMBER_OF_DAYS = 5;
 	private final static int NUMBER_OF_LESSONS = 6;
 	
 	/** Monday, Tuesday, ... */

@@ -8,10 +8,11 @@ public class TeacherTT extends TT {
 	
 	private Long teacherId;
 
-	public TeacherTT(List<Lesson> lessons, Long version) {
+	public TeacherTT(List<Lesson> lessons, Long version, Long teacherId) {
 		super(lessons, version);
 		for (Lesson lesson : lessons)
 			lesson.setTeacherTT(this);
+		this.teacherId = teacherId;
 	}
 
 	public Long getTeacherId() {

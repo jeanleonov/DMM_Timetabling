@@ -16,7 +16,7 @@ public class CollisionAvoiding implements IRule {
 		float penalty = 0;
 		for (Lesson lesson : tt.getAllLessons())
 			penalty += lesson.hasCollisions()? 1 : 0;
-		return penalty;
+		return penalty==0? 1 : -penalty;
 	}
 
 }

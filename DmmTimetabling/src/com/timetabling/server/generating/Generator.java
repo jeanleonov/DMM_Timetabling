@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
 import com.timetabling.server.data.entities.timetabling.Time;
@@ -15,25 +17,29 @@ import com.timetabling.server.data.managers.timetabling.LessonsManager;
 import com.timetabling.server.generating.rules.CollisionAvoiding;
 import com.timetabling.server.generating.rules.DaysLoading;
 import com.timetabling.server.generating.rules.IRule;
+import com.timetabling.server.generating.rules.WithoutWindows;
 
 public class Generator {
 	
 	private Map<Long, Float> curPopulation;
+	private SortedSet<Long> versions;
+	// TODO implement sorting of versions and proportional dieing / multiplying
 	private TimetableIndividual timetable;
-	private double curMaxMark;
+	private float curMaxMark;
 	private Long curBestIndivudual;
-	private int sizeOfPopulation = 20;
-	private int populationMultiplier = 5;
+	private int sizeOfPopulation = 50;
+	private int populationMultiplier = 10;
 	private int collisionAvoidingTries = 5;
-	private double mutationProbability = 0.1;
+	private double mutationProbability = 0.15;
 	private List<Long> notEstimatedVersions;
 	private List<IRule> rules;
 
 	public Generator(int year, boolean season) {
 		curPopulation = new HashMap<Long, Float>();
-		curMaxMark = -Double.MAX_VALUE;
+		curMaxMark = -Float.MAX_VALUE;
 		curBestIndivudual = null;
 		notEstimatedVersions = new LinkedList<Long>();
+		versions = new TreeSet<Long>(new VersionsComparator(curPopulation));
 		initiateRules();
 		loadGroupAndTeacherTTs(year, season);
 	}
@@ -42,6 +48,7 @@ public class Generator {
 		rules = new ArrayList<IRule>();
 		rules.add(new CollisionAvoiding());
 		rules.add(new DaysLoading());
+		rules.add(new WithoutWindows());
 	}
 	
 	public TimetableIndividual getTTWithMark(double mark) {
@@ -49,7 +56,7 @@ public class Generator {
 			multiplyAndEstimatePopulation();
 			cleanPopulation();
 			for (Float markToPrint: curPopulation.values())
-				System.out.format("%.2f ", markToPrint);
+				System.out.format("%.3f ", markToPrint);
 			System.out.println();
 		}
 		timetable.setVersion(curBestIndivudual);
@@ -57,8 +64,10 @@ public class Generator {
 	}
 	
 	private Long init(List<Lesson> lessons) {
-		for (Lesson lesson : lessons)
+		for (Lesson lesson : lessons) {
 			lesson.setVersionTimeMap(new HashMap<Long, Time>());
+			lesson.setVersionProblemsMap(new HashMap<Long, Integer>());
+		}
 		Long lastVersion = null;
 		for (int i=0; i<sizeOfPopulation; i++) {
 			Long version = getNewVersion();
@@ -101,7 +110,6 @@ public class Generator {
 			timetable.setVersion(oldVersion);
 			for (int i=0; i<populationMultiplier; i++)
 				mutateIndividual(oldVersion);
-			System.out.println();
 		}
 		estimateNewVersions();
 	}
@@ -130,7 +138,6 @@ public class Generator {
 				curBestIndivudual = version;
 			}
 		}
-		timetable.setVersionAndMoveLessonsInTTs(curBestIndivudual);
 		notEstimatedVersions.clear();
 	}
 	
@@ -153,7 +160,7 @@ public class Generator {
 	
 	private void killVersion(Long version) {
 		for (Lesson lesson : timetable.getAllLessons())
-			lesson.removeTimeInVersion(version);
+			lesson.removeVersion(version);
 	}
 	
 }
