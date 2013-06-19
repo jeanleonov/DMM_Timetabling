@@ -1,6 +1,5 @@
 package com.timetabling.server.data.entities.timetabling.tt;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -28,30 +27,6 @@ public class TT {
 
 	public List<Lesson> getLessons() {
 		return lessons;
-	}
-	
-	public void updateLessonPosition(Lesson lesson, Long newVersion) {
-		Time oldTime = lesson.getTimeInVersion(activeVersion);
-		if (oldTime.getWeekType() == WeekType.LOWER || oldTime.getWeekType() == WeekType.FULL) {
-			SortedSet<Lesson> lowerWeekLessons = days[oldTime.getWeekDay()];
-			Iterator<Lesson> iterator = lowerWeekLessons.iterator();
-			while (iterator.hasNext())
-				if (lesson == iterator.next()) {
-					iterator.remove();
-					break;
-				}
-		}
-		if (oldTime.getWeekType() == WeekType.UPPER || oldTime.getWeekType() == WeekType.FULL) {
-			SortedSet<Lesson> upperWeekLessons = days[oldTime.getWeekDay()+Time.NUMBER_OF_DAYS];
-			Iterator<Lesson> iterator = upperWeekLessons.iterator();
-			while (iterator.hasNext())
-				if (lesson == iterator.next()) {
-					iterator.remove();
-					break;
-				}
-		}
-		addLesson(lesson);
-		activeVersion = newVersion;
 	}
 	
 	public void cleanDays() {

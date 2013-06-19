@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
 import com.timetabling.server.data.entities.timetabling.Time;
@@ -22,24 +20,23 @@ import com.timetabling.server.generating.rules.WithoutWindows;
 public class Generator {
 	
 	private Map<Long, Float> curPopulation;
-	private SortedSet<Long> versions;
-	// TODO implement sorting of versions and proportional dieing / multiplying
 	private TimetableIndividual timetable;
 	private float curMaxMark;
+	private float curMinMark;
 	private Long curBestIndivudual;
 	private int sizeOfPopulation = 50;
-	private int populationMultiplier = 10;
+	private int maxPopulationMultiplier = 21;
 	private int collisionAvoidingTries = 5;
 	private double mutationProbability = 0.15;
 	private List<Long> notEstimatedVersions;
 	private List<IRule> rules;
+	private int generation = 0;
 
 	public Generator(int year, boolean season) {
 		curPopulation = new HashMap<Long, Float>();
 		curMaxMark = -Float.MAX_VALUE;
 		curBestIndivudual = null;
 		notEstimatedVersions = new LinkedList<Long>();
-		versions = new TreeSet<Long>(new VersionsComparator(curPopulation));
 		initiateRules();
 		loadGroupAndTeacherTTs(year, season);
 	}
@@ -55,9 +52,11 @@ public class Generator {
 		while (curMaxMark < mark) {
 			multiplyAndEstimatePopulation();
 			cleanPopulation();
+			System.out.print(generation + "   ");
 			for (Float markToPrint: curPopulation.values())
 				System.out.format("%.3f ", markToPrint);
 			System.out.println();
+			generation++;
 		}
 		timetable.setVersion(curBestIndivudual);
 		return timetable;
@@ -108,7 +107,13 @@ public class Generator {
 	private void multiplyAndEstimatePopulation() {
 		for (Long oldVersion : curPopulation.keySet()) {
 			timetable.setVersion(oldVersion);
-			for (int i=0; i<populationMultiplier; i++)
+			Float versionMark = curPopulation.get(oldVersion);
+			int multiplier;
+			if (versionMark != null)
+				multiplier = (int) (maxPopulationMultiplier*(versionMark-curMinMark)/(curMaxMark-curMinMark));
+			else
+				multiplier = maxPopulationMultiplier;
+			for (int i=0; i<multiplier; i++)
 				mutateIndividual(oldVersion);
 		}
 		estimateNewVersions();
@@ -142,17 +147,18 @@ public class Generator {
 	}
 	
 	private void cleanPopulation() {
-		double curMinMark;
+		float curMinMark;
 		Long curWorstVersion = null;
 		while (curPopulation.size() > sizeOfPopulation) {
-			curMinMark = Double.MAX_VALUE;
+			curMinMark = Float.MAX_VALUE;
 			for (Long version : curPopulation.keySet()) {
-				double versionMark = curPopulation.get(version);
+				float versionMark = curPopulation.get(version);
 				if (versionMark<curMinMark || curWorstVersion==null) {
 					curWorstVersion = version;
 					curMinMark = versionMark;
 				}
 			}
+			this.curMinMark = curMinMark;
 			curPopulation.remove(curWorstVersion);
 			killVersion(curWorstVersion);
 		}

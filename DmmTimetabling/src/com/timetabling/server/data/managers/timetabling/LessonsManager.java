@@ -51,7 +51,8 @@ public class LessonsManager extends GenericDAO<Lesson> {
 	
 	public TimetableIndividual bindLessonsToTimetabels(List<Lesson> lessons, List<CurriculumCell> cells, Long version) {
 		setCurriculumCellsForLessons(lessons, cells);
-		Map<Long, Map<Byte, Map<Byte, List<Lesson>>>> groupsLessons = getGroupsLessons(lessons);
+		Map<Long, Map<Byte, Byte>> specCourseSubgroupsMap = getGroupsNumbers(cells);
+		Map<Long, Map<Byte, Map<Byte, List<Lesson>>>> groupsLessons = getGroupsLessons(lessons, specCourseSubgroupsMap);
 		Map<Long, List<Lesson>> teachersLessons = getTeachersLessons(lessons);
 		TimetableIndividual tt = createTimetableWithTimes(groupsLessons, teachersLessons, version);
 		tt.setAllLessons(lessons);
@@ -77,7 +78,25 @@ public class LessonsManager extends GenericDAO<Lesson> {
 				}
 	}
 	
-	private Map<Long, Map<Byte, Map<Byte, List<Lesson>>>> getGroupsLessons(List<Lesson> lessons) {
+	private Map<Long, Map<Byte, Byte>> getGroupsNumbers(List<CurriculumCell> cells) {
+		Map<Long, Map<Byte, Byte>> specTo = new HashMap<Long, Map<Byte, Byte>>();
+		for (CurriculumCell cell : cells) {
+			Long specId = cell.getSpecialtyId();
+			Map<Byte, Byte> courseTo = specTo.get(specId); 
+			if (courseTo == null) {
+				courseTo = new HashMap<Byte, Byte>();
+				specTo.put(specId, courseTo);
+			}
+			Byte numberOfSubgroups = courseTo.get(cell.getCourse());
+			if (numberOfSubgroups == null || numberOfSubgroups < cell.getNumberOfSubgroups())
+				courseTo.put((Byte) cell.getCourse(), cell.getNumberOfSubgroups());
+		}
+		return specTo;
+	}
+	
+	private Map<Long, Map<Byte, Map<Byte, List<Lesson>>>> getGroupsLessons(
+										List<Lesson> lessons,
+										Map<Long, Map<Byte, Byte>> specCourseSubgroupsMap) {
 		Map<Long, Map<Byte, Map<Byte, List<Lesson>>>> specTo = new HashMap<Long, Map<Byte,Map<Byte,List<Lesson>>>>();
 		for (Lesson lesson : lessons) {
 			Long specId = lesson.getCurriculumCell().getSpecialtyId();
@@ -93,12 +112,24 @@ public class LessonsManager extends GenericDAO<Lesson> {
 				courseTo.put(course, groupTo);
 			}
 			Byte group = lesson.getSubGroupNumber();
-			List<Lesson> groupsLessons = groupTo.get(group); 
-			if (groupsLessons == null) {
-				groupsLessons = new ArrayList<Lesson>();
-				groupTo.put(group, groupsLessons);
+			if (lesson.getCurriculumCell().getNumberOfSubgroups() == specCourseSubgroupsMap.get(specId).get(course)) {
+				List<Lesson> groupsLessons = groupTo.get(group);
+				if (groupsLessons == null) {
+					groupsLessons = new ArrayList<Lesson>();
+					groupTo.put(group, groupsLessons);
+				}
+				groupsLessons.add(lesson);
 			}
-			groupsLessons.add(lesson);
+			else {
+				for (Byte groupNum=1; groupNum<=lesson.getCurriculumCell().getNumberOfSubgroups(); groupNum++) {
+					List<Lesson> groupsLessons = groupTo.get(groupNum);
+					if (groupsLessons == null) {
+						groupsLessons = new ArrayList<Lesson>();
+						groupTo.put(groupNum, groupsLessons);
+					}
+					groupsLessons.add(lesson);
+				}
+			}
 		}
 		return specTo;
 	}
