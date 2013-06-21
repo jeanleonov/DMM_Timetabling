@@ -16,7 +16,7 @@ public class TestRunner {
 		Thread thread = ThreadManager.createBackgroundThread(new Runnable() {
 			public void run() {
 				try {
-					new Generator(2013, true).getTTWithMark(14);
+					new Generator(2013, true).getTTWithMark(0.994);
 				}
 				catch (Throwable t) {
 					t.printStackTrace();

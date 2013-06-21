@@ -30,7 +30,7 @@ public class PDFMaker {
 	private static final int TOP_WEEK = 1;
 
 	private Document document = null;
-	private Map<Integer, Font> fonts = new HashMap<>();
+	private Map<Integer, Font> fonts = new HashMap<Integer, Font>();
 
 	// main method
 	public void createPDF(List<GroupTT> lessonsGroup,
@@ -44,7 +44,7 @@ public class PDFMaker {
 			document.open();
 
 			// font initialization
-			BaseFont unicode = BaseFont.createFont("ARIALUNI.TTF",
+			BaseFont unicode = BaseFont.createFont("arialuni.ttf",
 					BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 			initFonts(unicode);
 

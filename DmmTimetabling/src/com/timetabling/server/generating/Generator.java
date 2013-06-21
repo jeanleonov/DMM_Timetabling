@@ -16,6 +16,7 @@ import com.timetabling.server.generating.rules.CollisionAvoiding;
 import com.timetabling.server.generating.rules.DaysLoading;
 import com.timetabling.server.generating.rules.IRule;
 import com.timetabling.server.generating.rules.WithoutWindows;
+import com.timetabling.server.ttprinting.PDFMaker;
 
 public class Generator {
 	
@@ -57,6 +58,12 @@ public class Generator {
 				System.out.format("%.3f ", markToPrint);
 			System.out.println();
 			generation++;
+		}
+		try {
+			new PDFMaker().createPDF(timetable.getGroupTTs(), timetable.getTeacherTTs());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		timetable.setVersion(curBestIndivudual);
 		return timetable;
