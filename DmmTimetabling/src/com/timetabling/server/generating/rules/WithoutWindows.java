@@ -11,8 +11,8 @@ import com.timetabling.shared.enums.RuleType;
 
 public class WithoutWindows implements IRule {
 	
-	private final static float TEACHER_DAY_WITHOUT_WINDOW_MARK = 0.2f;
-	private final static float GROUP_DAY_WITHOUT_WINDOW_MARK = 0.8f;
+	private final static float TEACHER_DAY_WITHOUT_WINDOW_MARK = 0.1f;
+	private final static float GROUP_DAY_WITHOUT_WINDOW_MARK = 0.9f;
 
 	@Override
 	public RuleType getRuleType() {

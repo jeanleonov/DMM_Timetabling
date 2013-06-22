@@ -27,18 +27,18 @@ public class DaysLoading implements IRule {
 		float teachersMark = 0;
 		for (TeacherTT teacherTT : tt.getTeacherTTs())
 			for (SortedSet<Lesson> day : teacherTT.getDays()) {
-				if (day.size() <= MAX_TEACHER_LOADING)
+				if (day.size() <= MAX_TEACHER_LOADING && day.size() > 0)
 					teachersMark += 0.5;
-				if (day.size() < MAX_TEACHER_LOADING)
+				if (day.size() < MAX_TEACHER_LOADING && day.size() > 1)
 					teachersMark += 0.5;
 			}
 		teachersMark /= tt.getTeacherTTs().size()*Time.NUMBER_OF_DAYS*2;
 		float groupsMark = 0;
 		for (GroupTT groupTT : tt.getGroupTTs()) {
 			for (SortedSet<Lesson> day : groupTT.getDays()) {
-				if (day.size() <= MAX_GROUP_LOADING)
+				if (day.size() <= MAX_GROUP_LOADING && day.size() > 0)
 					groupsMark += 0.5;
-				if (day.size() < MAX_GROUP_LOADING)
+				if (day.size() < MAX_GROUP_LOADING && day.size() > 1)
 					groupsMark += 0.5;
 			}
 		}

@@ -15,7 +15,7 @@ public class VersionsComparator implements Comparator<Long> {
 	public int compare(Long ver1, Long ver2) {
 		float mark1 = versionsMarks.get(ver1);
 		float mark2 = versionsMarks.get(ver2);
-		if (mark1 > mark2)
+		if (mark1 < mark2)
 			return 1;
 		if (mark1 == mark2)
 			return 0;

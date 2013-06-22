@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.appengine.api.blobstore.BlobKey;
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
 import com.timetabling.server.data.entities.timetabling.Time;
 import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
@@ -19,6 +20,8 @@ import com.timetabling.server.generating.rules.WithoutWindows;
 import com.timetabling.server.ttprinting.PDFMaker;
 
 public class Generator {
+	
+	public static BlobKey lastPDF = null;
 	
 	private Map<Long, Float> curPopulation;
 	private TimetableIndividual timetable;
@@ -59,13 +62,12 @@ public class Generator {
 			System.out.println();
 			generation++;
 		}
+		timetable.setVersion(curBestIndivudual);
 		try {
-			new PDFMaker().createPDF(timetable.getGroupTTs(), timetable.getTeacherTTs());
+			lastPDF = new PDFMaker().createPDF(timetable.getGroupTTs(), timetable.getTeacherTTs());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		timetable.setVersion(curBestIndivudual);
 		return timetable;
 	}
 	

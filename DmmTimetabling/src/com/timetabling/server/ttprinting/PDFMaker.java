@@ -1,11 +1,18 @@
 package com.timetabling.server.ttprinting;
 
-import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.channels.Channels;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.files.AppEngineFile;
+import com.google.appengine.api.files.FileService;
+import com.google.appengine.api.files.FileServiceFactory;
+import com.google.appengine.api.files.FileWriteChannel;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -26,60 +33,36 @@ import com.timetabling.shared.enums.LessonType;
  */
 public class PDFMaker {
 
-  private static final int LOWER_WEEK = 0;
+	private static final int LOWER_WEEK = 0;
 	private static final int TOP_WEEK = 1;
 
 	private Document document = null;
+	private FileService fileService = null;
+	private FileWriteChannel writeChannel = null;
+	private AppEngineFile file = null;
+	private OutputStream outputStream = null;
 	private Map<Integer, Font> fonts = new HashMap<Integer, Font>();
 
-	// main method
-	public void createPDF(List<GroupTT> lessonsGroup,
-			List<TeacherTT> lessonsTeacher) throws Exception {
-
-		document = new Document();
-
-
-			PdfWriter.getInstance(document, new FileOutputStream("test.pdf"));
-
-			document.open();
-
-			// font initialization
-			BaseFont unicode = BaseFont.createFont("arialuni.ttf",
-					BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-			initFonts(unicode);
-
-			// make title
-			Font font = fonts.get(12);
-			Paragraph preface = new Paragraph("Расписание", font);
-			preface.setAlignment(Element.ALIGN_CENTER);
-			document.add(preface);
-
-			addEmptyLine(3);
-
-			for (GroupTT group : lessonsGroup) {
-
-				int size = group.getDays().length;
-
-				byte groupNumber = group.getGroupNumber();
-
-				String specialtyName = group.getLessons().get(0)
-						.getCurriculumCell().getSpecialtyName();
-
-				byte course = group.getLessons().get(0).getCurriculumCell()
-						.getCourse();
-
-				for (int i = 0; i < size / 2; i++) {
-					makeDayGroupTable(group.getDays()[i], LOWER_WEEK,
-							specialtyName, course, groupNumber);
-					makeDayGroupTable(group.getDays()[i + size / 2], TOP_WEEK,
-							specialtyName, course, groupNumber);
-					document.newPage();
-				}
+	public BlobKey createPDF(List<GroupTT> lessonsGroup, List<TeacherTT> lessonsTeacher) throws Exception {
+		openDocument("timetable.pdf");
+		initFonts();
+		makeTitle();
+		addEmptyLines(3);
+		for (GroupTT group : lessonsGroup) {
+			int size = group.getDays().length;
+			byte groupNumber = group.getGroupNumber();
+			String specialtyName = group.getSpecialtyName();
+			byte course = group.getCourse();
+			for (int i = 0; i < size / 2; i++) {
+				makeDayGroupTable(group.getDays()[i], LOWER_WEEK,
+						specialtyName, course, groupNumber);
+				makeDayGroupTable(group.getDays()[i + size / 2], TOP_WEEK,
+						specialtyName, course, groupNumber);
+				document.newPage();
 			}
-
-			document.close();
-
-	
+		}
+		closeEverything();
+		return fileService.getBlobKey(file);
 	}
 
 	private void makeDayGroupTable(SortedSet<Lesson> lessons, int weekType,
@@ -103,7 +86,7 @@ public class PDFMaker {
 				+ groupNumber;
 
 		document.add(new Paragraph(tableTitleString, fonts.get(12)));
-		addEmptyLine(1);
+		addEmptyLines(1);
 
 		PdfPTable table = new PdfPTable(3);
 		table.addCell("Time");
@@ -124,11 +107,28 @@ public class PDFMaker {
 			table.addCell(cellType);
 		}
 		document.add(table);
-		addEmptyLine(3);
+		addEmptyLines(3);
 
 	}
+	
+	private void openDocument(String fileName) throws IOException, DocumentException {
+		document = new Document();
+		fileService = FileServiceFactory.getFileService();
+		file = fileService.createNewBlobFile("application/pdf", fileName);
+		writeChannel = fileService.openWriteChannel(file, true);
+		outputStream = Channels.newOutputStream(writeChannel);
+		PdfWriter.getInstance(document, outputStream);
+		document.open();
+	}
+	
+	private void closeEverything() throws IOException {
+		document.close();
+		outputStream.close();
+		writeChannel.closeFinally();
+	}
 
-	private void initFonts(BaseFont unicode) {
+	private void initFonts() throws DocumentException, IOException {
+		BaseFont unicode = BaseFont.createFont("arialuni.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 		fonts.put(8, new Font(unicode, 8));
 		fonts.put(9, new Font(unicode, 9));
 		fonts.put(10, new Font(unicode, 10));
@@ -139,14 +139,16 @@ public class PDFMaker {
 		fonts.put(15, new Font(unicode, 15));
 		fonts.put(16, new Font(unicode, 16));
 	}
+	
+	private void makeTitle() throws DocumentException {
+		Font font = fonts.get(12);
+		Paragraph preface = new Paragraph("Расписание", font);
+		preface.setAlignment(Element.ALIGN_CENTER);
+		document.add(preface);
+	}
 
-	private void addEmptyLine(int number) throws DocumentException {
-
-		if (document == null)
-			return;
-
-		for (int i = 0; i < number; i++) {
+	private void addEmptyLines(int number) throws DocumentException {
+		for (int i = 0; i < number; i++)
 			document.add(new Paragraph(" "));
-		}
 	}
 }

@@ -52,4 +52,24 @@
     <url-pattern>/299021read</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>ttPDF</servlet-name>
+    <servlet-class>com.timetabling.server.servlets.ResultProvider</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ttPDF</servlet-name>
+    <url-pattern>/ttPDF</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>GeneratorRunner</servlet-name>
+    <servlet-class>com.timetabling.server.servlets.GeneratorRunner</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GeneratorRunner</servlet-name>
+    <url-pattern>/run</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

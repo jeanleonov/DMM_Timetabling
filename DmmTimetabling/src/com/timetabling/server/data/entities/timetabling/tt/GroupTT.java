@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.timetabling.server.data.entities.timetabling.lesson.Lesson;
+import com.timetabling.server.data.managers.DaoFactory;
 
 public class GroupTT extends TT {
 	
 	private Long specialtyId;
+	private String specialtyName;
 	private byte course;
 	private byte groupNumber;
 	
@@ -24,6 +26,12 @@ public class GroupTT extends TT {
 		this.specialtyId = specId;
 		this.course = course;
 		this.groupNumber = group;
+		try {
+			specialtyName = DaoFactory.getSpecialtyManager().getSpecialtyById(specialtyId).getShortName();
+		}
+		catch (Exception e) {
+			specialtyName = "";
+		}
 	}
 
 	public Long getSpecialtyId() {
@@ -32,6 +40,14 @@ public class GroupTT extends TT {
 
 	public void setSpecialtyId(Long specialtyId) {
 		this.specialtyId = specialtyId;
+	}
+
+	public String getSpecialtyName() {
+		return specialtyName;
+	}
+
+	public void setSpecialtyName(String specialtyName) {
+		this.specialtyName = specialtyName;
 	}
 
 	public byte getCourse() {

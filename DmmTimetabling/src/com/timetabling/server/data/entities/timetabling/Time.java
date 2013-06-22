@@ -115,5 +115,20 @@ public class Time {
 				     rand.nextInt(NUMBER_OF_DAYS)*100 +
 				     rand.nextInt(NUMBER_OF_LESSONS)*10000);
 	}
+	
+	public String toString() {
+		String dayStr;
+		switch (day) {
+		case 0:  dayStr = "пн";  break;
+		case 1:  dayStr = "вт";  break;
+		case 2:  dayStr = "ср";  break;
+		case 3:  dayStr = "чт";  break;
+		case 4:  dayStr = "пт";  break;
+		case 5:  dayStr = "сб";  break;
+		case 6:  dayStr = "вс";  break;
+		default: dayStr = "??";  break;
+		}
+		return dayStr + " " + (lessonNumber+1);
+	}
 
 }
