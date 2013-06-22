@@ -30,7 +30,7 @@ public class GeneratorRunner extends HttpServlet {
 		Thread thread = ThreadManager.createBackgroundThread(new Runnable() {
 			public void run() {
 				try {
-					new Generator(2013, true).getTTWithMark(0.996);
+					new Generator(2013, true).getTTWithMark(0.77);
 				}
 				catch (Throwable t) {
 					t.printStackTrace();

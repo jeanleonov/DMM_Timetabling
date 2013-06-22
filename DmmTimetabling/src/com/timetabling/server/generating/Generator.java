@@ -28,10 +28,10 @@ public class Generator {
 	private float curMaxMark;
 	private float curMinMark;
 	private Long curBestIndivudual;
-	private int sizeOfPopulation = 50;
-	private int maxPopulationMultiplier = 21;
+	private int sizeOfPopulation = 500;
+	private int maxPopulationMultiplier = 40;
 	private int collisionAvoidingTries = 5;
-	private double mutationProbability = 0.15;
+	private double mutationProbability = 0.08;
 	private List<Long> notEstimatedVersions;
 	private List<IRule> rules;
 	private int generation = 0;

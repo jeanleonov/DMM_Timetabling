@@ -48,19 +48,8 @@ public class PDFMaker {
 		initFonts();
 		makeTitle();
 		addEmptyLines(3);
-		for (GroupTT group : lessonsGroup) {
-			int size = group.getDays().length;
-			byte groupNumber = group.getGroupNumber();
-			String specialtyName = group.getSpecialtyName();
-			byte course = group.getCourse();
-			for (int i = 0; i < size / 2; i++) {
-				makeDayGroupTable(group.getDays()[i], LOWER_WEEK,
-						specialtyName, course, groupNumber);
-				makeDayGroupTable(group.getDays()[i + size / 2], TOP_WEEK,
-						specialtyName, course, groupNumber);
-				document.newPage();
-			}
-		}
+		for (GroupTT groupTT : lessonsGroup)
+			writeGroupTT(groupTT);
 		closeEverything();
 		return fileService.getBlobKey(file);
 	}
@@ -150,5 +139,19 @@ public class PDFMaker {
 	private void addEmptyLines(int number) throws DocumentException {
 		for (int i = 0; i < number; i++)
 			document.add(new Paragraph(" "));
+	}
+	
+	private void writeGroupTT(GroupTT groupTT) throws DocumentException {
+		int size = groupTT.getDays().length;
+		byte groupNumber = groupTT.getGroupNumber();
+		String specialtyName = groupTT.getSpecialtyName();
+		byte course = groupTT.getCourse();
+		for (int i = 0; i < size / 2; i++) {
+			makeDayGroupTable(groupTT.getDays()[i], LOWER_WEEK,
+					specialtyName, course, groupNumber);
+			makeDayGroupTable(groupTT.getDays()[i + size / 2], TOP_WEEK,
+					specialtyName, course, groupNumber);
+			document.newPage();
+		}
 	}
 }
