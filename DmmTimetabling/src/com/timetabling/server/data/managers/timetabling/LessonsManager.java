@@ -166,7 +166,7 @@ public class LessonsManager extends GenericDAO<Lesson> {
 		}
 		for (Long teacherId : teacherTo.keySet()) {
 			List<Lesson> lessons = teacherTo.get(teacherId);
-			TeacherTT teacherTT = new TeacherTT(lessons, version, teacherId);
+			TeacherTT teacherTT = new TeacherTT(lessons, version);
 			tt.addTeacherTT(teacherTT);
 		}
 		return tt;

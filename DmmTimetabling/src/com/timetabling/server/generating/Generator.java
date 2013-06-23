@@ -2,9 +2,11 @@ package com.timetabling.server.generating;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.timetabling.server.data.entities.curriculum.CurriculumCell;
@@ -16,6 +18,7 @@ import com.timetabling.server.data.managers.timetabling.LessonsManager;
 import com.timetabling.server.generating.rules.CollisionAvoiding;
 import com.timetabling.server.generating.rules.DaysLoading;
 import com.timetabling.server.generating.rules.IRule;
+import com.timetabling.server.generating.rules.SingleShift;
 import com.timetabling.server.generating.rules.WithoutWindows;
 import com.timetabling.server.ttprinting.PDFMaker;
 
@@ -50,10 +53,11 @@ public class Generator {
 		rules.add(new CollisionAvoiding());
 		rules.add(new DaysLoading());
 		rules.add(new WithoutWindows());
+		rules.add(new SingleShift());
 	}
 	
 	public TimetableIndividual getTTWithMark(double mark) {
-		while (curMaxMark < mark) {
+		while (generation < 200 && curMaxMark < mark) {
 			multiplyAndEstimatePopulation();
 			cleanPopulation();
 			System.out.print(generation + "   ");
@@ -62,7 +66,7 @@ public class Generator {
 			System.out.println();
 			generation++;
 		}
-		timetable.setVersion(curBestIndivudual);
+		timetable.setVersionAndMoveLessonsInTTs(curBestIndivudual);
 		try {
 			lastPDF = new PDFMaker().createPDF(timetable.getGroupTTs(), timetable.getTeacherTTs());
 		} catch (Exception e) {
@@ -90,8 +94,12 @@ public class Generator {
 		return lastVersion;
 	}
 	
+	private long lastVersion = Long.MIN_VALUE;
+	
 	private Long getNewVersion() {
-		return System.currentTimeMillis();
+		if (lastVersion == Long.MAX_VALUE)
+			lastVersion = Long.MIN_VALUE;
+		return lastVersion++;
 	}
 	
 	private void setRandomTimeForLesson(Lesson lesson, int collisionAvoidingTries) {
@@ -118,10 +126,10 @@ public class Generator {
 			timetable.setVersion(oldVersion);
 			Float versionMark = curPopulation.get(oldVersion);
 			int multiplier;
-			if (versionMark != null)
-				multiplier = (int) (maxPopulationMultiplier*(versionMark-curMinMark)/(curMaxMark-curMinMark));
+			if (versionMark != null  &&  curMaxMark-curMinMark == 0)
+				multiplier = (int) (maxPopulationMultiplier*(versionMark-curMinMark)/(curMaxMark-curMinMark)) + 1;
 			else
-				multiplier = maxPopulationMultiplier;
+				multiplier = maxPopulationMultiplier/2;
 			for (int i=0; i<multiplier; i++)
 				mutateIndividual(oldVersion);
 		}
@@ -147,7 +155,7 @@ public class Generator {
 				mark += rule.checkTT(timetable)*rule.getRuleType().getPriority();
 			mark /= rules.size();
 			curPopulation.put(version, mark);
-			if (curMaxMark < mark) {
+			if (curMaxMark <= mark) {
 				curMaxMark = mark;
 				curBestIndivudual = version;
 			}
@@ -168,6 +176,10 @@ public class Generator {
 				}
 			}
 			this.curMinMark = curMinMark;
+			if (curWorstVersion == null) {
+				removeExcessIndividuals();
+				break;
+			}
 			curPopulation.remove(curWorstVersion);
 			killVersion(curWorstVersion);
 		}
@@ -176,6 +188,18 @@ public class Generator {
 	private void killVersion(Long version) {
 		for (Lesson lesson : timetable.getAllLessons())
 			lesson.removeVersion(version);
+	}
+	
+	private void removeExcessIndividuals() {
+		int excess = curPopulation.size() - sizeOfPopulation;
+		int counter = 0;
+		Set<Long> toRemove = new HashSet<Long>(curPopulation.keySet());
+		for (Long version : toRemove) {
+			if (counter < excess)
+				break;
+			curPopulation.remove(version);
+			killVersion(version);
+		}
 	}
 	
 }

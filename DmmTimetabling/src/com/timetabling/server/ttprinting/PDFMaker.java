@@ -3,9 +3,7 @@ package com.timetabling.server.ttprinting;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.channels.Channels;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
 
 import com.google.appengine.api.blobstore.BlobKey;
@@ -35,69 +33,93 @@ public class PDFMaker {
 
 	private static final int LOWER_WEEK = 0;
 	private static final int TOP_WEEK = 1;
+	private static String[] COLUMNS = new String[]{"Time", "Name", "Type", "Teacher"};
+	private Font TABLE_TITLE_FONT;
+	private Font TABLE_CELL_FONT;
+	private Font DOCUMENT_TITLE_FONT;
 
-	private Document document = null;
-	private FileService fileService = null;
-	private FileWriteChannel writeChannel = null;
-	private AppEngineFile file = null;
-	private OutputStream outputStream = null;
-	private Map<Integer, Font> fonts = new HashMap<Integer, Font>();
+	private Document document;
+	private FileService fileService;
+	private FileWriteChannel writeChannel;
+	private AppEngineFile file;
+	private OutputStream outputStream;
+	
+	public PDFMaker() throws DocumentException, IOException {
+		BaseFont unicode = BaseFont.createFont("arialuni.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		TABLE_TITLE_FONT = new Font(unicode, 12);
+		DOCUMENT_TITLE_FONT = new Font(unicode, 12);
+		TABLE_CELL_FONT = new Font(unicode, 11);
+	}
 
-	public BlobKey createPDF(List<GroupTT> lessonsGroup, List<TeacherTT> lessonsTeacher) throws Exception {
+	public BlobKey createPDF(List<GroupTT> groupTTs, List<TeacherTT> teacherTTs) throws Exception {
 		openDocument("timetable.pdf");
-		initFonts();
-		makeTitle();
+		addDocumentTitle();
 		addEmptyLines(3);
-		for (GroupTT groupTT : lessonsGroup)
+		for (GroupTT groupTT : groupTTs) {
 			writeGroupTT(groupTT);
+			document.newPage();
+		}
 		closeEverything();
 		return fileService.getBlobKey(file);
 	}
+	
+	private void writeGroupTT(GroupTT groupTT) throws DocumentException {
+		byte group = groupTT.getGroupNumber();
+		String specialty = groupTT.getSpecialtyName();
+		byte course = groupTT.getCourse();
+		makeGroupWeekTable(groupTT.getDays(), LOWER_WEEK, specialty, course, group);
+		makeGroupWeekTable(groupTT.getDays(), TOP_WEEK, specialty, course, group);
+	}
 
-	private void makeDayGroupTable(SortedSet<Lesson> lessons, int weekType,
-			String specialtyName, byte course, byte groupNumber)
-			throws DocumentException {
-		String typeWeekString = null;
-		if (weekType == LOWER_WEEK) {
-			typeWeekString = "Нижняя неделя";
-		}
-
-		if (weekType == TOP_WEEK) {
-			typeWeekString = "Верхняя неделя";
-		}
-
-		if (typeWeekString == null) {
-			typeWeekString = "";
-		}
-
-		String tableTitleString = typeWeekString + " " + " Курс: " + course
-				+ " Специальность: " + specialtyName + " Группа: "
-				+ groupNumber;
-
-		document.add(new Paragraph(tableTitleString, fonts.get(12)));
-		addEmptyLines(1);
-
-		PdfPTable table = new PdfPTable(3);
-		table.addCell("Time");
-		table.addCell("Name");
-		table.addCell("Type");
-		Font font = fonts.get(11);
-		for (Lesson lesson : lessons) {
-			PdfPCell cellTime = new PdfPCell(new Phrase(lesson.getTime()
-					.toString(), font));
-			PdfPCell cellLessonName = new PdfPCell(new Phrase(lesson
-					.getCurriculumCell().getDisplayName(), font));
-			
-			PdfPCell cellType = new PdfPCell(new Phrase(
-					LessonType.getByCode(lesson.getCurriculumCell()
-							.getLessonTypeCode()).getDisplayName(), font));
-			table.addCell(cellTime);
-			table.addCell(cellLessonName);
-			table.addCell(cellType);
-		}
+	private void makeGroupWeekTable(SortedSet<Lesson>[] days, int weekCode,
+									String specialty, byte course, byte group)
+									throws DocumentException {
+		addTableTitle(weekCode, course, specialty, group);
+		PdfPTable table = getTableWithColumns(COLUMNS);
+		int start = weekCode==LOWER_WEEK? 0 : days.length/2;
+		int end = weekCode==LOWER_WEEK? days.length/2 : days.length;
+		for (int i=start; i<end; i++)
+			for (Lesson lesson : days[i])
+				fillTableRow(table, lesson);
 		document.add(table);
 		addEmptyLines(3);
-
+	}
+	
+	private void fillTableRow(PdfPTable table, Lesson lesson) {
+		PdfPCell cellTime = getTimeCellFor(lesson);
+		PdfPCell cellLessonName = getLessonNameCellFor(lesson);
+		PdfPCell cellType = getLessonTypeCellFor(lesson);
+		PdfPCell cellTeacher = getTeacherCellFor(lesson);
+		table.addCell(cellTime);
+		table.addCell(cellLessonName);
+		table.addCell(cellType);
+		table.addCell(cellTeacher);
+	}
+	
+	private PdfPCell getTimeCellFor(Lesson lesson) {
+		String time = lesson.getTime().toString();
+		Phrase phrase = new Phrase(time, TABLE_CELL_FONT);
+		return new PdfPCell(phrase);
+	}
+	
+	private PdfPCell getLessonNameCellFor(Lesson lesson) {
+		String name = lesson.getCurriculumCell().getDisplayName();
+		Phrase phrase = new Phrase(name, TABLE_CELL_FONT);
+		return new PdfPCell(phrase);
+	}
+	
+	private PdfPCell getLessonTypeCellFor(Lesson lesson) {
+		int typeCode = lesson.getCurriculumCell().getLessonTypeCode();
+		LessonType type = LessonType.getByCode(typeCode);
+		String name = type.getDisplayName();
+		Phrase phrase = new Phrase(name, TABLE_CELL_FONT);
+		return new PdfPCell(phrase);
+	}
+	
+	private PdfPCell getTeacherCellFor(Lesson lesson) {
+		String name = lesson.getTeacherTT().getTeacherName();
+		Phrase phrase = new Phrase(name, TABLE_CELL_FONT);
+		return new PdfPCell(phrase);
 	}
 	
 	private void openDocument(String fileName) throws IOException, DocumentException {
@@ -115,43 +137,33 @@ public class PDFMaker {
 		outputStream.close();
 		writeChannel.closeFinally();
 	}
-
-	private void initFonts() throws DocumentException, IOException {
-		BaseFont unicode = BaseFont.createFont("arialuni.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-		fonts.put(8, new Font(unicode, 8));
-		fonts.put(9, new Font(unicode, 9));
-		fonts.put(10, new Font(unicode, 10));
-		fonts.put(11, new Font(unicode, 11));
-		fonts.put(12, new Font(unicode, 12));
-		fonts.put(13, new Font(unicode, 13));
-		fonts.put(14, new Font(unicode, 14));
-		fonts.put(15, new Font(unicode, 15));
-		fonts.put(16, new Font(unicode, 16));
-	}
 	
-	private void makeTitle() throws DocumentException {
-		Font font = fonts.get(12);
-		Paragraph preface = new Paragraph("Расписание", font);
+	private void addDocumentTitle() throws DocumentException {
+		Paragraph preface = new Paragraph("Расписание", DOCUMENT_TITLE_FONT);
 		preface.setAlignment(Element.ALIGN_CENTER);
 		document.add(preface);
+	}
+	
+	private void addTableTitle(int weekCode, byte course, String spec, byte group) throws DocumentException {
+		StringBuilder result = new StringBuilder();
+		String weekType = weekCode==LOWER_WEEK? "Нижняя неделя" : "Верхняя неделя";
+		result.append(weekType);
+		result.append("   Курс: ").append(course);
+		result.append("   Специальность: ").append(spec);
+		result.append("   Группа: ").append(group);
+		document.add(new Paragraph(result.toString(), TABLE_TITLE_FONT));
+		addEmptyLines(1);
+	}
+	
+	private PdfPTable getTableWithColumns(String[] columns) {
+		PdfPTable table = new PdfPTable(columns.length);
+		for (int i=0; i<columns.length; i++)
+			table.addCell(columns[i]);
+		return table;
 	}
 
 	private void addEmptyLines(int number) throws DocumentException {
 		for (int i = 0; i < number; i++)
 			document.add(new Paragraph(" "));
-	}
-	
-	private void writeGroupTT(GroupTT groupTT) throws DocumentException {
-		int size = groupTT.getDays().length;
-		byte groupNumber = groupTT.getGroupNumber();
-		String specialtyName = groupTT.getSpecialtyName();
-		byte course = groupTT.getCourse();
-		for (int i = 0; i < size / 2; i++) {
-			makeDayGroupTable(groupTT.getDays()[i], LOWER_WEEK,
-					specialtyName, course, groupNumber);
-			makeDayGroupTable(groupTT.getDays()[i + size / 2], TOP_WEEK,
-					specialtyName, course, groupNumber);
-			document.newPage();
-		}
 	}
 }

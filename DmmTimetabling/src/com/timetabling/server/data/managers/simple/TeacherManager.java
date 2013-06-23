@@ -19,6 +19,11 @@ public class TeacherManager extends GenericDAO<Teacher> {
 		super(Teacher.class);
 	}
 	
+	public Teacher getById(Long cathedraId, Long teacherId) throws Exception {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		return ofy().get(KeyHelper.getKey(Teacher.class, KeyHelper.getKey(Cathedra.class, cathedraId), teacherId));
+	}
+	
 	public void putTeacher(final Teacher teacher, final long cathedraId) throws Exception {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
 		Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);

@@ -91,17 +91,13 @@ public class Time {
 		return weekTypeCode + 100*day + 10000*lessonNumber;
 	}
 	
-	/**
-	 * hasConflictWith or doesIntersectWith
-	 * @return true if times are intersecting. You should remember that ANY intersect with anything except UNDEF
-	 */
+	// TODO it is just for Real lessons (has day, lesson number and week type)
 	public boolean hasConflictWith(Time t) {
-		if (  day==UNDEF ||   lessonNumber==UNDEF ||   weekTypeCode == WeekType.UNDEF.getCode() ||
-			t.day==UNDEF || t.lessonNumber==UNDEF || t.weekTypeCode == WeekType.UNDEF.getCode())
-			assert false : "The times are not fully defined";
-		if (day==ANY || t.day==ANY || day==t.day)
-			if (lessonNumber==ANY || t.lessonNumber==ANY || lessonNumber==t.lessonNumber)
-				if (weekTypeCode==WeekType.ANY.getCode() || t.weekTypeCode==WeekType.ANY.getCode() || weekTypeCode==t.weekTypeCode)
+		if (day==t.day)
+			if (lessonNumber==t.lessonNumber)
+				if (weekTypeCode==t.weekTypeCode
+				 || weekTypeCode==WeekType.FULL.code
+				 || t.weekTypeCode==WeekType.FULL.code)
 					return true;
 		return false;
 	}

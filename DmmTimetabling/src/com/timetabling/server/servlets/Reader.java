@@ -29,12 +29,11 @@ public class Reader extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		ServletContext context = getServletContext();
-		String path = context.getRealPath("Уч_план_прикл_2_4_NEW.xls");
-		resp.setContentType("text/plain");
-		for (File root : File.listRoots())
-			resp.getWriter().write(root.getAbsolutePath() + " * " + root.getName());
+		String path1 = context.getRealPath("Механика.xls");
+		String path2 = context.getRealPath("Информатика.xls");
 		try {
-			new CurriculumReader(new File(path), 2013,  true).readAndPersistCurriculum();
+			new CurriculumReader(new File(path1), 2013,  true).readAndPersistCurriculum();
+			new CurriculumReader(new File(path2), 2013,  true).readAndPersistCurriculum();
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Problems while opening curriculum file", e);
 			e.printStackTrace();
