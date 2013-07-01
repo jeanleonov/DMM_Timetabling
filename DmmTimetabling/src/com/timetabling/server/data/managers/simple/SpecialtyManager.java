@@ -1,7 +1,14 @@
 package com.timetabling.server.data.managers.simple;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+
+import net.sf.jsr107cache.Cache;
+import net.sf.jsr107cache.CacheException;
+import net.sf.jsr107cache.CacheFactory;
+import net.sf.jsr107cache.CacheManager;
 
 import com.timetabling.server.base.common.KeyHelper;
 import com.timetabling.server.base.common.NamespaceController;
@@ -12,9 +19,17 @@ import com.timetabling.server.base.data.dao.ObjectifyDao;
 import com.timetabling.server.data.entities.curriculum.Specialty;
 
 public class SpecialtyManager extends GenericDAO<Specialty> {
+	
+	private Cache idsCache = null;
 
 	public SpecialtyManager() {
 		super(Specialty.class);
+		try {
+	        CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+	        idsCache = cacheFactory.createCache(Collections.emptyMap());
+	    } catch (CacheException e) {
+	        logger.log(Level.WARNING, "Cann't create a specialtyNames cache.", e);
+	    }
 	}
 	
 	public void putSpecialty(Specialty specialty) throws Exception {
@@ -47,13 +62,19 @@ public class SpecialtyManager extends GenericDAO<Specialty> {
 		return DAOT.runInTransaction(logger, new DatastoreOperation<Long>() {
 			@Override
 			public Long run(DAOT daot) throws Exception {
-				Specialty specialty = dao.getByProperty("name", specialtyName);
-				if (specialty != null)
-					return specialty.getId();
-				Specialty newSpecialty = new Specialty();
-				newSpecialty.setName(specialtyName);
-				newSpecialty.setShortName(getDefaultShortName(specialtyName));
-				return daot.getOfy().put(newSpecialty).getId();
+				Long specialtyId = getSpecialtyIdFromCache(specialtyName);
+				if (specialtyId == null) {
+					Specialty specialty = dao.getByProperty("name", specialtyName);
+					if (specialty == null) {
+						specialty = new Specialty();
+						specialty.setName(specialtyName);
+						specialty.setShortName(getDefaultShortName(specialtyName));
+						daot.getOfy().put(specialty);
+					}
+					idsCache.put(specialtyName, specialty.getId());
+					specialtyId = specialty.getId();
+				}
+				return specialtyId;
 			}
 			@Override
 			public String getOperationName() {
@@ -86,6 +107,12 @@ public class SpecialtyManager extends GenericDAO<Specialty> {
 		Method nameSetter = Specialty.class.getMethod("setShortName", String.class);
 		Utils.<Specialty>setFieldValueInEntity(
 				NamespaceController.generalNamespace, Specialty.class, specialtyId, specialtyShortName, nameSetter);
+	}
+	
+	private Long getSpecialtyIdFromCache(String specialtyName) {
+		if (idsCache == null)
+			return null;
+		return (Long) idsCache.get(specialtyName);
 	}
 
 }

@@ -21,7 +21,7 @@ public class Reader extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+			throws ServletException, IOException {     
 		doPost(req, resp);
 	}
 	
@@ -32,12 +32,12 @@ public class Reader extends HttpServlet {
 		String path1 = context.getRealPath("Механика.xls");
 		String path2 = context.getRealPath("Информатика.xls");
 		try {
-			new CurriculumReader(new File(path1), 2013,  true).readAndPersistCurriculum();
-			new CurriculumReader(new File(path2), 2013,  true).readAndPersistCurriculum();
+			new CurriculumReader(new File(path1), 2013,  false).readAndPersistCurriculum();
+			new CurriculumReader(new File(path2), 2013,  false).readAndPersistCurriculum();
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Problems while opening curriculum file", e);
 			e.printStackTrace();
 		}
-	}
+              	}
 
 }

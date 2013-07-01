@@ -1,14 +1,18 @@
 package com.timetabling.server.data.entities.curriculum;
 
+import java.io.Serializable;
+
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 
 @Cached
-public class Specialty extends DatastoreLongEntity {
+public class Specialty extends DatastoreLongEntity implements Serializable {
 
+	private static final long serialVersionUID = -704732242181384961L;
+	
 	private String name;
-	/** Short of full specialty name. For example: ÌÔ, ÌÏ ..*/
+	/** Short of full specialty name. For example: ï¿½ï¿½, ï¿½ï¿½ ..*/
 	@Unindexed private String shortName;
 	
 	public Specialty() {
@@ -22,7 +26,7 @@ public class Specialty extends DatastoreLongEntity {
 		this.name = name;
 	}
 
-	/** Short of full specialty name. For example: ÌÔ, ÌÏ ..*/
+	/** Short of full specialty name. For example: ï¿½ï¿½, ï¿½ï¿½ ..*/
 	public String getShortName() {
 		return shortName;
 	}

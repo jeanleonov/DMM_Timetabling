@@ -1,11 +1,15 @@
 package com.timetabling.server.data.entities.curriculum;
 
+import java.io.Serializable;
+
 import com.googlecode.objectify.annotation.Cached;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
 
 @Cached
-public class Subject extends DatastoreLongEntity {
-
+public class Subject extends DatastoreLongEntity implements Serializable {
+	
+	private static final long serialVersionUID = 5803682877340257805L;
+	
 	private String name;
 	private String displayName;
 

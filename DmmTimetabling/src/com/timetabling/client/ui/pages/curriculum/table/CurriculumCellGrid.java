@@ -20,7 +20,7 @@ import com.timetabling.shared.enums.LessonType;
 public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 	
 	public static final int YEAR = 2013;
-	public static final boolean SEASON = true;
+	public static final boolean SEASON = false;
 	private CathedraProxy cathedra = null;
 	private SpecialtyProxy specialty = null;
 	private Byte course = null;

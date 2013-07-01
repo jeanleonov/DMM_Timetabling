@@ -1,7 +1,14 @@
 package com.timetabling.server.data.managers.simple;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+
+import net.sf.jsr107cache.Cache;
+import net.sf.jsr107cache.CacheException;
+import net.sf.jsr107cache.CacheFactory;
+import net.sf.jsr107cache.CacheManager;
 
 import com.timetabling.server.base.common.KeyHelper;
 import com.timetabling.server.base.common.NamespaceController;
@@ -12,9 +19,17 @@ import com.timetabling.server.base.data.dao.ObjectifyDao;
 import com.timetabling.server.data.entities.curriculum.Subject;
 
 public class SubjectManager extends GenericDAO<Subject> {
+	
+	private Cache idsCache = null;
 
 	public SubjectManager() {
 		super(Subject.class);
+		try {
+	        CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+	        idsCache = cacheFactory.createCache(Collections.emptyMap());
+	    } catch (CacheException e) {
+	        logger.log(Level.WARNING, "Cann't create a subjectNames cache.", e);
+	    }
 	}
 	
 	public void putSubject(Subject subject) throws Exception {
@@ -47,13 +62,19 @@ public class SubjectManager extends GenericDAO<Subject> {
 		return DAOT.runInTransaction(logger, new DatastoreOperation<Long>() {
 			@Override
 			public Long run(DAOT daot) throws Exception {
-				Subject subject = dao.getByProperty("name", subjectName);
-				if (subject != null)
-					return subject.getId();
-				Subject newSubject = new Subject();
-				newSubject.setName(subjectName);
-				newSubject.setDisplayName(subjectName);
-				return daot.getOfy().put(newSubject).getId();
+				Long subjectId = getSubjectIdFromCache(subjectName);
+				if (subjectId == null) {
+					Subject subject = dao.getByProperty("name", subjectName);
+					if (subject == null) {
+						subject = new Subject();
+						subject.setName(subjectName);
+						subject.setDisplayName(subjectName);
+						daot.getOfy().put(subject);
+					}
+					idsCache.put(subjectName, subject.getId());
+					subjectId = subject.getId();
+				}
+				return subjectId;
 			}
 			@Override
 			public String getOperationName() {
@@ -81,6 +102,12 @@ public class SubjectManager extends GenericDAO<Subject> {
 		Method nameSetter = Subject.class.getMethod("setDisplayName", String.class);
 		Utils.<Subject>setFieldValueInEntity(
 				NamespaceController.generalNamespace, Subject.class, subjectId, subectDisplayName, nameSetter);
+	}
+	
+	private Long getSubjectIdFromCache(String subjectName) {
+		if (idsCache == null)
+			return null;
+		return (Long) idsCache.get(subjectName);
 	}
 
 }
