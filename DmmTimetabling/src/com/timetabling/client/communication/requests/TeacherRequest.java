@@ -21,8 +21,8 @@ public interface TeacherRequest extends RequestContext {
 	Request<List<TeacherProxy>> getAllTeachersFrom(CathedraProxy cathedra);
 	Request<Void> setTeacherName(long teacherId, String teacherName);
 	Request<Void> setTeacherRank(long teacherId, int teacherRankCode);
-	Request<Void> addWish(long teacherId, WishProxy wish);
-	Request<List<WishProxy>> getAllWishesFor(long teacherId);
-	Request<Void> deleteWish(long teacherId, long wishId);
+	Request<Void> addWish(long teacherId, long cathedraId, WishProxy wish);
+	Request<List<WishProxy>> getAllWishesFor(long teacherId, long cathedraId);
+	Request<Void> deleteWish(long teacherId, long cathedraId, long wishId);
 	
 }
