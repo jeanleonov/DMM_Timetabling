@@ -75,7 +75,7 @@ public class Time {
 		return weekTypeCode;
 	}
 
-	public void setWeekType(int weekTypeCode) {
+	public void setWeekTypeCode(int weekTypeCode) {
 		this.weekTypeCode = weekTypeCode;
 	}
 

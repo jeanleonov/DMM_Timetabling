@@ -1,9 +1,46 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
 	<ui:style>
-		
+		.panel {
+		}
+		.head {
+			background: rgba(255, 255, 255, 0.34);
+			padding: 2px 12px 3px 12px;
+			border-radius: 0 7px 0 7px;
+			margin: -9px -15px 0 0;
+			color: rgb(41, 73, 94);
+		}
+
+		.title {
+			float: left;
+			font-variant: small-caps;
+			font-size: large;
+			margin: 4px 4px 0 0;
+			width: 140px;
+		}
+		.plusButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+
+
 	</ui:style>
-	<g:HTMLPanel>
-	</g:HTMLPanel>
+	<g:FlowPanel addStyleNames="{style.panel}" >
+		<g:FlowPanel addStyleNames="{style.head}" >
+				<g:Label addStyleNames="{style.title}">ПН</g:Label>
+				<g:Label addStyleNames="{style.title}">ВТ</g:Label>
+				<g:Label addStyleNames="{style.title}">СР</g:Label>
+				<g:Label addStyleNames="{style.title}">ЧТ</g:Label>
+				<g:Label addStyleNames="{style.title}">ПТ</g:Label>
+		</g:FlowPanel>
+		
+		<g:FlowPanel  ui:field="wishesOnWeek" >
+		</g:FlowPanel>
+		<g:FlowPanel>
+				<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить"  type="SUCCESS" />
+		</g:FlowPanel>
+	
+	</g:FlowPanel>
 </ui:UiBinder> 

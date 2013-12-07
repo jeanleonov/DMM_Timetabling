@@ -8,8 +8,12 @@ public class Communicator {
 	
     /** main event bus for application **/
     public final EventBus eventBus = new SimpleEventBus();
+    public final ObjectifyRequestFactory requestFactory = 
 
-    public final ObjectifyRequestFactory requestFactory = GWT.create( ObjectifyRequestFactory.class );
+GWT.create( ObjectifyRequestFactory.class );
+    public final CommunicationContext context = new 
+
+CommunicationContext();
 
     private Communicator() {
         requestFactory.initialize( eventBus );

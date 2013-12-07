@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -19,6 +20,8 @@ import com.timetabling.client.communication.providers.CathedraListProvider;
 import com.timetabling.client.communication.providers.RankListProvider;
 import com.timetabling.client.communication.requests.TeacherRequest;
 import com.timetabling.client.ui.pages.BasePage;
+import com.timetabling.client.ui.pages.PageName;
+import com.timetabling.client.ui.pages.PagesDispatcher;
 import com.timetabling.client.ui.pages.teacher.table.TeacherGrid;
 import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList;
 
@@ -34,11 +37,13 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 	@UiField Button editButton;
 	@UiField Button removeButton;
 	@UiField Button cancelButton;
+	@UiField Button editWishesButton;
 	@UiField TextBox nameSetter;
 	@UiField FlowPanel cathedraSetterContainer;
 	@UiField FlowPanel rankSetterContainer;
 	@UiField FlowPanel form;
 	@UiField FlowPanel persistedTeachers;
+	
 	private TeacherGrid dataGrid;
 	private CathedraProxy cathedra;
 	private SingleSelectList<CathedraProxy> cathedraSetter;
@@ -123,11 +128,20 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		dataGrid.getProvider().update();
 	}
 	
+	@UiHandler("editWishesButton")
+	void onEditWishes(ClickEvent e) {
+		Communicator.get().context.setTeacherID(dataGrid.getSelected().getId());
+		Communicator.get().context.setCathedraID(cathedra.getId());
+	//	Window.alert("teacher - " + Communicator.get().context.getTeacherID()+ "cathedra" +Communicator.get().context.getCathedraID() );
+		PagesDispatcher.setPage(PageName.WISHES);
+	}
+	
 	private void setCreatingMode() {
 		saveButton.setVisible(true);
 		editButton.setVisible(false);
 		removeButton.setVisible(false);
 		cancelButton.setVisible(false);
+		editWishesButton.setVisible(false);
 		nameSetter.setText("");
 	}
 	
@@ -136,6 +150,7 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 		editButton.setVisible(true);
 		removeButton.setVisible(true);
 		cancelButton.setVisible(true);
+		editWishesButton.setVisible(true);
 		nameSetter.setText(entity.getName());
 		rankSetter.setSelectedItem(entity.getRankCode());
 	}

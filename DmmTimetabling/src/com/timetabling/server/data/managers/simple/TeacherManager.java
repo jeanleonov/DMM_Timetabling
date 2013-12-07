@@ -91,13 +91,14 @@ public class TeacherManager extends GenericDAO<Teacher> {
 		Method rankCodeSetter = Teacher.class.getMethod("setRankCode", Integer.class);
 		Utils.<Teacher>setFieldValueInEntity(NamespaceController.generalNamespace, Teacher.class, teacherId, teacherRankCode, rankCodeSetter);
 	}
-	
-	public void addWish(final long teacherId, final Wish wish) throws Exception {
+
+	public void addWish(final long teacherId, final long cathedraId, final Wish wish) throws Exception {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
 		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
 			@Override
 			public Void run(DAOT daot) throws Exception {
-				Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, teacherId);
+				Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
+				Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, cathedraKey, teacherId);
 				wish.setParent(teacherKey);
 				daot.getOfy().put(wish);
 				return null;
@@ -109,13 +110,17 @@ public class TeacherManager extends GenericDAO<Teacher> {
 		});
 	}
 	
-	public List<Wish> getAllWishesFor(long teacherId) {
+	public List<Wish> getAllWishesFor(long teacherId, long cathedraId) {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
-		return ofy().query(Wish.class).ancestor(KeyHelper.getKey(Teacher.class, teacherId)).list();
+		Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
+		Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, cathedraKey, teacherId);
+		return ofy().query(Wish.class).ancestor(teacherKey).list();
 	}
 	
-	public void deleteWish(long teacherId, long wishId) {
-		Key<Wish> wishKey = KeyHelper.getKey(Wish.class, KeyHelper.getKey(Teacher.class, teacherId), wishId);
+	public void deleteWish(long teacherId, long cathedraId, long wishId) {
+		Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
+		Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, cathedraKey, teacherId);
+		Key<Wish> wishKey = KeyHelper.getKey(Wish.class, teacherKey, wishId);
 		ofy().delete(wishKey);
 	}
 

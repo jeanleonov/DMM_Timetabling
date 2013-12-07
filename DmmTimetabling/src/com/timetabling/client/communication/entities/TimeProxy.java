@@ -13,6 +13,6 @@ public interface TimeProxy extends EntityProxy {
 	int getLessonNumber();
 	void setLessonNumber(int lessonNumber);
 	int getWeekTypeCode();
-	void setWeekType(int weekTypeCode);
+	void setWeekTypeCode(int weekTypeCode);
 	
 }

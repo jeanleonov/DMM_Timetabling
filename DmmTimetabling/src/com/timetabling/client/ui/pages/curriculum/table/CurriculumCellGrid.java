@@ -19,8 +19,8 @@ import com.timetabling.shared.enums.LessonType;
 
 public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 	
-	public static final int YEAR = 2013;
-	public static final boolean SEASON = false;
+	public static final int YEAR = Communicator.get().context.getYear();
+	public static final boolean SEASON = Communicator.get().context.getSeason();
 	private CathedraProxy cathedra = null;
 	private SpecialtyProxy specialty = null;
 	private Byte course = null;
@@ -32,23 +32,23 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 	@Override
 	protected void initiateColumns() {
 		Column<CurriculumCellProxy, String> cellName = new NameColumn();
-		addColumn(cellName, "РРјСЏ", "250px");
+		addColumn(cellName, "Имя", "250px");
 		Column<CurriculumCellProxy, String> lessonType = new LessonTypeColumn();
-		addColumn(lessonType, "РўРёРї РїР°СЂС‹", "175px");
+		addColumn(lessonType, "Тип пары", "175px");
 		Column<CurriculumCellProxy, String> subgroups = new SubgroupsColumn();
-		addColumn(subgroups, "РџРѕРґРіСЂСѓРїРїС‹", "100px");
+		addColumn(subgroups, "Подгруппы", "100px");
 		Column<CurriculumCellProxy, String> hours = new HoursColumn();
-		addColumn(hours, "Р§Р°СЃС‹", "90px");
+		addColumn(hours, "Часы", "90px");
 		Column<CurriculumCellProxy, String> cathedra = new CathedraColumn();
-		addColumn(cathedra, "РљР°С„РµРґСЂР°", "175px");
+		addColumn(cathedra, "Кафедра", "175px");
 		Column<CurriculumCellProxy, String> specialty = new SpecialtyColumn();
-		addColumn(specialty, "РЎРїРµС†РёР°Р»СЊРЅРѕСЃС‚СЊ", "175px");
+		addColumn(specialty, "Специальность", "175px");
 		Column<CurriculumCellProxy, String> subject = new SubjectColumn();
-		addColumn(subject, "РџСЂРµРґРјРµС‚", "250px");
+		addColumn(subject, "Предмет", "250px");
 		Column<CurriculumCellProxy, String> course = new CourseColumn();
-		addColumn(course, "РљСѓСЂСЃ", "60px");
+		addColumn(course, "Курс", "60px");
 		Column<CurriculumCellProxy, String> teachers = new TeachersColumn();
-		addColumn(teachers, "РџСЂРµРїРѕРґР°РІР°С‚РµР»Рё", "300px");
+		addColumn(teachers, "Преподаватели", "300px");
 		getElement().getStyle().setWidth(1575, Unit.PX);
 	}
 
@@ -138,7 +138,7 @@ public class CurriculumCellGrid extends BaseDataGrid<CurriculumCellProxy> {
 		public String getValue(CurriculumCellProxy cell) {
 			if (cell.getHoursInTwoWeeks() == null)
 				return "";
-			return cell.getHoursInTwoWeeks().toString() + "/2 РїР°СЂС‹";
+			return cell.getHoursInTwoWeeks().toString() + "/2 пары";
 		}
 	}
 	

@@ -60,6 +60,11 @@
 			margin-left: 20px;
 		}
 	
+		.editWishesButton {
+			margin-top: 17px;
+			margin-left: 5px;
+		}
+	
 		.output {
 			position: absolute;
 			top: 86px;
@@ -96,6 +101,7 @@
 			<b:Button addStyleNames="{style.editButton}" ui:field="editButton" text="Изменить" type="SUCCESS" icon="EDIT" />
 			<b:Button addStyleNames="{style.removeButton}" ui:field="removeButton" text="Удалить" type="DANGER" icon="TRASH" />
 			<b:Button addStyleNames="{style.cancelButton}" ui:field="cancelButton" text="Отмена" type="WARNING" icon="REMOVE" />
+			<b:Button addStyleNames="{style.editWishesButton}" ui:field="editWishesButton" text="Редактировать пожелания" type="SUCCESS"/>
 			<b:Button addStyleNames="{style.updateButton}" ui:field="updateButton" type="LINK" icon="REFRESH" iconSize="LARGE"></b:Button>
 		</g:FlowPanel>
 		

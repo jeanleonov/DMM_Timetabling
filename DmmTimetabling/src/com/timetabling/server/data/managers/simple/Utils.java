@@ -14,11 +14,9 @@ import com.timetabling.server.base.common.NamespaceController;
 import com.timetabling.server.base.data.dao.DAOT;
 import com.timetabling.server.base.data.dao.DAOT.DatastoreOperation;
 import com.timetabling.server.base.data.entities.DatastoreLongEntity;
+import com.timetabling.shared.ConstantsShared;
 
 public class Utils {
-	
-	public final static boolean WINTER_SUMMER = true;
-	public final static boolean AUTUMN_WINTER = false;
 	
 	private static Logger logger = Logger.getLogger(Utils.class.getSimpleName());
 	
@@ -44,7 +42,7 @@ public class Utils {
 	}
 	
 	public static String getSeasonName(boolean season) {
-		return season? "winter-summer" : "autumn-winter";
+		return season==ConstantsShared.WINTER_SUMMER? "winter-summer" : "autumn-winter";
 	}
 	
 	
