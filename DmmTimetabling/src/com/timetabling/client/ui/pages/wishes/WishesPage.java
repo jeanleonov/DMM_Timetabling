@@ -50,16 +50,19 @@ public class WishesPage extends BasePage {
 		
 	long teacherID;
 	long cathedraID;
-	Integer teacherRank;
 	TeacherProxy teacher;
 	public WishesPage() {
 		initWidget(uiBinder.createAndBindUi(this));
-		
 		teacherID = Communicator.get().context.getTeacherID();
-		cathedraID = Communicator.get().context.getCathedraID();			
-		teacherRank = getRankTeacher();
-
-		initTable();
+		cathedraID = Communicator.get().context.getCathedraID();
+		Receiver<TeacherProxy> onTeacherLoaded = new Receiver<TeacherProxy>() {
+			@Override
+			public void onSuccess(TeacherProxy response) {
+				teacher = response;
+				initTable();
+			}
+		};
+		loadTeacher(onTeacherLoaded);
 		
 	/*	TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();
 		Request<List<WishProxy>> wish = requestContext.getAllWishesFor(teacherID, cathedraID);		
@@ -77,17 +80,12 @@ public class WishesPage extends BasePage {
 		
 	}
 	
-	private Integer getRankTeacher(){		
+	private void loadTeacher(Receiver<TeacherProxy> onTeacherLoaded){		
 		TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();
 		Request<TeacherProxy> teacherRequest = requestContext.getById(cathedraID, teacherID);
-		teacherRequest.fire(new Receiver<TeacherProxy>() {
-			@Override
-			public void onSuccess(TeacherProxy response) {
-				teacher = response;
-			}
-		});
-		return teacher.getRankCode();
+		teacherRequest.fire(onTeacherLoaded);
 	}
+	
 	private void initTable(){
 		int numRows = grid.getRowCount();
 	    int numColumns = grid.getColumnCount();
@@ -103,14 +101,15 @@ public class WishesPage extends BasePage {
 	      }
 	    wishesOnWeek.add(grid);
 	}
+	
 	@UiHandler("saveButton")
-	void onSave(ClickEvent e) {
-		TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();		
+	void onSave(ClickEvent e) {		
 		
 		int numRows = grid.getRowCount();
 	    int numColumns = grid.getColumnCount();
 	    for (int row = 0; row < numRows; row++) {
 	        for (int col = 0; col < numColumns; col++) {
+	        	TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();
 	        	int i = row*numColumns + col;
 	        	int priorityCode = getPriorityCodeByStyle(t[i].getStyleName());	
 	        	if(priorityCode == -1)

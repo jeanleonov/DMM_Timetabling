@@ -49,6 +49,8 @@ public class Time {
 	private int lessonNumber = UNDEF;
 	private int weekTypeCode = WeekType.UNDEF.getCode();
 	
+	public Time() {}
+	
 	public Time(int timeKey) {
 		lessonNumber = timeKey / 10000;
 		day = (timeKey - lessonNumber*10000) / 100;
