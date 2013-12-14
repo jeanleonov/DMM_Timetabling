@@ -9,6 +9,7 @@ import com.timetabling.client.communication.entities.CathedraProxy;
 import com.timetabling.client.communication.entities.TeacherProxy;
 import com.timetabling.client.communication.entities.WishProxy;
 import com.timetabling.server.base.data.dao.DaoServiceLocator;
+import com.timetabling.server.data.entities.curriculum.extentions.Wish;
 import com.timetabling.server.data.managers.simple.TeacherManager;
 
 @Service( value = TeacherManager.class, locator = DaoServiceLocator.class )
@@ -22,8 +23,12 @@ public interface TeacherRequest extends RequestContext {
 	Request<Void> setTeacherName(long teacherId, String teacherName);
 	Request<Void> setTeacherRank(long teacherId, int teacherRankCode);
 	Request<TeacherProxy> getById(Long cathedraId, Long teacherId);
+	Request<TeacherProxy> getTeacherWithWishesById(Long cathedraId, Long teacherId);
 	Request<Void> addWish(long teacherId, long cathedraId, WishProxy wish);
+	Request<Void> addWishes(long teacherId, long cathedraId, List<WishProxy> wishes);
+	Request<Void> updateWishes(long teacherId, long cathedraId, List<WishProxy> wishes, List<Long> wishesId);
 	Request<List<WishProxy>> getAllWishesFor(long teacherId, long cathedraId);
 	Request<Void> deleteWish(long teacherId, long cathedraId, long wishId);
+	Request<Void> deleteWishes(long teacherId, long cathedraId, List<Long> wishId);
 	
 }

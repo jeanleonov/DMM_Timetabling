@@ -56,8 +56,4 @@ public class LeftPanel extends Composite {
 		PagesDispatcher.setPage(PageName.CURRICULUM_EDITING);
 	}
 	
-	@UiHandler ("testWish")
-	void onTest(ClickEvent click) {
-		PagesDispatcher.setPage(PageName.WISHES);
-	}
 }

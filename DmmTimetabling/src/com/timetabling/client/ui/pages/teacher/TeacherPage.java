@@ -8,8 +8,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.timetabling.client.base.communication.Communicator;
@@ -23,6 +23,7 @@ import com.timetabling.client.ui.pages.BasePage;
 import com.timetabling.client.ui.pages.PageName;
 import com.timetabling.client.ui.pages.PagesDispatcher;
 import com.timetabling.client.ui.pages.teacher.table.TeacherGrid;
+import com.timetabling.client.ui.pages.wishes.WishesPage;
 import com.timetabling.client.ui.widgets.chosen.single.SingleSelectList;
 
 public class TeacherPage extends BasePage implements DataSelectionListener<TeacherProxy> {
@@ -131,8 +132,7 @@ public class TeacherPage extends BasePage implements DataSelectionListener<Teach
 	@UiHandler("editWishesButton")
 	void onEditWishes(ClickEvent e) {
 		Communicator.get().context.setTeacherID(dataGrid.getSelected().getId());
-		Communicator.get().context.setCathedraID(cathedra.getId());
-	//	Window.alert("teacher - " + Communicator.get().context.getTeacherID()+ "cathedra" +Communicator.get().context.getCathedraID() );
+		Communicator.get().context.setCathedraID(cathedra.getId());		
 		PagesDispatcher.setPage(PageName.WISHES);
 	}
 	

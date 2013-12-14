@@ -1,7 +1,10 @@
 package com.timetabling.client.communication.entities;
 
+import java.util.List;
+
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.timetabling.server.base.data.ObjectifyLongLocator;
 import com.timetabling.server.data.entities.curriculum.extentions.Teacher;
 
@@ -14,4 +17,5 @@ public interface TeacherProxy extends EntityProxy {
 	void setName(String name);
 	Integer getRankCode();
 	void setRankCode(Integer rankCode);
+	List<WishProxy> getWishes();
 }

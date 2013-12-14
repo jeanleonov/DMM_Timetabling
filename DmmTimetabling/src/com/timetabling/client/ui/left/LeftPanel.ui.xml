@@ -53,9 +53,6 @@
 			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
 				<g:Anchor addStyleNames="{style.editingItem}" text="Учебный план" ui:field="curriculum"></g:Anchor>
 			</g:FlowPanel>
-			<g:FlowPanel addStyleNames="{style.editingItemPanel}">
-				<g:Anchor addStyleNames="{style.editingItem}" text="TestWish" ui:field="testWish"></g:Anchor>
-			</g:FlowPanel>
 		</g:FlowPanel>
 		<g:FlowPanel addStyleNames="{style.test}" ui:field="test"></g:FlowPanel>
 	</g:FlowPanel>

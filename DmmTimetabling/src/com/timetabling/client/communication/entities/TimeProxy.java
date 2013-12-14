@@ -14,5 +14,6 @@ public interface TimeProxy extends EntityProxy {
 	void setLessonNumber(int lessonNumber);
 	int getWeekTypeCode();
 	void setWeekTypeCode(int weekTypeCode);
+	int getKey();
 	
 }

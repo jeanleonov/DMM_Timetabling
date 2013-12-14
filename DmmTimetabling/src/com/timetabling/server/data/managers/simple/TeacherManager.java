@@ -1,6 +1,7 @@
 package com.timetabling.server.data.managers.simple;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.objectify.Key;
@@ -22,6 +23,16 @@ public class TeacherManager extends GenericDAO<Teacher> {
 	public Teacher getById(Long cathedraId, Long teacherId) throws Exception {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
 		return ofy().get(KeyHelper.getKey(Teacher.class, KeyHelper.getKey(Cathedra.class, cathedraId), teacherId));
+	}
+	
+	public Teacher getTeacherWithWishesById(Long cathedraId, Long teacherId) throws Exception {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);			
+		Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
+		Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, cathedraKey, teacherId);		
+		Teacher teacher = ofy().get(teacherKey);
+		List<Wish> wishes = ofy().query(Wish.class).ancestor(teacherKey).list();
+		teacher.setWishes(wishes);
+		return teacher;
 	}
 	
 	public void putTeacher(final Teacher teacher, final long cathedraId) throws Exception {
@@ -58,11 +69,16 @@ public class TeacherManager extends GenericDAO<Teacher> {
 	
 	public void deleteTeacher(final long teacherId, final long cathedraId) throws Exception {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		List<Wish> wishes = getAllWishesFor(teacherId, cathedraId);
+		final List<Long> idWishes = new ArrayList<Long>();
+		for (Wish wish : wishes)
+			idWishes.add(wish.getId());
 		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
 			@Override
 			public Void run(DAOT daot) throws Exception {
 				Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
-				daot.getOfy().delete(KeyHelper.getKey(Teacher.class, cathedraKey, teacherId));
+				daot.getOfy().delete(KeyHelper.getKey(Teacher.class, cathedraKey, teacherId));											
+				deleteWishes(teacherId, cathedraId, idWishes);				
 				return null;
 			}
 			@Override
@@ -110,6 +126,26 @@ public class TeacherManager extends GenericDAO<Teacher> {
 		});
 	}
 	
+	public void addWishes(final long teacherId, final long cathedraId, final List<Wish> wishes) throws Exception {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		DAOT.runInTransaction(logger, new DatastoreOperation<Void>() {
+			@Override
+			public Void run(DAOT daot) throws Exception {
+				Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
+				Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, cathedraKey, teacherId);
+				for(Wish wish: wishes){
+					wish.setParent(teacherKey);
+				}
+				daot.getOfy().put(wishes);
+				return null;
+			}
+			@Override
+			public String getOperationName() {
+				return "Persisting of wishes.";
+			}
+		});
+	}
+	
 	public List<Wish> getAllWishesFor(long teacherId, long cathedraId) {
 		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
 		Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
@@ -118,10 +154,29 @@ public class TeacherManager extends GenericDAO<Teacher> {
 	}
 	
 	public void deleteWish(long teacherId, long cathedraId, long wishId) {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
 		Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
 		Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, cathedraKey, teacherId);
 		Key<Wish> wishKey = KeyHelper.getKey(Wish.class, teacherKey, wishId);
 		ofy().delete(wishKey);
+	}
+	
+	public void deleteWishes(long teacherId, long cathedraId, List<Long> wishIds) {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		Key<Cathedra> cathedraKey = KeyHelper.getKey(Cathedra.class, cathedraId);
+		Key<Teacher> teacherKey = KeyHelper.getKey(Teacher.class, cathedraKey, teacherId);
+		List<Key<Wish>> wishKeys = new ArrayList<Key<Wish>>();
+		for(Long wishId : wishIds)
+		{
+			wishKeys.add(KeyHelper.getKey(Wish.class, teacherKey, wishId));
+		}
+		ofy().delete(wishKeys);
+	}
+	
+	public void updateWishes(final long teacherId, final long cathedraId, final List<Wish> wishes, final List<Long> wishesIdToDelete) throws Exception {
+		NamespaceController.getInstance().updateNamespace(NamespaceController.generalNamespace);
+		deleteWishes(teacherId, cathedraId,  wishesIdToDelete);
+		addWishes(teacherId, cathedraId, wishes);
 	}
 
 }

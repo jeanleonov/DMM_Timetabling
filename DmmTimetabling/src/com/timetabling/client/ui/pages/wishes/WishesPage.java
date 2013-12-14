@@ -14,11 +14,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.timetabling.client.base.communication.Communicator;
-import com.timetabling.client.communication.entities.SpecialtyProxy;
 import com.timetabling.client.communication.entities.TeacherProxy;
 import com.timetabling.client.communication.entities.TimeProxy;
 import com.timetabling.client.communication.entities.WishProxy;
@@ -32,11 +33,7 @@ public class WishesPage extends BasePage {
 
 	interface WishesPageUiBinder extends UiBinder<Widget, WishesPage> {
 	}
-	@UiField FlowPanel wishesOnWeek;
-	String [] styleNames = {"neutral", "good", "bad", "impossible"};
-
-	HTML t[] = new HTML[80];
-	Grid grid = new Grid(8, 10);
+	@UiField HorizontalPanel wishesOnWeek;
 	String times[] = {"08:00 - 09:35", 
     		"09:55 - 11:30", 
     		"11:40 - 13:15", 
@@ -46,7 +43,8 @@ public class WishesPage extends BasePage {
     		"18:45 - 20:20", 
     		"20:30 - 21:45" }; 
 	
-	List<WishProxy> wishes = new ArrayList<WishProxy>();
+	List<WishProxy> wishes = new ArrayList<WishProxy>();	
+	WishesPageCell cells[] = new WishesPageCell[80];
 		
 	long teacherID;
 	long cathedraID;
@@ -54,102 +52,109 @@ public class WishesPage extends BasePage {
 	public WishesPage() {
 		initWidget(uiBinder.createAndBindUi(this));
 		teacherID = Communicator.get().context.getTeacherID();
-		cathedraID = Communicator.get().context.getCathedraID();
-		Receiver<TeacherProxy> onTeacherLoaded = new Receiver<TeacherProxy>() {
+		cathedraID = Communicator.get().context.getCathedraID();		
+		loadSavedWishes();
+		
+	}
+	
+	private void loadSavedWishes(){
+		Receiver<List<WishProxy>> onWishesLoaded = new Receiver<List<WishProxy>>() {
 			@Override
-			public void onSuccess(TeacherProxy response) {
-				teacher = response;
+			public void onSuccess(List<WishProxy> response) {
+				wishes = response;	
 				initTable();
 			}
 		};
-		loadTeacher(onTeacherLoaded);
-		
-	/*	TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();
-		Request<List<WishProxy>> wish = requestContext.getAllWishesFor(teacherID, cathedraID);		
-		wish.fire(new Receiver<List<WishProxy>>() {
-			@Override
-			public void onSuccess(List<WishProxy> response) {
-				wishes = response;
-			}
-		});
-		for (WishProxy w : wishes)
-		{
-			Window.alert(""+w.getPriorityCode());
-		}*/
-
-		
+		loadWishes(onWishesLoaded);	
 	}
 	
-	private void loadTeacher(Receiver<TeacherProxy> onTeacherLoaded){		
+	private void loadWishes(Receiver<List<WishProxy>> onWishesLoaded){		
 		TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();
-		Request<TeacherProxy> teacherRequest = requestContext.getById(cathedraID, teacherID);
-		teacherRequest.fire(onTeacherLoaded);
+		Request<List<WishProxy>> teacherRequest = requestContext.getAllWishesFor(teacherID, cathedraID);
+		teacherRequest.fire(onWishesLoaded);
 	}
 	
 	private void initTable(){
-		int numRows = grid.getRowCount();
-	    int numColumns = grid.getColumnCount();
-	    for (int row = 0; row < numRows; row++) {
-	        for (int col = 0; col < numColumns; col++) {
-	        	int i = row*numColumns + col;
-	        	t[i] = new HTML(times[row]);
-	        	t[i].setStylePrimaryName("myCellStyle");
-		    	t[i].addStyleName("neutral");
-		    	t[i].addClickHandler(new ClickCellHandler(t[i]));
-	            grid.setWidget(row, col, t[i]);
-	         }
-	      }
-	    wishesOnWeek.add(grid);
+
+		int numCell = 0;
+		for(int day = 1; day <= 5; day ++){
+			for(int weekType = 0; weekType <= 1; weekType++){
+				VerticalPanel verticalPanel = new VerticalPanel();
+				for(int lesson = 1; lesson <= times.length; lesson++)
+				{
+					int timeKey = getTimeKey(weekType, day, lesson);
+		    		cells[numCell] = new WishesPageCell(timeKey, getWishPriorityOnTime(timeKey));
+		    		cells[numCell].setText(times[lesson - 1]);
+		    		verticalPanel.add(cells[numCell]);	
+		    		numCell++;
+				}
+				wishesOnWeek.add(verticalPanel);
+			}
+			
+		}
+
+	}
+	public int getTimeKey(int weekTypeCode, int day, int lessonNumber) {
+		return weekTypeCode + 100*day + 10000*lessonNumber;
+	}
+	private int getWishPriorityOnTime(int timeKey){
+		for(WishProxy w : wishes)
+			if(w.getTimeKey() == timeKey)
+				return w.getPriorityCode();		
+		return -1;	
+	}
+	
+	private WishProxy getWishOnTime(int timeKey){
+		for(WishProxy w : wishes)
+			if(w.getTimeKey() == timeKey)
+				return w;		
+		return null;	
 	}
 	
 	@UiHandler("saveButton")
 	void onSave(ClickEvent e) {		
 		
-		int numRows = grid.getRowCount();
-	    int numColumns = grid.getColumnCount();
-	    for (int row = 0; row < numRows; row++) {
-	        for (int col = 0; col < numColumns; col++) {
-	        	TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();
-	        	int i = row*numColumns + col;
-	        	int priorityCode = getPriorityCodeByStyle(t[i].getStyleName());	
-	        	if(priorityCode == -1)
-	        		continue;
-
-	        	WishProxy wish = requestContext.create(WishProxy.class);		
-	    		TimeProxy time = requestContext.create(TimeProxy.class);
-	    		time.setLessonNumber(row+1);
-	    		time.setWeekDay(col/2+1);
-	    		time.setWeekTypeCode(col%2);
-	    		wish.setTime(time);
-	    		wish.setPriorityCode(priorityCode);	    		
-	    		requestContext.addWish(Communicator.get().context.getTeacherID(), Communicator.get().context.getCathedraID(), wish)
-	    		.fire();
-	    		}
-	      }
-	    
+		List<WishProxy> toSave = new ArrayList<WishProxy>();
+		List<WishProxy> toUpdate = new ArrayList<WishProxy>();
+		List<Long> toDelete = new ArrayList<Long>();
+		List<Long> toUpdateId = new ArrayList<Long>();
+		
+		TeacherRequest requestContextSaving = Communicator.get().requestFactory.createTeacherRequest();
+		TeacherRequest requestContextUpdating = Communicator.get().requestFactory.createTeacherRequest();
+		for(int i = 0; i < 80; i++)
+		{			
+			switch(cells[i].getStatus()){
+			case 0:				
+				WishProxy wish = requestContextSaving.create(WishProxy.class);
+				wish.setTimeKey(cells[i].getTimeKey());
+				wish.setPriorityCode(cells[i].getPriority());
+				toSave.add(wish);
+				break;
+			case 1:
+				toUpdateId.add(getWishOnTime(cells[i].getTimeKey()).getId());
+				WishProxy wishUpdate = requestContextUpdating.create(WishProxy.class);
+				wishUpdate.setTimeKey(cells[i].getTimeKey());
+				wishUpdate.setPriorityCode(cells[i].getPriority());
+				toUpdate.add(wishUpdate);
+				break;
+			case 2:
+				toDelete.add(getWishOnTime(cells[i].getTimeKey()).getId());
+				break;
+			}
+			
+		}	
+		
+		TeacherRequest requestContext = Communicator.get().requestFactory.createTeacherRequest();
+		if(toDelete != null)
+			requestContext.deleteWishes(teacherID, cathedraID, toDelete).fire();		
+		if(toSave != null)
+			requestContextSaving.addWishes(teacherID, cathedraID, toSave).fire();
+		if(toUpdate != null)
+			requestContextUpdating.updateWishes(teacherID, cathedraID, toUpdate, toUpdateId).fire();
+		//loadSavedWishes();
 		
 	}
 	
-	private int getPriorityCodeByStyle(String style){
-		for(int i = 0; i < styleNames.length; i++)
-			if (style.equals("myCellStyle " + styleNames[i]))
-				return i-1;
-		return -1;
-	}
 
 }
 
-class ClickCellHandler implements ClickHandler{
-	int i = 0;
-	String [] styleNames = {"neutral", "good", "bad", "impossible"};
-	HTML current;
-	
-	public ClickCellHandler(HTML current){
-		this.current = current;
-	}
-	public void onClick(ClickEvent event) {
-		current.removeStyleName(styleNames[i%4]);	
-		i++;
-		current.addStyleName(styleNames[i%4]);
-	}
-}

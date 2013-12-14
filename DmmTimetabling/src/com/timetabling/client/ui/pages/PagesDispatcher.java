@@ -8,6 +8,8 @@ public class PagesDispatcher {
 		for (PageName pageName : PageName.values())
 			if (pageName.isInitiated()  &&  pageName != page)
 				pageName.getPage().setVisible(false);
+
+		
 		if (page.isInitiated())
 			page.getPage().setVisible(true);
 		else

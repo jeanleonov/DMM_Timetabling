@@ -18,7 +18,7 @@
 			font-variant: small-caps;
 			font-size: large;
 			margin: 4px 4px 0 0;
-			width: 140px;
+			width: 144px;
 		}
 		.plusButton {
 			margin-top: 17px;
@@ -36,8 +36,8 @@
 				<g:Label addStyleNames="{style.title}">ПТ</g:Label>
 		</g:FlowPanel>
 		
-		<g:FlowPanel  ui:field="wishesOnWeek" >
-		</g:FlowPanel>
+		<g:HorizontalPanel  ui:field="wishesOnWeek" >
+		</g:HorizontalPanel>
 		<g:FlowPanel>
 				<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить"  type="SUCCESS" />
 		</g:FlowPanel>

@@ -1,0 +1,35 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style type='com.timetabling.client.ui.pages.wishes.WishesPageCell.MyStyle'>
+		.myCellStyle{
+		display: block;
+		margin: 2px 2px 2px 2px;
+		width: 70px;
+	    font-weight: bold;
+	    text-shadow: 1px 1px 1px #fff;
+	    border-radius: 5px;
+ 	   -moz-border-radius: 5px;
+ 	   -webkit-border-radius: 5px;
+	    -khtml-border-radius: 5px;
+		}
+
+		
+		.neutral{ 
+   		background-color:lavender;  
+		}
+		.good{ 
+  		 background-color:MediumSeaGreen;   
+		}
+		.bad{ 
+  		 background-color:PaleGoldenrod;   
+		}
+		.impossible{ 
+	    background-color:LightSalmon;   
+		}	
+	
+	</ui:style>
+	<g:HTMLPanel>
+		<g:HTML styleName="{style.myCellStyle}" ui:field="time" >12:00 - 13:50</g:HTML>
+	</g:HTMLPanel>
+</ui:UiBinder> 
