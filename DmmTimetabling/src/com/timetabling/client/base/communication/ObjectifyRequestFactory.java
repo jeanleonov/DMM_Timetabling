@@ -8,7 +8,6 @@ import com.timetabling.client.communication.entities.RoomsInfoProxy;
 import com.timetabling.client.communication.entities.SpecialtyProxy;
 import com.timetabling.client.communication.entities.SubjectProxy;
 import com.timetabling.client.communication.entities.TeacherProxy;
-import com.timetabling.client.communication.entities.TimeProxy;
 import com.timetabling.client.communication.entities.WishProxy;
 import com.timetabling.client.communication.requests.CathedraRequest;
 import com.timetabling.client.communication.requests.CurriculumCellJoinerRequest;
@@ -26,7 +25,7 @@ import com.timetabling.client.communication.requests.testing.TestRequest;
  * Request factory for current application. Include request for entities.
  */
 @ExtraTypes( {	CathedraProxy.class, SpecialtyProxy.class, RoomsInfoProxy.class,
-				SubjectProxy.class, TeacherProxy.class, CurriculumCellProxy.class, WishProxy.class, TimeProxy.class } )
+				SubjectProxy.class, TeacherProxy.class, CurriculumCellProxy.class, WishProxy.class } )
 public interface ObjectifyRequestFactory extends RequestFactory {
 	
 	CathedraRequest createCathedraRequest();

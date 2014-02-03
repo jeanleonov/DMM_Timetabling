@@ -16,8 +16,6 @@ public interface WishProxy extends EntityProxy {
 	void setTimeKey(int timeKey);
 	int getPriorityCode();
 	void setPriorityCode(int priorityCode);
-	TimeProxy getTime();
-	void setTime(TimeProxy time);
 	WishPriority getPriority();
 	void setPriority(WishPriority priority);
 	TeacherRank getTeacherRank();

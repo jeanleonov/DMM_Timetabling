@@ -6,12 +6,11 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasText;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.timetabling.client.communication.entities.WishProxy;
 
 public class WishesPageCell extends Composite implements HasText {
 
@@ -21,26 +20,23 @@ public class WishesPageCell extends Composite implements HasText {
 	interface WishesPageCellUiBinder extends UiBinder<Widget, WishesPageCell> {
 	}
 	
-	@UiField
-	HTML time;
-	int timeKey;
-	int priority;
-	int priorityPrime;
-	int status;
-	/* -1 - do nothing
-	 * 0 - to save
-	 * 1 - to update
-	 * 2 - to delete
-	 */
+	@UiField Label time;
+	@UiField MyStyle style;
 	
-	@UiField
-    MyStyle style;
+	private WishProxy wish;
+	private int timeKey;
+	private int priority;
+	private int priorityPrime;
 	
-	public WishesPageCell(int timeKey, int priority) {
-		initWidget(uiBinder.createAndBindUi(this));		
-		this.timeKey = timeKey;
-		this.priority = priority;
+	public WishesPageCell(WishProxy wish, int timeKey) {
+		initWidget(uiBinder.createAndBindUi(this));
+		this.wish = wish;
+		if (wish != null)
+			priority = wish.getPriorityCode();
+		else
+			priority = -1;
 		priorityPrime = priority;
+		this.timeKey = timeKey;
 		setStyle();
 	}
 
@@ -83,8 +79,7 @@ public class WishesPageCell extends Composite implements HasText {
 			time.removeStyleName(style.bad());
 			time.addStyleName(style.impossible());
 			break;
-		
-	}
+		}
 	}
 	public void setText(String text) {
 		time.setText(text);
@@ -100,20 +95,27 @@ public class WishesPageCell extends Composite implements HasText {
 	public int getPriority() {
 		return priority;
 	}
+	public WishProxy getWish() {
+		return wish;
+	}
+	
+	/** 
+	 * possible values to return are:
+	 * -1  - do nothing
+	 *  0  - to save
+	 *  1  - to update
+	 *  2  - to delete
+	 */
 	public int getStatus() {
-		if(priorityPrime == -1){
+		if(priorityPrime == -1)
 			if(priority == -1)
 				return -1;
 			else
 				return 0;
-		}
-		else{
-			if(priority == -1)
-				return 2;
-			else if (priority == priorityPrime)
-				return -1;
-			else
-				return 1;
-		}
+		if(priority == -1)
+			return 2;
+		if (priority == priorityPrime)
+			return -1;
+		return 1;
 	}
 }

@@ -9,7 +9,6 @@ import com.timetabling.client.communication.entities.CathedraProxy;
 import com.timetabling.client.communication.entities.TeacherProxy;
 import com.timetabling.client.communication.entities.WishProxy;
 import com.timetabling.server.base.data.dao.DaoServiceLocator;
-import com.timetabling.server.data.entities.curriculum.extentions.Wish;
 import com.timetabling.server.data.managers.simple.TeacherManager;
 
 @Service( value = TeacherManager.class, locator = DaoServiceLocator.class )

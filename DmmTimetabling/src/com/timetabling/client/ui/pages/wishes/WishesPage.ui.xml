@@ -6,19 +6,39 @@
 		.panel {
 		}
 		.head {
+			float: right;
+			display: inline;
 			background: rgba(255, 255, 255, 0.34);
 			padding: 2px 12px 3px 12px;
 			border-radius: 0 7px 0 7px;
 			margin: -9px -15px 0 0;
 			color: rgb(41, 73, 94);
 		}
-
+		.content {
+			padding-top: 20px;
+		}
+		.days {
+			width: 470px;
+		}
+		.days {
+			width: 470px;
+			margin-bottom: 2px;
+		}
+		.days>span {
+			font-variant: small-caps;
+			font-size: large;
+			margin: 2px;
+			padding: 2px 65px 2px 64px;
+			border-radius: 7px 7px 2px 2px;
+			background-color: rgba(60, 141, 148, 0.33);
+			color: rgb(87, 100, 102);
+		}
 		.title {
-			float: left;
+			float: right;
 			font-variant: small-caps;
 			font-size: large;
 			margin: 4px 4px 0 0;
-			width: 144px;
+			display: inline;
 		}
 		.plusButton {
 			margin-top: 17px;
@@ -29,17 +49,27 @@
 	</ui:style>
 	<g:FlowPanel addStyleNames="{style.panel}" >
 		<g:FlowPanel addStyleNames="{style.head}" >
-				<g:Label addStyleNames="{style.title}">ПН</g:Label>
-				<g:Label addStyleNames="{style.title}">ВТ</g:Label>
-				<g:Label addStyleNames="{style.title}">СР</g:Label>
-				<g:Label addStyleNames="{style.title}">ЧТ</g:Label>
-				<g:Label addStyleNames="{style.title}">ПТ</g:Label>
+			<g:FlowPanel addStyleNames="{style.title}">
+				<g:InlineLabel>Пожелания преподавателя (</g:InlineLabel>
+				<g:InlineLabel ui:field="teacherName"></g:InlineLabel>
+				<g:InlineLabel>):</g:InlineLabel>
+			</g:FlowPanel>
 		</g:FlowPanel>
 		
-		<g:HorizontalPanel  ui:field="wishesOnWeek" >
-		</g:HorizontalPanel>
-		<g:FlowPanel>
+		<g:FlowPanel addStyleNames="{style.content}" >
+			<g:FlowPanel addStyleNames="{style.days}" >
+				<g:InlineLabel>ПН</g:InlineLabel>
+				<g:InlineLabel>ВТ</g:InlineLabel>
+				<g:InlineLabel>СР</g:InlineLabel>
+				<g:InlineLabel>ЧТ</g:InlineLabel>
+				<g:InlineLabel>ПТ</g:InlineLabel>
+			</g:FlowPanel>
+			
+			<g:HorizontalPanel  ui:field="wishesOnWeek" >
+			</g:HorizontalPanel>
+			<g:FlowPanel>
 				<b:Button addStyleNames="{style.plusButton}" ui:field="saveButton" text="Сохранить"  type="SUCCESS" />
+			</g:FlowPanel>
 		</g:FlowPanel>
 	
 	</g:FlowPanel>
